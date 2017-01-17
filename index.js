@@ -5,17 +5,17 @@ import * as d3 from 'd3'
 /////////////////////////
 // var data = [1, 1, 2, 3, 5, 8, 13];
 
-// var canvas = document.querySelector("canvas"),
-//     context = canvas.getContext("2d");
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d");
 
-// canvas.width = window.innerWidth
-// canvas.height = window.innerHeight
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight*0.7
 
-// context.globalAlpha = 0.2
+context.globalAlpha = 1
 
-// var width = canvas.width,
-//     height = canvas.height,
-//     radius = Math.min(width, height) / 2;
+var width = canvas.width,
+    height = canvas.height,
+    radius = Math.min(width, height) / 2;
 
 // context.translate(width / 2, height / 2)
 
@@ -104,6 +104,10 @@ d3.tsv("data.tsv", function(d) {
     return d;
 }, function(error, data) {
     if (error) throw error;
+
+    var aa= d3.extent(data, function(d) {
+        return d.date; })
+    console.log(aa)
 
     x.domain(d3.extent(data, function(d) {
         return d.date; }));
