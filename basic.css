@@ -10,5 +10,20 @@ canvas{
 }
 
 svg{
-	background: rgba(46,139,87,0.5);
+	/*background: rgba(46,139,87,0.5);*/
+	background: #fff;
+}
+
+rect {
+  fill: none;
+  pointer-events: all;
+}
+
+circle {
+  fill: none;
+  stroke: rgba(46,139,87,0.5);
+}
+
+.salmon{
+	stroke: salmon;
 }

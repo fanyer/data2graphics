@@ -1,3 +1,4 @@
+var webpack = require('webpack')
 module.exports = {
     entry: './index.js',
     output: {
@@ -13,7 +14,12 @@ module.exports = {
             test: /\.css$/, // Only .css files
             loader: 'style-loader!css-loader' // Run both loaders
         }]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            'd3': 'd3'
+        })
+    ]
 
 
 }
