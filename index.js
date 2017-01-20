@@ -12,9 +12,6 @@ Array.prototype.scale = function(factor) {
 
 
 
-
-
-
 var data = [1, 1, 2, 3, 5, 8, 13];
 
 var colors = [
@@ -29,22 +26,29 @@ var canvas = document.querySelector("canvas"),
 canvas.width = 1000;
 canvas.height = 800;
 
-
 var width = canvas.width,
     height = canvas.height,
     radius = Math.min(width, height) / 2;
 
+context.translate(width/2, height/2)
+
 
 
 // draw text & number
-context.font = "64px serif";
 context.textBaseline = "hanging";
 context.textAlign = "center";
-context.fillText("46.7", width/2, height/2-60);
+// context.rotate(Math.PI / 9);
+context.font = "64px serif";
+context.fillStyle=colors[1]
+context.fillText("46.7", 0, - 60);
+
+context.fillStyle=colors[2]
 context.font = "24px serif";
-context.fillText("综合打分", width/2, height/2);
+context.fillText("综合打分",0,0);
 context.font = "16px serif";
-context.fillText("Basal Metalbolic Assay", width/2, height/2+50);
+context.fillText("Basal Metalbolic Assay", 0, 50);
+
+// ctx.setTransform(1, 0, 0, 1, 0, 0);
 
 
 // circles layers
@@ -54,7 +58,6 @@ radius.push(d3.range(200, 250 + 10, 10))
 radius.push(d3.range(250, 300 + 10, 10))
 radius.push(d3.range(300, 350 + 10, 10))
 
-context.translate(width / 2, height / 2);
 
 context.globalAlpha = 0.3
 radius.forEach((e, i) => {
@@ -62,7 +65,7 @@ radius.forEach((e, i) => {
     radius[i].forEach(function(e2, i2) {
         i2 > 4 || i2 < 1 ?
             context.setLineDash([10, 0]) :
-            context.setLineDash([1, 5])
+            context.setLineDash([2, 4])
 
         var arc = d3.arc()
             .outerRadius(e2)
@@ -98,18 +101,18 @@ var line = () => (
     .context(context)
 )
 
-var point = [];
 
 context.setLineDash([5, 0]);
-context.shadowBlur = 5;
+context.shadowBlur = 1;
 
 context.beginPath()
-context.shadowColor = "black";
+context.strokeStyle = "seagreen"
+context.shadowColor = "seagreen";
 line()(lineData);
 context.stroke()
 
 context.beginPath()
-context.shadowColor = "salmon";
+context.shadowColor = "seagreen";
 // line()(lineData.scale(0.8));
 
 //  draw split line in the arc
@@ -120,6 +123,30 @@ context.shadowColor = "salmon";
 //     .endAngle(Math.PI * 2)
 //     .context(context);
 
+// draw points
+var point = [];
 
-context.strokeStyle = colors[2]
+
+
+
+
+
+// draw a axis ilne
+// context.beginPath();
+// context.lineWidth = 2;
+// context.shadowBlur = 0;
+
+// context.moveTo(0,150);
+// context.lineTo(0, 350);
+// context.stroke();
+context.strokeStyle='salmon'
+
+var line = d3.line()
+    .curve(d3.curveCardinalClosed.tension(1))
+    .context(context);
+
+Array.from(Array(14).keys()).forEach((e,i)=>{
+    line([[0,0],[lineData[i][0],lineData[i][1]]])
+})
+context.rotate(Math.Pi)
 context.stroke()
