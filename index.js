@@ -1,13 +1,18 @@
 import './basic.css'
 
-// extend Array prototype
+/**
+ * [function description]
+ * @param  {[type]} factor [description]
+ * @return {[type]}        [description]
+ */
 Array.prototype.scale = function(factor) {
-    console.log(this)
-    this.forEach((i) => {
-        i[0] *= factor
-        i[1] *= factor
+    var newArr = []
+    this.forEach((e, i, arr) => {
+        if (typeof e === "number") {
+            newArr[i] = e * factor
+        }
     })
-    return this;
+    return newArr;
 }
 
 
@@ -30,21 +35,22 @@ var width = canvas.width,
     height = canvas.height,
     radius = Math.min(width, height) / 2;
 
-context.translate(width/2, height/2)
+context.translate(width / 2, height / 2)
 
 
 
 // draw text & number
 context.textBaseline = "hanging";
 context.textAlign = "center";
-// context.rotate(Math.PI / 9);
-context.font = "64px serif";
-context.fillStyle=colors[1]
-context.fillText("46.7", 0, - 60);
 
-context.fillStyle=colors[2]
+var txt = d3.randomUniform(30, 50)().toFixed(1)
+context.font = "64px serif";
+context.fillStyle = colors[1]
+context.fillText(txt, 0, -60);
+
+context.fillStyle = colors[2]
 context.font = "24px serif";
-context.fillText("综合打分",0,0);
+context.fillText("综合打分", 0, 0);
 context.font = "16px serif";
 context.fillText("Basal Metalbolic Assay", 0, 50);
 
@@ -84,47 +90,36 @@ radius.forEach((e, i) => {
 
 
 // draw curve
-var lineData = []
+context.restore()
+var axisLineData = []
+var curveLineData = []
 var pi = Math.PI
 context.globalAlpha = 0.9
 
 var r = [260, 220, 160, 300, 210, 340, 160, 290, 220, 160, 300, 210, 340, 160]
 
+
+
 for (var i = 0; i < 14; i++) {
-    // var r = d3.randomUniform(150, 350)()
-    lineData.push([r[i] * Math.cos(pi / 2 - 2 * pi / 14 * (i)), r[i] * Math.sin(-pi / 2 + 2 * pi / 14 * (i))])
+    let point = [150 * Math.cos(pi / 2 - 2 * pi / 14 * i), 150 * Math.sin(-pi / 2 + 2 * pi / 14 * i)];
+
+    axisLineData.push(point)
+    curveLineData.push(point.scale(d3.randomUniform(1, 2.3)()))
 }
 
-var line = () => (
-    d3.line()
-    .curve(d3.curveCardinalClosed.tension(0))
+var line = d3.line()
+    .curve(d3.curveCardinalClosed.tension(0.2))
     .context(context)
-)
 
 
 context.setLineDash([5, 0]);
-context.shadowBlur = 1;
-
+// context.shadowBlur = 1;
 context.beginPath()
 context.strokeStyle = "seagreen"
 context.shadowColor = "seagreen";
-line()(lineData);
+line(curveLineData);
 context.stroke()
 
-context.beginPath()
-context.shadowColor = "seagreen";
-// line()(lineData.scale(0.8));
-
-//  draw split line in the arc
-// arc = d3.arc()
-//     .outerRadius(e2)
-//     .innerRadius(150)
-//     .startAngle(350)
-//     .endAngle(Math.PI * 2)
-//     .context(context);
-
-// draw points
-var point = [];
 
 
 
@@ -134,19 +129,59 @@ var point = [];
 // draw a axis ilne
 // context.beginPath();
 // context.lineWidth = 2;
-// context.shadowBlur = 0;
+context.restore()
 
-// context.moveTo(0,150);
-// context.lineTo(0, 350);
-// context.stroke();
-context.strokeStyle='salmon'
+context.strokeStyle = 'salmon'
+context.lineWidth = 1;
+
+var innerborder = axisLineData
+var outerborder = axisLineData.map((e) => (e.scale(2.33)))
 
 var line = d3.line()
     .curve(d3.curveCardinalClosed.tension(1))
     .context(context);
 
-Array.from(Array(14).keys()).forEach((e,i)=>{
-    line([[0,0],[lineData[i][0],lineData[i][1]]])
-})
-context.rotate(Math.Pi)
+line([
+    [0, -150],
+    [0, -350]
+])
+line([
+    [innerborder[0][0], innerborder[0][1]],
+    [outerborder[0][0], outerborder[0][1]]
+])
+
+Array.from(Array(14).keys()).forEach((e, i) => {
+
+        line([
+            [innerborder[i][0], innerborder[i][1]],
+            [outerborder[i][0], outerborder[i][1]]
+        ])
+    })
+    // context.rotate(Math.Pi)
 context.stroke()
+
+
+
+
+
+// draw points
+context.strokeStyle = 'salmon'
+context.lineWidth = 4;
+context.fillStyle = '#ccc'
+
+var points = d3.symbol()
+    .size(20)
+    .context(context);
+
+context.beginPath()
+curveLineData.forEach((d,i) => {
+    console.log(d)
+    context.save();
+    context.translate(d[0], d[1]);
+    points()
+    context.restore();
+})
+
+context.stroke()
+context.fill()
+
