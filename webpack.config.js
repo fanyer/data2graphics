@@ -1,6 +1,6 @@
 var webpack = require('webpack')
 module.exports = {
-    entry: './index.js',
+    entry: './basic.js',
     output: {
         filename: 'bundle.js'
     },
