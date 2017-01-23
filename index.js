@@ -6,18 +6,24 @@ import './basic.css'
  * @return {[type]}        [description]
  */
 Array.prototype.scale = function(factor) {
-    var newArr = []
-    this.forEach((e, i, arr) => {
-        if (typeof e === "number") {
-            newArr[i] = e * factor
-        }
-    })
-    return newArr;
-}
+        var newArr = []
+        this.forEach((e, i, arr) => {
+            newArr[i] = [e[0], min + (e[1] - min) * factor]
+        })
+        return newArr;
+    }
+    // Array.prototype.scale = function(factor) {
+    //     var newArr = []
+    //     this.forEach((e, i, arr) => {
+    //         if (typeof e === "number") {
+    //             newArr[i] = e * factor
+    //         }
+    //     })
+    //     return newArr;
+    // }
 
 
 
-var data = [1, 1, 2, 3, 5, 8, 13];
 
 var colors = [
     "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
@@ -53,8 +59,9 @@ context.font = "24px serif";
 context.fillText("综合打分", 0, 0);
 context.font = "16px serif";
 context.fillText("Basal Metalbolic Assay", 0, 50);
+context.restore()
 
-// ctx.setTransform(1, 0, 0, 1, 0, 0);
+
 
 
 // circles layers
@@ -67,69 +74,78 @@ radius.push(d3.range(300, 350 + 10, 10))
 
 context.globalAlpha = 0.3
 radius.forEach((e, i) => {
-    context.strokeStyle = colors[i];
-    radius[i].forEach(function(e2, i2) {
-        i2 > 4 || i2 < 1 ?
-            context.setLineDash([10, 0]) :
-            context.setLineDash([2, 4])
+        context.strokeStyle = colors[i];
+        radius[i].forEach(function(e2, i2) {
+            i2 > 4 || i2 < 1 ?
+                context.setLineDash([10, 0]) :
+                context.setLineDash([2, 4])
 
-        var arc = d3.arc()
-            .outerRadius(e2)
-            .innerRadius(0)
-            .startAngle(0)
-            // .padAngel(1)
-            .endAngle(Math.PI * 2)
-            .context(context);
+            var arc = d3.arc()
+                .outerRadius(e2)
+                .innerRadius(0)
+                .startAngle(0)
+                // .padAngel(1)
+                .endAngle(Math.PI * 2)
+                .context(context);
 
-        context.beginPath()
-        arc()
-        context.stroke();
+            context.beginPath()
+            arc()
+            context.stroke();
 
+        })
     })
-})
+    // context.rotate(Math.PI/7)
 
 
 // draw curve
-context.restore()
-var axisLineData = []
 var curveLineData = []
+var axisLineData = []
 var pi = Math.PI
 context.globalAlpha = 0.9
 
-var r = [260, 220, 160, 300, 210, 340, 160, 290, 220, 160, 300, 210, 340, 160]
-
+var max = 350
+var min = 150
 
 
 for (var i = 0; i < 14; i++) {
-    let point = [150 * Math.cos(pi / 2 - 2 * pi / 14 * i), 150 * Math.sin(-pi / 2 + 2 * pi / 14 * i)];
+    let r = d3.scaleLinear()
+        .domain([0, 1])
+        .range([min, max])
 
-    axisLineData.push(point)
-    curveLineData.push(point.scale(d3.randomUniform(1, 2.3)()))
+    let factor = d3.randomUniform(0, 1)()
+    let point = [pi / 7 * i, r(factor)]
+
+    curveLineData.push(point)
 }
 
-var line = d3.line()
-    .curve(d3.curveCardinalClosed.tension(0.2))
+var radial = d3.radialLine()
+    .curve(d3.curveCardinalClosed.tension(0.3))
     .context(context)
 
+console.log(curveLineData)
 
 context.setLineDash([5, 0]);
 // context.shadowBlur = 1;
 context.beginPath()
 context.strokeStyle = "seagreen"
-context.shadowColor = "seagreen";
-line(curveLineData);
+context.shadowColor = "seagreen"
+radial(curveLineData);
+
+d3.range(0, 1, 0.02).forEach((i) => {
+    radial(curveLineData.scale(i));
+})
 context.stroke()
 
 
 
 
 
-
-
-// draw a axis ilne
-// context.beginPath();
-// context.lineWidth = 2;
+// draw a axis line
+context.beginPath();
+context.lineWidth = 2;
 context.restore()
+let bundaryPoints = []
+
 
 context.strokeStyle = 'salmon'
 context.lineWidth = 1;
@@ -137,30 +153,21 @@ context.lineWidth = 1;
 var innerborder = axisLineData
 var outerborder = axisLineData.map((e) => (e.scale(2.33)))
 
-var line = d3.line()
-    .curve(d3.curveCardinalClosed.tension(1))
+var axis = d3.radialLine()
     .context(context);
 
-line([
-    [0, -150],
-    [0, -350]
-])
-line([
-    [innerborder[0][0], innerborder[0][1]],
-    [outerborder[0][0], outerborder[0][1]]
-])
+d3.range(0,2*Math.PI,Math.PI/7).forEach((e,i)=>{
+    let r = d3.scaleLinear()
+        .domain([0, 1])
+        .range([min, max])
+    let startPoint = [pi / 7 * i, r(0)]
+    let endPoint = [pi / 7 * i, r(1)]
+    axis([startPoint, endPoint])
+})
 
-Array.from(Array(14).keys()).forEach((e, i) => {
 
-        line([
-            [innerborder[i][0], innerborder[i][1]],
-            [outerborder[i][0], outerborder[i][1]]
-        ])
-    })
-    // context.rotate(Math.Pi)
+
 context.stroke()
-
-
 
 
 
@@ -174,14 +181,13 @@ var points = d3.symbol()
     .context(context);
 
 context.beginPath()
-curveLineData.forEach((d,i) => {
+curveLineData.forEach((d, i) => {
     console.log(d)
     context.save();
-    context.translate(d[0], d[1]);
+    context.translate(d[1] * Math.sin(d[0]), -d[1] * Math.cos(d[0]));
     points()
     context.restore();
 })
 
 context.stroke()
 context.fill()
-
