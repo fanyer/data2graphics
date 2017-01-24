@@ -26,7 +26,6 @@ Array.prototype.scale = function(factor) {
 
 var data2canvas = () => {
 
-
     var max = 350
     var min = 150
     var colors = [
@@ -116,14 +115,11 @@ var data2canvas = () => {
 
 
     // draw curve
-
     context.restore()
     var curveLineData = []
     var axisLineData = []
     var pi = Math.PI
     context.globalAlpha = 0.9
-
-
 
     for (var i = 0; i < 14; i++) {
         let r = d3.scaleLinear()
@@ -140,7 +136,6 @@ var data2canvas = () => {
         .curve(d3.curveCardinalClosed.tension(0.3))
         .context(context)
 
-
     context.setLineDash([5, 0]);
     // context.shadowBlur = 1;
     context.beginPath()
@@ -150,14 +145,11 @@ var data2canvas = () => {
 
 
     // draw internal bundle curve
-
     d3.range(0, 1, 0.02).forEach((e, i) => {
 
         radial(curveLineData.scale(e));
     })
     context.stroke()
-
-
 
 
 
@@ -215,7 +207,6 @@ var data2canvas = () => {
     context.stroke()
     context.fill()
     context.rotate(pi / 2)
-
 
     // label
 
