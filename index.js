@@ -1,30 +1,30 @@
 import './basic.css'
 
-/**
- * [function description]
- * @param  {[type]} factor [description]
- * @return {[type]}        [description]
- */
-Array.prototype.scale = function(factor) {
-        var newArr = []
-        this.forEach((e, i, arr) => {
-            newArr[i] = [e[0], min + (e[1] - min) * factor]
-        })
-        return newArr;
-    }
-    // Array.prototype.scale = function(factor) {
-    //     var newArr = []
-    //     this.forEach((e, i, arr) => {
-    //         if (typeof e === "number") {
-    //             newArr[i] = e * factor
-    //         }
-    //     })
-    //     return newArr;
-    // }
 
 
 
 var data2canvas = () => {
+    /**
+     * [function description]
+     * @param  {[type]} factor [description]
+     * @return {[type]}        [description]
+     */
+    Array.prototype.scale = function(factor) {
+            var newArr = []
+            this.forEach((e, i, arr) => {
+                newArr[i] = [e[0], min + (e[1] - min) * factor]
+            })
+            return newArr;
+        }
+        // Array.prototype.scale = function(factor) {
+        //     var newArr = []
+        //     this.forEach((e, i, arr) => {
+        //         if (typeof e === "number") {
+        //             newArr[i] = e * factor
+        //         }
+        //     })
+        //     return newArr;
+        // }
 
     var max = 350
     var min = 150
@@ -142,6 +142,8 @@ var data2canvas = () => {
     context.strokeStyle = "seagreen"
     context.shadowColor = "seagreen"
     radial(curveLineData);
+    context.rotate(Math.PI / 2)
+
 
 
     // draw internal bundle curve
