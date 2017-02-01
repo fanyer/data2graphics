@@ -32,7 +32,22 @@ var data2canvas = () => {
         "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
         "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
     ];
-
+    var labels=[
+                "低聚果糖"，
+                "低聚异麦芽糖",
+                "𝜷-葡聚糖",
+                "葡甘露聚糖",
+                "抗性麦芽糊精",
+                "氨糖",
+                "饱和脂肪酸",
+                "不饱和脂肪酸",
+                "鞘脂类",
+                "胆汁酸",
+                "胆红素",
+                "胆固醇",
+                "淀粉",
+                "膳食纤维"
+                ]
 
 
     if (!document.querySelector("canvas")) {
@@ -60,7 +75,7 @@ var data2canvas = () => {
 
     context.textBaseline = "hanging";
     context.textAlign = "center";
-    context.rotate(Math.PI / 10)
+    // context.rotate(Math.PI / 10)
 
     var txt = d3.randomUniform(30, 50)().toFixed(1)
     context.font = "64px serif";
@@ -79,7 +94,7 @@ var data2canvas = () => {
 
     // circles layers
     context.restore()
-    context.rotate(-Math.PI / 10)
+    // context.rotate(-Math.PI / 10)
 
     var radius = []
     radius.push(d3.range(150, 200, 10))
@@ -142,7 +157,7 @@ var data2canvas = () => {
     context.strokeStyle = "seagreen"
     context.shadowColor = "seagreen"
     radial(curveLineData);
-    context.rotate(Math.PI / 2)
+    // context.rotate(Math.PI / 2)
 
 
 
@@ -208,10 +223,19 @@ var data2canvas = () => {
 
     context.stroke()
     context.fill()
-    context.rotate(pi / 2)
+    // context.rotate(pi / 2)
 
     // label
+    context.restore()
+    context.strokeStyle = 'salmon'
+    context.lineWidth = 4;
+    context.fillStyle = '#ccc'
 
+
+
+    context.beginPath()
+
+    context.fillText()
 
 }
 
