@@ -33,7 +33,7 @@ var data2canvas = () => {
         "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
     ];
     var labels=[
-                "低聚果糖"，
+                "低聚果糖",
                 "低聚异麦芽糖",
                 "𝜷-葡聚糖",
                 "葡甘露聚糖",
@@ -50,6 +50,7 @@ var data2canvas = () => {
                 ]
 
 
+    // judge browser canvas api
     if (!document.querySelector("canvas")) {
         document.body.appendChild(document.createElement("canvas"))
     }
@@ -72,7 +73,6 @@ var data2canvas = () => {
 
     // draw text & number
     context.restore()
-
     context.textBaseline = "hanging";
     context.textAlign = "center";
     // context.rotate(Math.PI / 10)
@@ -229,11 +229,14 @@ var data2canvas = () => {
     context.restore()
     context.strokeStyle = 'salmon'
     context.lineWidth = 4;
-    context.fillStyle = '#ccc'
-
-
+    context.fillStyle = 'salmon'
 
     context.beginPath()
+    
+    context.font = "32px serif";
+    labels.forEach((e,i)=>{
+        context.fillText(e, 0, -60);
+    })
 
     context.fillText()
 
