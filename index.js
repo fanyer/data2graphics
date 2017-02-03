@@ -3,7 +3,7 @@ import './basic.css'
 
 
 
-var data2canvas = () => {
+var levelScore = () => {
     /**
      * [function description]
      * @param  {[type]} factor [description]
@@ -201,7 +201,6 @@ var data2canvas = () => {
     context.stroke()
 
 
-
     // draw points
     context.restore()
     context.strokeStyle = 'salmon'
@@ -232,7 +231,7 @@ var data2canvas = () => {
     context.fillStyle = 'salmon'
 
     context.beginPath()
-    
+
     context.font = "32px serif";
     labels.forEach((e,i)=>{
         context.fillText(e, 0, -60);
@@ -243,4 +242,4 @@ var data2canvas = () => {
 }
 
 
-export default data2canvas
+export default levelScore
