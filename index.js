@@ -1,243 +1,142 @@
 import './basic.css'
 
-
+const d3 = Object.assign({},
+    require('d3-format'),
+    require('d3-sankey'),
+    require('d3-selection'),
+    require('d3-request'),
+    require('d3-drag'),
+    require('d3-color'),
+    require('d3-scale')
+);
 
 
 var levelScore = () => {
-    /**
-     * [function description]
-     * @param  {[type]} factor [description]
-     * @return {[type]}        [description]
-     */
-    Array.prototype.scale = function(factor) {
-            var newArr = []
-            this.forEach((e, i, arr) => {
-                newArr[i] = [e[0], min + (e[1] - min) * factor]
-            })
-            return newArr;
-        }
-        // Array.prototype.scale = function(factor) {
-        //     var newArr = []
-        //     this.forEach((e, i, arr) => {
-        //         if (typeof e === "number") {
-        //             newArr[i] = e * factor
-        //         }
-        //     })
-        //     return newArr;
-        // }
-
-    var max = 350
-    var min = 150
-    var colors = [
-        "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-        "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
-    ];
-    var labels=[
-                "低聚果糖",
-                "低聚异麦芽糖",
-                "𝜷-葡聚糖",
-                "葡甘露聚糖",
-                "抗性麦芽糊精",
-                "氨糖",
-                "饱和脂肪酸",
-                "不饱和脂肪酸",
-                "鞘脂类",
-                "胆汁酸",
-                "胆红素",
-                "胆固醇",
-                "淀粉",
-                "膳食纤维"
-                ]
 
 
-    // judge browser canvas api
-    if (!document.querySelector("canvas")) {
-        document.body.appendChild(document.createElement("canvas"))
-    }
+    var margin = {
+            top: 1,
+            right: 1,
+            bottom: 6,
+            left: 1
+        },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-    var canvas = document.querySelector("canvas"),
-        context = canvas.getContext("2d");
+    var formatNumber = d3.format(",.0f"),
+        format = function(d) {
+            return formatNumber(d) + " TWh";
+        },
+        color = d3.scaleOrdinal(d3.schemeCategory20);
 
-    canvas.width = 1000;
-    canvas.height = 800;
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var width = canvas.width,
-        height = canvas.height,
-        radius = Math.min(width, height) / 2;
+    var sankey = d3.sankey()
+        .nodeWidth(15)
+        .nodePadding(5)
+        .size([width, height]);
 
-    context.translate(width / 2, height / 2)
+    var path = sankey.link();
+    // d3.json("lib/energy.json", function(energy) {
+    //     console.log(energy.links[0])
 
-    context.save()
+    //      sankey
+    //         .nodes(energy.nodes)
+    //         .links(energy.links);
+    //         .layout(32);
+    //     console.log(energy.links[0])
 
+    // })
 
+    d3.json("lib/energy.json", function(energy) {
 
-    // draw text & number
-    context.restore()
-    context.textBaseline = "hanging";
-    context.textAlign = "center";
-    // context.rotate(Math.PI / 10)
-
-    var txt = d3.randomUniform(30, 50)().toFixed(1)
-    context.font = "64px serif";
-    context.fillStyle = colors[1]
-    context.fillText(txt, 0, -60);
-
-    context.fillStyle = colors[2]
-    context.font = "24px serif";
-    context.fillText("综合打分", 0, 0);
-    context.font = "16px serif";
-    context.fillText("Basal Metalbolic Assay", 0, 50);
-
-
-
-
-
-    // circles layers
-    context.restore()
-    // context.rotate(-Math.PI / 10)
-
-    var radius = []
-    radius.push(d3.range(150, 200, 10))
-    radius.push(d3.range(200, 250 + 10, 10))
-    radius.push(d3.range(250, 300 + 10, 10))
-    radius.push(d3.range(300, 350 + 10, 10))
-
-
-    context.globalAlpha = 0.3
-    radius.forEach((e, i) => {
-            context.strokeStyle = colors[i];
-            radius[i].forEach(function(e2, i2) {
-                i2 > 4 || i2 < 1 ?
-                    context.setLineDash([10, 0]) :
-                    context.setLineDash([2, 4])
-
-                var arc = d3.arc()
-                    .outerRadius(e2)
-                    .innerRadius(0)
-                    .startAngle(0)
-                    // .padAngel(1)
-                    .endAngle(Math.PI * 2)
-                    .context(context);
-
-                context.beginPath()
-                arc()
-
-                context.stroke();
-
-            })
+        sankey
+            .nodes(energy.nodes)
+            .links(energy.links)
+            .layout(32);
+        // console.log(energy.nodes[0])
+        Array.from(Array(47).keys()).forEach((e, i) => {
+            console.log(energy.nodes[i].x)
         })
-        // context.rotate(Math.PI/7)
+        var link = svg.append("g").selectAll(".link")
+            .data(energy.links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", path)
+            .style("stroke-width", function(d) {
+                return Math.max(1, d.dy);
+            })
+            .sort(function(a, b) {
+                return b.dy - a.dy;
+            });
 
 
-    // draw curve
-    context.restore()
-    var curveLineData = []
-    var axisLineData = []
-    var pi = Math.PI
-    context.globalAlpha = 0.9
+        link.append("title")
+            .text(function(d) {
 
-    for (var i = 0; i < 14; i++) {
-        let r = d3.scaleLinear()
-            .domain([0, 1])
-            .range([min, max])
-
-        let factor = d3.randomUniform(0, 1)()
-        let point = [pi / 7 * i, r(factor)]
-
-        curveLineData.push(point)
-    }
-
-    var radial = d3.radialLine()
-        .curve(d3.curveCardinalClosed.tension(0.3))
-        .context(context)
-
-    context.setLineDash([5, 0]);
-    // context.shadowBlur = 1;
-    context.beginPath()
-    context.strokeStyle = "seagreen"
-    context.shadowColor = "seagreen"
-    radial(curveLineData);
-    // context.rotate(Math.PI / 2)
+                return d.source.name + " → " + d.target.name + "\n" + format(d.value);
+            });
 
 
+        var node = svg.append("g").selectAll(".node")
+            .data(energy.nodes)
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            })
+            .call(d3.drag()
+                .subject(function(d) {
+                    return d;
+                })
+                .on("start", function() {
+                    this.parentNode.appendChild(this);
+                })
+                .on("drag", dragmove));
 
-    // draw internal bundle curve
-    d3.range(0, 1, 0.02).forEach((e, i) => {
+        node.append("rect")
+            .attr("height", function(d) {
+                return d.dy;
+            })
+            .attr("width", sankey.nodeWidth())
+            .style("fill", function(d) {
+                return d.color = color(d.name.replace(/ .*/, ""));
+            })
+            .style("stroke", function(d) {
+                return d3.rgb(d.color).darker(2);
+            })
+            .append("title")
+            .text(function(d) {
+                return d.name + "\n" + format(d.value);
+            });
 
-        radial(curveLineData.scale(e));
-    })
-    context.stroke()
+        node.append("text")
+            .attr("x", -6)
+            .attr("y", function(d) {
+                return d.dy / 2;
+            })
+            .attr("dy", ".35em")
+            .attr("text-anchor", "end")
+            .attr("transform", null)
+            .text(function(d) {
+                return d.name;
+            })
+            .filter(function(d) {
+                return d.x < width / 2;
+            })
+            .attr("x", 6 + sankey.nodeWidth())
+            .attr("text-anchor", "start");
 
-
-
-    // draw a axis line
-    context.restore()
-    context.beginPath()
-    context.lineWidth = 2
-    context.restore()
-    let bundaryPoints = []
-
-
-    context.strokeStyle = 'salmon'
-    context.lineWidth = 1;
-
-    var innerborder = axisLineData
-    var outerborder = axisLineData.map((e) => (e.scale(2.33)))
-
-    var axis = d3.radialLine()
-        .context(context);
-
-    d3.range(0, 2 * Math.PI, Math.PI / 7).forEach((e, i) => {
-        let r = d3.scaleLinear()
-            .domain([0, 1])
-            .range([min, max])
-        let startPoint = [pi / 7 * i, r(0)]
-        let endPoint = [pi / 7 * i, r(1)]
-        axis([startPoint, endPoint])
-    })
-
-
-
-    context.stroke()
-
-
-    // draw points
-    context.restore()
-    context.strokeStyle = 'salmon'
-    context.lineWidth = 4;
-    context.fillStyle = '#ccc'
-
-    var points = d3.symbol()
-        .size(20)
-        .context(context);
-
-
-    context.beginPath()
-    curveLineData.forEach((d, i) => {
-        context.save();
-        context.translate(d[1] * Math.sin(d[0]), -d[1] * Math.cos(d[0]));
-        points()
-        context.restore();
-    })
-
-    context.stroke()
-    context.fill()
-    // context.rotate(pi / 2)
-
-    // label
-    context.restore()
-    context.strokeStyle = 'salmon'
-    context.lineWidth = 4;
-    context.fillStyle = 'salmon'
-
-    context.beginPath()
-
-    context.font = "32px serif";
-    labels.forEach((e,i)=>{
-        context.fillText(e, 0, -60);
-    })
-
-    context.fillText()
+        function dragmove(d) {
+            d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+            sankey.relayout();
+            link.attr("d", path);
+        }
+    });
 
 }
 
