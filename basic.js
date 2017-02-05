@@ -1,5 +1,5 @@
-import levelScore from './lib/levelScore'
+import sankey from './lib/sankey'
 
-levelScore()
+sankey()
 
 // export default str
