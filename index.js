@@ -60,7 +60,7 @@ var levelScore = () => {
             .layout(32);
         // console.log(energy.nodes[0])
         Array.from(Array(47).keys()).forEach((e, i) => {
-            console.log(energy.nodes[i].x)
+            console.log(energy.links[i])
         })
         var link = svg.append("g").selectAll(".link")
             .data(energy.links)

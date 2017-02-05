@@ -1,7 +1,5 @@
-import _ from 'lodash'
-import data2canvas from './'
+import levelScore from './lib/levelScore'
 
-var str = 'str'
-data2canvas()
+levelScore()
 
-export default str
+// export default str
