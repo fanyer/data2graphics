@@ -1,5 +1,5 @@
-import sankey from './lib/sankey'
+import intakeDistribution from './lib/intake-distribution'
+import './basic.css'
 
-sankey()
+intakeDistribution()
 
-// export default str
