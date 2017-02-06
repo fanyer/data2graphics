@@ -1,4 +1,3 @@
-import './basic.css'
 
 const d3 = Object.assign({},
     require('d3-format'),
