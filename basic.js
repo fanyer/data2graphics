@@ -1,5 +1,6 @@
-import intakeDistribution from './lib/intake-distribution'
+// import intakeDistribution from './lib/intake-distribution'
+import index from './'
 import './basic.css'
 
-var graph=intakeDistribution()
-document.body.append(graph)
+// intakeDistribution();
+index()
