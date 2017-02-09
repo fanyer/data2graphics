@@ -10,18 +10,11 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             loader: 'babel',
-            exclude: /node_modules/
+            exclude: '/node_modules/'
 
         }, {
             test: /\.css$/, // Only .css files
             loader: 'style!css' // Run both loaders
-        }],
-        rules: [{
-            test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: "style-loader",
-                use: "css-loader"
-            })
         }]
     },
     plugins: [

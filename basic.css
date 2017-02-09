@@ -1,66 +1,69 @@
-body{
-	/*background: salmon;*/
-	/*color: #fff;*/
-	padding: 0;
-	margin: 0;
+body {
+    /*background: salmon;*/
+    /*color: #fff;*/
+    padding: 0;
+    margin: 0;
 }
 
-canvas{
-	/*background: #ccc;*/
+canvas {
+    /*background: #ccc;*/
 }
 
-svg{
-	/*background: rgba(46,139,87,0.5);*/
-	background: #fff;
+svg {
+    /*background: rgba(46,139,87,0.5);*/
+    background: #fff;
 }
 
 rect {
-  fill: none;
-  pointer-events: all;
+    fill: none;
+    pointer-events: all;
 }
 
 circle {
-  fill: none;
-  stroke: rgba(46,139,87,0.5);
+    fill: none;
+    stroke: rgba(46, 139, 87, 0.5);
 }
 
-.salmon{
-	stroke: salmon;
+.salmon {
+    stroke: salmon;
 }
+
 
 /*sankey*/
+
 #chart {
     height: 500px;
-  }
+}
 
-  .node rect {
+.node rect {
     cursor: move;
     fill-opacity: .9;
     shape-rendering: crispEdges;
-  }
+}
 
-  .node text {
+.node text {
     pointer-events: none;
     text-shadow: 0 1px 0 #fff;
-  }
+}
 
-  .link {
+.link {
     fill: none;
     stroke: #000;
     stroke-opacity: .2;
-  }
+}
 
-  .link:hover {
+.link:hover {
     stroke-opacity: .5;
-  }
+}
 
 
+/*histogram*/
 
-  .bar rect {
-  fill: steelblue;
+.bar rect {
+    fill: steelblue;
 }
 
 .bar text {
-  fill: #fff;
-  font: 10px sans-serif;
+    fill: #fff;
+    font: 10px sans-serif;
 }
