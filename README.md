@@ -10,12 +10,12 @@ this library outputs graphics with interfaces as below
 * estimateFiber
 * estimateSugar
 
-#### intakeSugarDisrribution
+#### intakeSugarDistribution
 after import this function , call it as below:
 ```
-intakeDisrribution(oDom,{config1,config2})
+intakeDistribution(oDom,{config1,config2})
 
-//oDom is an dom object
+//oDom is a dom object
 
 //config1 example
 {
