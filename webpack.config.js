@@ -2,7 +2,7 @@ var webpack = require('webpack')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    entry: './basic.js',
+    entry: './index.js',
     output: {
         filename: 'bundle.js'
     },
@@ -10,7 +10,10 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             loader: 'babel',
-            exclude: '/node_modules/'
+            exclude: [/node_modules/],
+            query:{
+                presets:'es2015'
+            }
 
         }, {
             test: /\.css$/, // Only .css files
@@ -19,9 +22,9 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            'd3': 'd3'
+            d3: 'd3'
         }),
-        new ExtractTextPlugin('*.css')
+        new ExtractTextPlugin('style.css')
     ]
 
 
