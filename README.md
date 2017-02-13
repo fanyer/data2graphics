@@ -10,8 +10,14 @@ this library outputs graphics with interfaces as below
 * estimateFiber
 * estimateSugar
 
+****
+
+#### Notifications
+This library aims at making it purely free to transform between data and graphics . The most common json struct is `config`, whose keys and values can be mostly customed.
+****
+
 #### intakeSugarDistribution
-after import this function , call it as below:
+after import this function , you can call it as below:
 ```
 intakeDistribution(oDom, config1, config2)
 
@@ -47,7 +53,7 @@ intakeDistribution(oDom, config1, config2)
 
 #### intakeFiberStruct
 ```
-intakeSugarDistribution()
+intakeSugarDistribution(config)
 
 //config example
 {
@@ -85,7 +91,7 @@ scoreLevel(config)
 
 ### intakeFatProportion
 ```
-intakeFatProportion()
+intakeFatProportion(config)
 
 //config example
 
