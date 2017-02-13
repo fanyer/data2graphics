@@ -13,7 +13,7 @@ this library outputs graphics with interfaces as below
 #### intakeSugarDistribution
 after import this function , call it as below:
 ```
-intakeDistribution(oDom,{config1,config2})
+intakeDistribution(oDom, config1, config2)
 
 //oDom is a dom object
 
@@ -46,3 +46,48 @@ intakeDistribution(oDom,{config1,config2})
 
 
 #### intakeFiberStruct
+```
+intakeSugarDistribution()
+
+//config example
+{
+
+}
+```
+
+
+### scoreLevel
+```
+scoreLevel(config)
+
+//config example
+{
+    'score': 46.7,
+    'data':{
+      "低聚果糖": 0.4,
+      "低聚异麦芽糖": 0.6,
+      "𝜷-葡聚糖": 0.3,
+      "葡甘露聚糖": 0.2,
+      "抗性麦芽糊精": 0.9,
+      "氨糖": 0.5,
+      "饱和脂肪酸": 0.3,
+      "不饱和脂肪酸":0.8,
+      "鞘脂类": 0.77,
+      "胆汁酸":0.12,
+      "胆红素": 0.34,
+      "胆固醇":0.96,
+      "淀粉": 0.43,
+      "膳食纤维": 0.213
+    }
+}
+
+```
+
+### intakeFatProportion
+```
+intakeFatProportion()
+
+//config example
+
+
+```
