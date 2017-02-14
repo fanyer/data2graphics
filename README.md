@@ -13,7 +13,7 @@ this library outputs graphics with interfaces as below
 ****
 
 #### Notifications
-This library aims at making it purely free to transform between data and graphics . The most common json struct is `config`, whose keys and values can be mostly customed.
+This library aims at making it purely free to transfer between data and graphics . The most common json struct is `config`, whose keys and values can be mostly customed.
 ****
 
 #### intakeSugarDistribution
