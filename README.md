@@ -59,15 +59,17 @@ intakeFiberStruct(oDom, config)
 
 //config example
 {
-  'XXX': 0.15,
-  '胆固醇': 0.15,
-  '饱和脂肪酸': 0.2,
-  '不饱和脂肪酸': 0.1,
-  '鞘脂类': 0.4
+   'XXX': 0.08,
+   '胆固醇': 0.17,
+   '饱和脂肪酸': 0.2,
+   '不饱和脂肪酸': 0.1,
+   'YYY脂肪酸': 0.05,
+   '鞘脂类': 0.4
 }
 ```
 It will render as:
-![intakeFiberStruct](./docs/intake-fiber-struct.png)
+
+<img src="./docs/intake-fiber-struct.png" alt="intakeFiberStruct" width='500'>
 
 
 ### scoreLevel
