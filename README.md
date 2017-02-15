@@ -16,6 +16,8 @@ this library outputs graphics with interfaces as below
 This library aims at making it purely free to transfer between data and graphics . The most common json struct is `config`, whose keys and values can be mostly customed.
 ****
 
+
+
 #### intakeSugarDistribution
 after import this function , you can call it as below:
 ```
@@ -64,6 +66,8 @@ intakeFiberStruct(oDom, config)
   '鞘脂类': 0.4
 }
 ```
+It will render as:
+![intakeFiberStruct](./docs/intake-fiber-struct.png)
 
 
 ### scoreLevel
