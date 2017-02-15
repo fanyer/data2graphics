@@ -53,18 +53,22 @@ intakeDistribution(oDom, config1, config2)
 
 #### intakeFiberStruct
 ```
-intakeSugarDistribution(config)
+intakeFiberStruct(oDom, config)
 
 //config example
 {
-
+  'XXX': 0.15,
+  '胆固醇': 0.15,
+  '饱和脂肪酸': 0.2,
+  '不饱和脂肪酸': 0.1,
+  '鞘脂类': 0.4
 }
 ```
 
 
 ### scoreLevel
 ```
-scoreLevel(config)
+scoreLevel(oDom, config)
 
 //config example
 {
@@ -91,7 +95,7 @@ scoreLevel(config)
 
 ### intakeFatProportion
 ```
-intakeFatProportion(config)
+intakeFatProportion(oDom, config)
 
 //config example
 
