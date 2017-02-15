@@ -51,6 +51,9 @@ intakeDistribution(oDom, config1, config2)
  }
 
 ```
+It will render as below:
+
+<img src="./docs/intake-sugar-distribution.png"  width='500'>
 
 
 #### intakeFiberStruct
@@ -67,9 +70,9 @@ intakeFiberStruct(oDom, config)
    '鞘脂类': 0.4
 }
 ```
-It will render as:
+It will render as below:
 
-<img src="./docs/intake-fiber-struct.png" alt="intakeFiberStruct" width='500'>
+<img src="./docs/intake-fiber-struct.png" width='500'>
 
 
 ### scoreLevel
@@ -98,6 +101,11 @@ scoreLevel(oDom, config)
 }
 
 ```
+
+It will render as below:
+
+<img src="./docs/score-level.png" width='500'>
+
 
 ### intakeFatProportion
 ```
