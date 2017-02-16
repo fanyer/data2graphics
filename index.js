@@ -1,6 +1,7 @@
-import {intakeDistribution} from './lib/intake-distribution'
+import {scoreLevel} from './lib/score-level'
 import './basic.css'
 
 var oDiv1= document.querySelector('#div1')
 
-intakeDistribution(oDiv1)
+
+scoreLevel(oDiv1)
