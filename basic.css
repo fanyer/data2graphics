@@ -70,46 +70,57 @@ circle {
 
 
 /*level-score*/
+
 .line0 {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }
+
 .line1 {
-  fill: none;
-  stroke: seagreen;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: seagreen;
+    stroke-width: 1.5px;
 }
+
 .line3 {
-  fill: none;
-  stroke: salmon;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: salmon;
+    stroke-width: 1.5px;
 }
+
 .dot {
-  fill: white;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }
 
-path{
-  stroke-width: 1.5;
-  stroke: steelblue;
+path {
+    stroke-width: 1.5;
+    stroke: steelblue;
 }
 
-text{
-  font-family: Verdana;
-  font-weight: 100;
-  font-size: 16px;
-  fill: black;
+text {
+    font-family: Verdana;
+    font-weight: 100;
+    font-size: 16px;
+    fill: black;
 }
 
-.text0{
-  font-family: Verdana;
-  font-weight: 100;
-  fill :steelblue;
+.text0 {
+    font-family: Verdana;
+    font-weight: 100;
+    fill: steelblue;
 }
-.text1{
-  fill :seagreen;
-  font-family: Verdana;
-  font-weight: 100;
+
+.text1 {
+    fill: seagreen;
+    font-family: Verdana;
+    font-weight: 100;
+}
+
+/*source han sa*/
+@font-face {
+    font-family: "Source Han Sans CN";
+    src: local("Source Han Sans CN") url("./lib/fonts/NotoSans-Regular.ttf");
 }
