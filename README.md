@@ -115,3 +115,9 @@ intakeFatProportion(oDom, config)
 
 
 ```
+
+
+### FAQ
+1. Q: how to configure font-family in canvas or svg?
+
+   A: In canvas, it renders in the process of canvas on GPU. As a result, it behaves totally different from odinary html or svg. You'd better preload 3rd fonts at ahead.
