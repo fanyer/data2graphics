@@ -117,7 +117,42 @@ intakeFatProportion(oDom, config)
 ```
 
 
-### FAQ
-1. Q: how to configure font-family in canvas or svg?
+### estimateFiber
+```
+estimateFiber(oDom, config)
 
-   A: In canvas, it renders in the process of canvas on GPU. As a result, it behaves totally different from odinary html or svg. You'd better preload 3rd fonts at ahead.
+//config example
+{
+   '维生素1': 1,
+   '维生素2': 1,
+   '维生素3': 3,
+   '维生素4': 2,
+   '维生素5': 1,
+   '维生素6': 3,
+   '维生素7': 1,
+   '维生素8': 2,
+   '维生素9': 2,
+   '维生素10': 1,
+   '维生素11': 1,
+   '维生素12': 3,
+   '维生素13': 3,
+   '维生素14': 1,
+   '维生素15': 2,
+   '维生素16': 3
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-fiber.png" width='500'>
+
+
+
+### FAQ
+#### 1. Q: how to configure font-family in canvas or svg?
+
+   **A**: In canvas, fonts render in the process of canvas on GPUs. As a result, it behaves totally different from odinary html or svg in the renderer process. You'd better preload 3rd fonts at ahead.
+
+   **Included or require by js bundler like webpack are not valid.**
+
+   **When the canvas context resizes ,it also transfers to the default browser settings**
