@@ -112,9 +112,15 @@ It will render as below:
 intakeFatProportion(oDom, config)
 
 //config example
-
+{
+  'sature': 42,
+  'unsature': 58
+}
 
 ```
+It will render as below:
+
+<img src="./docs/proportion.png" width='500'>
 
 
 ### estimateFiber
