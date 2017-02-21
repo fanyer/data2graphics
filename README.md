@@ -153,6 +153,6 @@ It will render as below:
 
    **A**: In canvas, fonts render in the thread of canvas on GPUs. As a result, it behaves totally different from odinary html or svg in the renderer thread. You'd better preload 3rd fonts at ahead.
 
-   **Included or require by js bundler like webpack are not valid.**
+   **Included or required by js bundler like webpack are not valid.**
 
    **When the canvas context resizes ,it also transfers to the default browser settings**
