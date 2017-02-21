@@ -151,7 +151,7 @@ It will render as below:
 ### FAQ
 #### 1. Q: how to configure font-family in canvas or svg?
 
-   **A**: In canvas, fonts render in the process of canvas on GPUs. As a result, it behaves totally different from odinary html or svg in the renderer process. You'd better preload 3rd fonts at ahead.
+   **A**: In canvas, fonts render in the thread of canvas on GPUs. As a result, it behaves totally different from odinary html or svg in the renderer thread. You'd better preload 3rd fonts at ahead.
 
    **Included or require by js bundler like webpack are not valid.**
 

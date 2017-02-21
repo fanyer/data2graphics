@@ -5,8 +5,10 @@ body {
     margin: 0;
 }
 
+
+
 canvas {
-    /*background: #ccc;*/
+    font-family: 'adad';
 }
 
 svg {
@@ -117,10 +119,4 @@ text {
     fill: seagreen;
     font-family: Verdana;
     font-weight: 100;
-}
-
-/*source han sa*/
-@font-face {
-    font-family: "Source Han Sans CN";
-    src: local("Source Han Sans CN") url("./lib/fonts/NotoSans-Regular.ttf");
 }

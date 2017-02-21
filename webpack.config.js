@@ -22,7 +22,8 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            d3: 'd3'
+            d3: 'd3',
+            $:'jquery'
         }),
         new ExtractTextPlugin('style.css')
     ]
