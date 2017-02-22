@@ -1,5 +1,5 @@
 import './basic.css'
-import {intakeFatProportion} from './lib/intake-fat-distribution2'
+import {intakeFatProportion} from './lib/intake-fat-distribution'
 
 var oDiv1= document.querySelector('#div1')
 

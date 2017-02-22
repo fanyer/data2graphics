@@ -2,9 +2,9 @@ var webpack = require('webpack')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    entry: './basic.js',
+    entry: './index.js',
     output: {
-        filename: 'bundle.js'
+        filename: './bin/data2graphics.js'
     },
     module: {
         loaders: [{
@@ -21,11 +21,11 @@ module.exports = {
         }]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            d3: 'd3',
-            $:'jquery'
-        }),
-        new ExtractTextPlugin('style.css')
+        // new webpack.ProvidePlugin({
+        //     d3: 'd3',
+        //     $:'jquery'
+        // }),
+        // new ExtractTextPlugin('style.css')
     ]
 
 
