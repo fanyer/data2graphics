@@ -1,7 +1,7 @@
-// import intakeDistribution from './lib/intake-distribution'
-import {index} from './'
 import './basic.css'
+import {intakeFatProportion} from './lib/intake-fat-distribution2'
 
 var oDiv1= document.querySelector('#div1')
 
-index(oDiv1)
+intakeFatProportion(oDiv1)
+
