@@ -2,7 +2,7 @@
   "name": "data2graphics",
   "version": "1.0.0",
   "description": "",
-  "main": "bin/data2graphics.js",
+  "main": "bin/data2graphics.rollup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",

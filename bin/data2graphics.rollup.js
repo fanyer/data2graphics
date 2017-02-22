@@ -1,13 +1,20 @@
-#!/usr/bin/env node
-'use strict';
+/*!
+ * data2grahics.js v1.0.0
+ * (c) 2017-2017 Yeer Fan
+ * Released under the MIT License.
+ */
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
+	(factory((global.data2grahics = global.data2grahics || {}),global.D3));
+}(this, (function (exports,D3) { 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
+D3 = 'default' in D3 ? D3['default'] : D3;
 
-d3 = Object.assign({},
-    d3,
+var d3 = Object.assign({},
+    D3,
     require('d3-shape'),
     require('d3-format'),
-    require('d3-sankey'),
     require('d3-selection'),
     require('d3-request'),
     require('d3-drag'),
@@ -32,7 +39,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
     };
 
 
-    var xArr1 = config1||{
+    var xArr1 = config1 || {
         "type": "检测值",
         "data": {
             '膳食纤维': 5,
@@ -44,7 +51,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
         }
     };
 
-    var xArr2 = config2||{
+    var xArr2 = config2 || {
         "type": "标准值",
         "data": {
             '膳食纤维': 3.5,
@@ -92,7 +99,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
 
     // detect svg or canvas
-    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); //创建svg标签   
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute('width', '1000');
     svg.setAttribute('height', '500');
     parrent.append(svg);
@@ -262,7 +269,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
         .attr("r", 3.5);
 
 
-   
+
     // legend
     let y1Destiny = (lineData1.pop());
     let y2Destiny = (lineData2.pop());
@@ -282,7 +289,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
                 return e === '标准值' ?
                     'translate(900,' + (y1pixel + 20) + ')' : 'translate(900,' + (y2pixel + 20) + ')';
             })
-            .attr('class','text'+i)
+            .attr('class', 'text' + i)
             .text(function(d) {
                 return e;
             });
@@ -291,10 +298,8 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
 }
 
-// basic location coordination is polar
-
-d3 = Object.assign({},
-    d3,
+var d3$1 = Object.assign({},
+    D3,
     require('d3-format'),
     require('d3-request'),
     require('d3-drag'),
@@ -376,10 +381,10 @@ function intakeFiberStruct(parrent, config) {
     context.save();
 
     var radius = [
-        d3.range(min, min + d, 10),
-        d3.range(min + d, min + 2 * d, 10),
-        d3.range(min + 2 * d, min + 3 * d, 10),
-        d3.range(min + 3 * d, min + 4 * d + 10, 10)
+        d3$1.range(min, min + d, 10),
+        d3$1.range(min + d, min + 2 * d, 10),
+        d3$1.range(min + 2 * d, min + 3 * d, 10),
+        d3$1.range(min + 3 * d, min + 4 * d + 10, 10)
     ];
 
     context.globalAlpha = 0.8;
@@ -388,7 +393,7 @@ function intakeFiberStruct(parrent, config) {
         radius[i].forEach(function(e2, i2) {
             context.setLineDash([4, 5]);
 
-            let arc = d3.arc()
+            let arc = d3$1.arc()
                 .outerRadius(e2)
                 .innerRadius(0)
                 .startAngle(0)
@@ -408,13 +413,13 @@ function intakeFiberStruct(parrent, config) {
     // draw arcs
     context.save();
 
-    var arcs = d3.pie()(data);
+    var arcs = d3$1.pie()(data);
 
     arcs.sort((a, b) => {
         return a.value - b.value
     });
 
-    var arc = d3.arc()
+    var arc = d3$1.arc()
         .innerRadius(min)
         .context(context);
 
@@ -424,7 +429,7 @@ function intakeFiberStruct(parrent, config) {
         I > 3 ?
             context.strokeStyle = 'seagreen' : context.strokeStyle = 'steelblue';
 
-        d3.range(min, min + 210 - I * 30, 10).map((e, i) => {
+        d3$1.range(min, min + 210 - I * 30, 10).map((e, i) => {
             arc.outerRadius(e)(E);
             context.stroke();
         });
@@ -442,12 +447,12 @@ function intakeFiberStruct(parrent, config) {
     context.font = "24px Verdana";
     context.textBaseline = "middle";
 
-    var radialLine = d3.radialLine()
-        .curve(d3.curveLinear)
+    var radialLine = d3$1.radialLine()
+        .curve(d3$1.curveLinear)
         .context(context);
 
-    var line = d3.line()
-        .curve(d3.curveLinear)
+    var line = d3$1.line()
+        .curve(d3$1.curveLinear)
         .context(context);
 
     function generateRL(angle) {
@@ -493,6 +498,15 @@ function intakeFiberStruct(parrent, config) {
 
 
 }
+
+var d3$2 = Object.assign({},
+    D3,
+    require('d3-format'),
+    require('d3-request'),
+    require('d3-drag'),
+    require('d3-color'),
+    require('d3-scale')
+);
 
 function scoreLevel(parrent, config) {
     /**
@@ -586,10 +600,10 @@ function scoreLevel(parrent, config) {
         // context.rotate(-Math.PI / 10)
 
     var radius = [];
-    radius.push(d3.range(150, 200, 10));
-    radius.push(d3.range(200, 250 + 10, 10));
-    radius.push(d3.range(250, 300 + 10, 10));
-    radius.push(d3.range(300, 350 + 10, 10));
+    radius.push(d3$2.range(150, 200, 10));
+    radius.push(d3$2.range(200, 250 + 10, 10));
+    radius.push(d3$2.range(250, 300 + 10, 10));
+    radius.push(d3$2.range(300, 350 + 10, 10));
 
 
     context.globalAlpha = 0.3;
@@ -600,7 +614,7 @@ function scoreLevel(parrent, config) {
                     context.setLineDash([10, 0]) :
                     context.setLineDash([2, 4]);
 
-                let arc = d3.arc()
+                let arc = d3$2.arc()
                     .outerRadius(e2)
                     .innerRadius(0)
                     .startAngle(0)
@@ -626,7 +640,7 @@ function scoreLevel(parrent, config) {
     context.globalAlpha = 0.9;
 
     values.map((e, i) => {
-        let r = d3.scaleLinear()
+        let r = d3$2.scaleLinear()
             .domain([0, 1])
             .range([min, max]);
 
@@ -637,8 +651,8 @@ function scoreLevel(parrent, config) {
     });
 
 
-    var radial = d3.radialLine()
-        .curve(d3.curveCardinalClosed.tension(0.3))
+    var radial = d3$2.radialLine()
+        .curve(d3$2.curveCardinalClosed.tension(0.3))
         .context(context);
 
     context.setLineDash([5, 0]);
@@ -652,7 +666,7 @@ function scoreLevel(parrent, config) {
 
 
     // draw internal bundle curve
-    d3.range(0, 1, 0.02).forEach((e, i) => {
+    d3$2.range(0, 1, 0.02).forEach((e, i) => {
         radial(curveLineData.scale(e));
     });
     context.stroke();
@@ -673,11 +687,11 @@ function scoreLevel(parrent, config) {
     var innerborder = axisLineData;
     var outerborder = axisLineData.map((e) => (e.scale(2.33)));
 
-    var axis = d3.radialLine()
+    var axis = d3$2.radialLine()
         .context(context);
 
-    d3.range(0, 2 * Math.PI, Math.PI / 7).forEach((e, i) => {
-        let r = d3.scaleLinear()
+    d3$2.range(0, 2 * Math.PI, Math.PI / 7).forEach((e, i) => {
+        let r = d3$2.scaleLinear()
             .domain([0, 1])
             .range([min, max]);
         let startPoint = [pi / 7 * i, r(0)];
@@ -693,7 +707,7 @@ function scoreLevel(parrent, config) {
     context.lineWidth = 4;
     context.fillStyle = '#ccc';
 
-    var points = d3.symbol()
+    var points = d3$2.symbol()
         .size(20)
         .context(context);
 
@@ -738,8 +752,8 @@ function scoreLevel(parrent, config) {
 
 }
 
-d3 = Object.assign({},
-    d3,
+var d3$3 = Object.assign({},
+    D3,
     require('d3-shape'),
     require('d3-format'),
     require('d3-selection'),
@@ -790,7 +804,7 @@ function intakeFatProportion(parrent, config) {
 
     context.save();
 
-    var arcs = d3.pie()(data);
+    var arcs = d3$3.pie()(data);
 
 
     // draw text & number
@@ -810,7 +824,7 @@ function intakeFatProportion(parrent, config) {
 
 
 
-    var circle = d3.arc()
+    var circle = d3$3.arc()
         .startAngle(0)
         .endAngle(2 * Math.PI)
         .innerRadius(0)
@@ -823,7 +837,7 @@ function intakeFatProportion(parrent, config) {
         context.setLineDash(I === 0 ? [4, 10] : [4, 0]);
 
 
-        let arc = d3.arc()
+        let arc = d3$3.arc()
             .innerRadius(E)
             .outerRadius(E)
             .padAngle(0.02)
@@ -879,7 +893,7 @@ function intakeFatProportion(parrent, config) {
     context.save();
         // arcs.sort((a,b)=>(a.startAngle-b.startAngle))
 
-    var arc = d3.arc()
+    var arc = d3$3.arc()
         .innerRadius(min)
         .context(context);
 
@@ -888,7 +902,7 @@ function intakeFatProportion(parrent, config) {
 
         context.strokeStyle = I === 0 ? 'seagreen' : 'steelblue';
 
-        d3.range(min, min + 210 - I * 30, 10).map((e, i) => {
+        d3$3.range(min, min + 210 - I * 30, 10).map((e, i) => {
             arc.outerRadius(e)(E);
             context.stroke();
         });
@@ -922,8 +936,8 @@ function intakeFatDeviation(parrent, config) {
     context.save();
 }
 
-d3 = Object.assign({},
-    d3,
+var d3$4 = Object.assign({},
+    D3,
     require('d3-shape'),
     require('d3-format'),
     require('d3-selection'),
@@ -1005,10 +1019,10 @@ function estimateFiber(parrent, config) {
     context.strokeStyle = 'seagreen';
     context.setLineDash([4, 5]);
 
-    var radius = d3.range(min, min + 4 * d + 10, 20);
+    var radius = d3$4.range(min, min + 4 * d + 10, 20);
 
     radius.forEach((e, i) => {
-        let arc = d3.arc()
+        let arc = d3$4.arc()
             .outerRadius(e)
             .innerRadius(0)
             .startAngle(0)
@@ -1026,13 +1040,13 @@ function estimateFiber(parrent, config) {
     // draw arcs
     context.save();
 
-    var arcs = d3.pie()(Array.from({ length: 16 }, e => 1));
+    var arcs = d3$4.pie()(Array.from({ length: 16 }, e => 1));
 
     arcs.sort((a, b) => {
         return a.startAngle - b.startAngle
     });
 
-    var arc = d3.arc()
+    var arc = d3$4.arc()
         .innerRadius(min)
         .context(context);
 
@@ -1070,7 +1084,7 @@ function estimateFiber(parrent, config) {
 
         let inMax = InMax(data[I]);
 
-        d3.range(min, inMax, 10).map((e, i) => {
+        d3$4.range(min, inMax, 10).map((e, i) => {
 
             context.setLineDash([10, 0]);
             arc.outerRadius(e)(E);
@@ -1115,3 +1129,7 @@ exports.scoreLevel = scoreLevel;
 exports.intakeFatProportion = intakeFatProportion;
 exports.intakeFatDeviation = intakeFatDeviation;
 exports.estimateFiber = estimateFiber;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));

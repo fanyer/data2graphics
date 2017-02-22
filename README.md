@@ -178,8 +178,8 @@ It will render as below:
 
 ## How to join development?
 You'd better have experience in tools and knowledges as below:
-* packaged by rollup
-* monitored by webpack
+* 2 versions packaged by rollup/webpack
+* process monitored by webpack
 * Coordinate System in Geometry
 * Distributions in Math
 * fitting and approching curve functions in Math and Statistics
