@@ -24424,7 +24424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var d3 = Object.assign({}, _d2.default, __webpack_require__(5), __webpack_require__(7), __webpack_require__(11), __webpack_require__(12), __webpack_require__(13));
+	var d3 = Object.assign({}, _d2.default, __webpack_require__(14), __webpack_require__(3), __webpack_require__(5), __webpack_require__(7), __webpack_require__(11), __webpack_require__(12), __webpack_require__(13));
 
 	function intakeFiberStruct(parrent, config) {
 
@@ -24460,10 +24460,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    canvas.width = 1200;
 	    canvas.height = 900;
 
-	    var radius = Math.min(width, height) / 2;
-
 	    var width = canvas.width,
 	        height = canvas.height;
+	    var radius = Math.min(width, height) / 2;
+
 	    if (window.devicePixelRatio) {
 	        canvas.style.width = width + "px";
 	        canvas.style.height = height + "px";
@@ -24471,6 +24471,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        canvas.width = width * window.devicePixelRatio * 2;
 	        context.scale(window.devicePixelRatio * 2, window.devicePixelRatio * 2);
 	    }
+
+	    console.log(width);
 
 	    context.translate(width / 2, height / 2);
 	    context.lineWidth = 1.5;

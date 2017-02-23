@@ -5,11 +5,12 @@
   "main": "bin/data2graphics.rollup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline",
-    "build": "rollup -c rollup.config.js"
+    "dev": "webpack-dev-server --hot --inline -c config/dev.env.js",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build:webpack": "webpack -c config/prod.env.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "iofanyer",
+  "license": "MIT",
   "devDependencies": {
     "rollup": "^0.41.4"
   },
