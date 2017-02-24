@@ -2,20 +2,21 @@
   "name": "data2graphics",
   "version": "1.0.0",
   "description": "",
-  "main": "bin/data2graphics.rollup.js",
+  "main": "bin/data2graphics.webpack.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline -c config/dev.env.js",
+    "dev": "webpack-dev-server --hot --inline",
     "build:rollup": "rollup -c rollup.config.js",
     "build:webpack": "webpack -c config/prod.env.js"
   },
   "author": "iofanyer",
   "license": "MIT",
   "devDependencies": {
-    "rollup": "^0.41.4"
+    "rollup": "^0.41.4",
+    "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
-    "css-loader":"0.26.1",
+    "css-loader": "0.26.1",
     "style-loader": "0.13.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
