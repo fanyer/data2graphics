@@ -2,7 +2,7 @@
   "name": "data2graphics",
   "version": "1.0.0",
   "description": "",
-  "main": "bin/data2graphics.webpack.js",
+  "main": "bin/data2graphics.rollup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",
@@ -16,12 +16,9 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
-    "css-loader": "0.26.1",
-    "style-loader": "0.13.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
-    "react": "^15.4.2",
-    "react-native-webrtc": "^1.54.7",
+    "css-loader": "0.26.1",
     "d3": "^4.4.1",
     "d3-array": "^1.0.1",
     "d3-color": "^1.0.1",
@@ -35,6 +32,10 @@
     "d3-shape": "^1.0.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "jquery": "^3.1.1",
+    "react": "^15.4.2",
+    "react-native-webrtc": "^1.54.7",
+    "rollup-plugin-babel": "^2.7.1",
+    "style-loader": "0.13.1",
     "webpack": "^1.14.0"
   }
 }

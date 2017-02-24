@@ -1,5 +1,6 @@
 var dependencies = require("./package.json").dependencies;
 var version = require('./package.json').version;
+import babel from 'rollup-plugin-babel';
 
 var banner =
     '/*!\n' +
@@ -19,7 +20,9 @@ export default {
     // paths: {
     //     d3: 'https://d3js.org/d3.v4.min.js'
     // }
+    plugins: [ babel() ],
     globals: {
         'd3': 'D3'
-    }
+    },
+
 }
