@@ -61,15 +61,15 @@ circle {
 
 /*histogram*/
 
-.bar rect {
+/*.bar rect {
     fill: steelblue;
-}
+}*/
 
-.bar text {
+/*.bar text {
     fill: #fff;
     font: 10px sans-serif;
 }
-
+*/
 
 /*level-score*/
 

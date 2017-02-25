@@ -1,7 +1,7 @@
 ## Reports' Graphics API Referrence
 
 this library outputs graphics with interfaces as below
-* intakeSugarDisrribution
+* intakeSugarDistribution
 * intakeFiberStruct
 * scoreLevel
 * intakeFatProportion
