@@ -7,6 +7,8 @@ this library outputs graphics with interfaces as below
 * intakeFatProportion
 * intakeFatDeviation
 * guideGoodness
+  * curveGraph
+  * linkGraph
 * estimateFiber
 * estimateSugar
 
@@ -17,6 +19,9 @@ this library outputs graphics with interfaces as below
 
 2. For regular graphics ,the most is draw in svg based on Cartesian coordinate system; For irregular graphics or more geometrical, the most  is draw in canvas based on Polar coordinate system.
 ****
+
+## Specs Over Configuration
+1. Each graphic vue component shall be independent, for example, one ancestor dom node with one svg/canvas.
 
 
 
@@ -144,6 +149,49 @@ intakeFatDeviation(oDom, config)
 It will render as below:
 
 <img src="./docs/intake-fat-deviation.png" width='500'>
+
+
+
+### curveGraph (from guideGoodness)
+```
+guideGoodness(oDom, config)
+
+//config example
+{
+  '标准值':0.5,
+  'data':{
+    '饱和脂肪酸': 0.8739,
+    '不饱和脂肪酸': 0.1498,
+    '鞘脂类': 0.3483,
+    '胆固醇': 0.5705
+  }
+}
+
+```
+It will render as below:
+
+<img src="./docs/curve-graph.png" width='500'>
+
+
+### linkGraph (from guideGoodness)
+```
+linkGraph(oDom, config)
+
+//config example
+{
+  '标准值':0.5,
+  'data':{
+    '饱和脂肪酸': 0.8739,
+    '不饱和脂肪酸': 0.1498,
+    '鞘脂类': 0.3483,
+    '胆固醇': 0.5705
+  }
+}
+
+```
+It will render as below:
+
+<img src="./docs/link-graph.png" width='500'>
 
 
 ### estimateFiber

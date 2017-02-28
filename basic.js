@@ -1,5 +1,5 @@
 import './basic.css'
-import {intakeFatDeviation} from './lib/intake-fat-distribution'
+import {sankey} from './lib/sankey'
 
 var oDiv1= document.querySelector('#div1')
 
@@ -8,5 +8,5 @@ var oDiv1= document.querySelector('#div1')
 //   'unsature': 86
 // }
 
-intakeFatDeviation(oDiv1)
+sankey(oDiv1)
 
