@@ -10,3 +10,4 @@ var oDiv1= document.querySelector('#div1')
 
 sankey(oDiv1)
 
+// console.log(1212)

@@ -46,9 +46,9 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             loader: 'babel',
-            exclude: [/node_modules/],
+            exclude: [/node_modules\/(?![d3-selection|d3-drag])/],
             query: {
-                presets: 'es2015'
+                presets: ['es2015']
             }
 
         }, {
