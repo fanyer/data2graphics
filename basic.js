@@ -1,4 +1,5 @@
 import './basic.css'
+// import {intakeFatProportion} from './lib/intake-fat-distribution'
 import {sankey} from './lib/sankey'
 
 var oDiv1= document.querySelector('#div1')
@@ -10,4 +11,4 @@ var oDiv1= document.querySelector('#div1')
 
 sankey(oDiv1)
 
-// console.log(1212)
+// intakeFatProportion(oDiv1)
