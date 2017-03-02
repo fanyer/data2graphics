@@ -58,211 +58,211 @@
         "source": 0,
         "target": 16,
         "color": "cyan",
-        "value": 10
+        "value": 5
     }, {
         "source": 0,
         "target": 17,
-        "color": "gold",
-        "value": 10
+        "color": "cyan",
+        "value": 5
     }, {
         "source": 0,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 1,
         "target": 17,
-        "color": "cyan",
-        "value": 10
+        "color": "khaki",
+        "value": 5
     }, {
         "source": 1,
         "target": 18,
-        "color": "cyan",
-        "value": 10
+        "color": "khaki",
+        "value": 5
     }, {
         "source": 1,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 2,
         "target": 18,
-        "color": "cyan",
-        "value": 10
+        "color": "khaki",
+        "value": 5
     }, {
         "source": 2,
         "target": 19,
-        "value": 10
+        "value": 5
     }, {
         "source": 2,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 3,
         "target": 19,
-        "value": 10
+        "value": 5
     }, {
         "source": 3,
         "target": 20,
-        "value": 10
+        "value": 5
     }, {
         "source": 3,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 4,
         "target": 20,
-        "value": 10
+        "value": 5
     }, {
         "source": 4,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 4,
         "target": 22,
-        "value": 10
+        "value": 5
     }, {
         "source": 5,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 5,
         "target": 22,
-        "value": 10
+        "value": 5
     }, {
         "source": 5,
         "target": 23,
-        "value": 10
+        "value": 5
     }, {
         "source": 6,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 6,
         "target": 23,
-        "value": 10
+        "value": 5
     }, {
         "source": 6,
         "target": 24,
-        "value": 10
+        "value": 5
     }, {
         "source": 7,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 7,
         "target": 24,
-        "value": 10
+        "value": 5
     }, {
         "source": 7,
         "target": 25,
-        "value": 10
+        "value": 5
     }, {
         "source": 8,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 8,
         "target": 25,
-        "value": 10
+        "value": 5
     }, {
         "source": 8,
         "target": 17,
-        "value": 10
+        "value": 5
     }, {
         "source": 9,
         "target": 18,
-        "value": 10
+        "value": 5
     }, {
         "source": 9,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 9,
         "target": 22,
-        "value": 10
+        "value": 5
     }, {
         "source": 10,
         "target": 17,
-        "value": 10
+        "value": 5
     }, {
         "source": 10,
         "target": 19,
-        "value": 10
+        "value": 5
     }, {
         "source": 10,
         "target": 23,
-        "value": 10
+        "value": 5
     }, {
         "source": 11,
         "target": 23,
-        "value": 10
+        "value": 5
     }, {
         "source": 11,
         "target": 18,
-        "value": 10
+        "value": 5
     }, {
         "source": 11,
         "target": 19,
-        "value": 10
+        "value": 5
     }, {
         "source": 12,
         "target": 22,
-        "value": 10
+        "value": 5
     }, {
         "source": 12,
         "target": 20,
-        "value": 10
+        "value": 5
     }, {
         "source": 12,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 13,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 13,
         "target": 22,
-        "value": 10
+        "value": 5
     }, {
         "source": 13,
         "target": 19,
-        "value": 10
+        "value": 5
     }, {
         "source": 14,
         "target": 23,
-        "value": 10
+        "value": 5
     }, {
         "source": 14,
         "target": 20,
-        "value": 10
+        "value": 5
     }, {
         "source": 14,
         "target": 21,
         "color": "steelblue",
-        "value": 10
+        "value": 5
     }, {
         "source": 15,
         "target": 25,
-        "value": 10
+        "value": 5
     }, {
         "source": 15,
         "target": 26,
-        "value": 10
+        "value": 5
     }, {
         "source": 15,
         "target": 17,
-        "value": 10
+        "value": 5
     }]
 }
