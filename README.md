@@ -154,17 +154,17 @@ It will render as below:
 
 ### curveGraph (from guideGoodness)
 ```
-guideGoodness(oDom, config)
+curveGraph(oDom, config)
 
 //config example
 {
-  '标准值':0.5,
-  'data':{
-    '饱和脂肪酸': 0.8739,
-    '不饱和脂肪酸': 0.1498,
-    '鞘脂类': 0.3483,
-    '胆固醇': 0.5705
-  }
+  'standard': {
+       '过低'： -20,
+       '偏低'： -10,
+       '正常'：0,
+       '偏高'：10,
+       '过高'：20,
+   },
 }
 
 ```
