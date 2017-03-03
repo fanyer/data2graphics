@@ -179,16 +179,11 @@ linkGraph(oDom, config)
 
 //config example
 {
-  '标准值':0.5,
-  'data':{
-    '饱和脂肪酸': 0.8739,
-    '不饱和脂肪酸': 0.1498,
-    '鞘脂类': 0.3483,
-    '胆固醇': 0.5705
-  }
+  ...   
 }
 
 ```
+This config is a little long, explore at [here](https://pkgo.in/itg/data2graphics/blob/master/lib/energy2.json)
 It will render as below:
 
 <img src="./docs/link-graph.png" width='500'>
