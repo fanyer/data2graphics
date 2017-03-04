@@ -183,7 +183,8 @@ linkGraph(oDom, config)
 }
 
 ```
-This config is a little long, explore at [here](https://pkgo.in/itg/data2graphics/blob/master/lib/energy2.json)
+This config is a little long, explore at [here](https://pkgo.in/itg/data2graphics/blob/master/lib/energy2.json).
+
 It will render as below:
 
 <img src="./docs/link-graph.png" width='500'>

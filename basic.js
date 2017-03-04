@@ -1,6 +1,6 @@
 import './basic.css'
 // import {intakeFatProportion} from './lib/intake-fat-distribution'
-import {sankey} from './lib/sankey'
+import {curveGraph} from './lib/guide-goodness'
 
 var oDiv1= document.querySelector('#div1')
 
@@ -9,6 +9,6 @@ var oDiv1= document.querySelector('#div1')
 //   'unsature': 86
 // }
 
-sankey(oDiv1)
+curveGraph(oDiv1)
 
 // intakeFatProportion(oDiv1)
