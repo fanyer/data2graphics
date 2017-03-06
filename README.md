@@ -12,6 +12,7 @@ this library outputs graphics with interfaces as below
 * estimateFiber
 * estimateSugar
 
+
 ****
 
 #### Notifications
@@ -159,18 +160,38 @@ curveGraph(oDom, config)
 //config example
 {
   'standard': {
-       '过低'： -20,
-       '偏低'： -10,
-       '正常'：0,
-       '偏高'：10,
-       '过高'：20,
+       'min': -25,
+       '过低': -20,
+       '偏低': -10,
+       '正常': 0,
+       '偏高': 10,
+       '过高': 20,
+       'max': 25
    },
+   'data': {
+       '维生素A': 16,
+       '维生素B1': 19,
+       '维生素B2': -14,
+       '维生素B3': -5,
+       '维生素B5': -8,
+       '维生素B6': -13,
+       '维生素B7': 6,
+       '维生素B9': -20,
+       '维生素B12': 9,
+       '维生素C': -16,
+       '胡萝卜素': -18,
+       '维生素E': -7,
+       '牛磺酸': 2,
+       '辅酶Q': -7,
+       '异黄酮': -21,
+       '维生素K': -7
+   }
 }
 
 ```
 It will render as below:
 
-<img src="./docs/curve-graph.png" width='500'>
+<img src="./docs/curve-graph.png" width='300'>
 
 
 ### linkGraph (from guideGoodness)
