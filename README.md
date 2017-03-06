@@ -4,13 +4,14 @@ this library outputs graphics with interfaces as below
 * intakeSugarDistribution
 * intakeFiberStruct
 * scoreLevel
-* intakeFatProportion
-* intakeFatDeviation
+* intakeFatDsitribution
+  * intakeFatProportion
+  * intakeFatDeviation
 * guideGoodness
   * curveGraph
   * linkGraph
 * estimateFiber
-* estimateSugar
+* estimateAntibiotics
 
 
 ****

@@ -20,7 +20,12 @@ export default {
     // paths: {
     //     d3: 'https://d3js.org/d3.v4.min.js'
     // }
-    plugins: [ babel() ],
+    plugins: [
+        babel({
+            babelrc: false,
+            presets: ["es2015-rollup"]
+        })
+    ],
     globals: {
         'd3': 'D3'
     },
