@@ -20,12 +20,16 @@ this library outputs graphics with interfaces as below
 1. This library aims at making it purely free to transfer between data and graphics . The most common json struct is `config`, whose keys and values can be mostly customed.
 
 2. For regular graphics ,the most is draw in svg based on Cartesian coordinate system; For irregular graphics or more geometrical, the most  is draw in canvas based on Polar coordinate system.
+
+
 ****
 
-## Specs Over Configuration
+### Specs Over Configuration
 1. Each graphic vue component shall be independent, for example, one ancestor dom node with one svg/canvas.
 
+2. To be specific, `oDom` should have an `id` for the best.
 
+****
 
 #### intakeSugarDistribution
 after import this function , you can call it as below:
