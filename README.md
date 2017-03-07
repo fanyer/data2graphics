@@ -209,7 +209,7 @@ This config is a little long, explore at [here](https://pkgo.in/itg/data2graphic
 
 It will render as below:
 
-<img src="./docs/link-graph.png" width='500'>
+<img src="./docs/link-graph.png" width='400'>
 
 
 ### estimateFiber
