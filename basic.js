@@ -1,6 +1,6 @@
 // import './basic.css'
 // import {intakeFatProportion} from './lib/intake-fat-distribution'
-import {estimateAntibiotics} from './lib/estimate-antibiotics'
+import estimateAntibiotics from './lib/estimate-antibiotics'
 
 var oDiv1= document.querySelector('#div1')
 
@@ -9,6 +9,7 @@ var oDiv1= document.querySelector('#div1')
 //   'unsature': 86
 // }
 
-estimateAntibiotics(oDiv1)
+
+estimateAntibiotics.init(oDiv1)
 
 // intakeFatProportion(oDiv1)

@@ -12,6 +12,12 @@ this library outputs graphics with interfaces as below
   * linkGraph
 * estimateFiber
 * estimateAntibiotics
+  * init
+  * topLeft
+  * topRight
+  * bottomRight
+  * bottomLeft
+  * index
 
 
 ****
@@ -31,7 +37,7 @@ this library outputs graphics with interfaces as below
 
 ****
 
-#### intakeSugarDistribution
+#### intakeSugarDistribution()
 after import this function , you can call it as below:
 ```
 intakeDistribution(oDom, config1, config2)
@@ -69,7 +75,7 @@ It will render as below:
 <img src="./docs/intake-sugar-distribution.png"  width='500'>
 
 
-#### intakeFiberStruct
+#### intakeFiberStruct()
 ```
 intakeFiberStruct(oDom, config)
 
@@ -88,7 +94,7 @@ It will render as below:
 <img src="./docs/intake-fiber-struct.png" width='500'>
 
 
-### scoreLevel
+### scoreLevel()
 ```
 scoreLevel(oDom, config)
 
@@ -120,7 +126,7 @@ It will render as below:
 <img src="./docs/score-level.png" width='500'>
 
 
-### intakeFatProportion
+### intakeFatProportion()
 ```
 intakeFatProportion(oDom, config)
 
@@ -136,7 +142,7 @@ It will render as below:
 <img src="./docs/intake-fat-proportion.png" width='500'>
 
 
-### intakeFatDeviation
+### intakeFatDeviation()
 ```
 intakeFatDeviation(oDom, config)
 
@@ -158,7 +164,7 @@ It will render as below:
 
 
 
-### curveGraph (from guideGoodness)
+### curveGraph()
 ```
 curveGraph(oDom, config)
 
@@ -199,7 +205,7 @@ It will render as below:
 <img src="./docs/curve-graph.png" width='300'>
 
 
-### linkGraph (from guideGoodness)
+### linkGraph()
 ```
 linkGraph(oDom, config)
 
@@ -216,7 +222,7 @@ It will render as below:
 <img src="./docs/link-graph.png" width='400'>
 
 
-### estimateFiber
+### estimateFiber()
 ```
 estimateFiber(oDom, config)
 
@@ -244,6 +250,59 @@ estimateFiber(oDom, config)
 It will render as below:
 
 <img src="./docs/estimate-fiber.png" width='500'>
+
+### estimateAntibiotics.init()
+```
+estimateAntibiotics.init(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-int.png" width='500'>
+### estimateAntibiotics.topLeft()
+```
+estimateAntibiotics.init(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-int.png" width='500'>
+### estimateAntibiotics.init
+```
+estimateAntibiotics.init(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-int.png" width='500'>
+### estimateAntibiotics.init
+```
+estimateAntibiotics.init(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-int.png" width='500'>
 
 
 ## How to join development?
