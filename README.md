@@ -316,6 +316,19 @@ estimateAntibiotics.bottomLeft(oDom, config)
 It will render as below:
 
 <img src="./docs/estimate-antibiotics-bottom-left.png" width='500'>
+### estimateAntibiotics.index()
+```
+estimateAntibiotics.index(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-index.png" width='500'>
 
 
 ## How to join development?
