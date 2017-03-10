@@ -263,10 +263,10 @@ estimateAntibiotics.init(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/estimate-antibiotics-int.png" width='500'>
+<img src="./docs/estimate-antibiotics-init.png" width='500'>
 ### estimateAntibiotics.topLeft()
 ```
-estimateAntibiotics.init(oDom, config)
+estimateAntibiotics.topLeft(oDom, config)
 
 //config example
 {
@@ -276,10 +276,10 @@ estimateAntibiotics.init(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/estimate-antibiotics-int.png" width='500'>
-### estimateAntibiotics.init
+<img src="./docs/estimate-antibiotics-top-left.png" width='500'>
+### estimateAntibiotics.topRight()
 ```
-estimateAntibiotics.init(oDom, config)
+estimateAntibiotics.topRight(oDom, config)
 
 //config example
 {
@@ -289,10 +289,10 @@ estimateAntibiotics.init(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/estimate-antibiotics-int.png" width='500'>
-### estimateAntibiotics.init
+<img src="./docs/estimate-antibiotics-top-right.png" width='500'>
+### estimateAntibiotics.bottomRight()
 ```
-estimateAntibiotics.init(oDom, config)
+estimateAntibiotics.bottomRight(oDom, config)
 
 //config example
 {
@@ -302,7 +302,20 @@ estimateAntibiotics.init(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/estimate-antibiotics-int.png" width='500'>
+<img src="./docs/estimate-antibiotics-bottom-right.png" width='500'>
+### estimateAntibiotics.bottomLeft()
+```
+estimateAntibiotics.bottomLeft(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/estimate-antibiotics-bottom-left.png" width='500'>
 
 
 ## How to join development?
