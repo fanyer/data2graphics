@@ -123,12 +123,12 @@ text {
 
 
 #centerDiv{
-    width: 770px;
-    transform: translate(365px,-535px);
+    width: 1020px;
+    transform: translate(240px,-535px);
 }
 
 .div2{
-    width: 600px;
+    width: 800px;
     height: 70px;
     display: inline-block;
     background: seagreen;
@@ -136,7 +136,7 @@ text {
     border-radius: 20px 0 0 20px;
 }
 .div3{
-    width: 150px;
+    width: 200px;
     height: 70px;
     margin-left: 20px;
     opacity: 0.7;
