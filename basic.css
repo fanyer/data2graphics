@@ -121,9 +121,15 @@ text {
 }
 
 
+
+#centerDiv{
+    width: 770px;
+    transform: translate(365px,-535px);
+}
+
 .div2{
     width: 600px;
-    height: 100px;
+    height: 70px;
     display: inline-block;
     background: seagreen;
     opacity: 0.7;
@@ -131,12 +137,17 @@ text {
 }
 .div3{
     width: 150px;
-    height: 100px;
+    height: 70px;
     margin-left: 20px;
     opacity: 0.7;
     display: inline-block;
     background: orange;
     border-radius: 0 20px 20px 0;
+}
+
+
+.basicCurve path{
+    stroke: seagreen;
 }
 
 
