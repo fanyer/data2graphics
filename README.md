@@ -257,7 +257,17 @@ estimateAntibiotics.init(oDom, config)
 
 //config example
 {
+  top:[{
+      color:'steelblue',
+      x:0,
+      y:1,
+      direction:'left'
+    },{
 
+      }],
+    bottom:[{
+      
+      }]
 }
 
 ```
