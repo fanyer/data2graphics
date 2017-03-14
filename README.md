@@ -266,7 +266,7 @@ estimateAntibiotics.init(oDom, config)
 
       }],
     bottom:[{
-      
+
       }]
 }
 
@@ -274,6 +274,7 @@ estimateAntibiotics.init(oDom, config)
 It will render as below:
 
 <img src="./docs/estimate-antibiotics-init.png" width='500'>
+<img src="./docs/estimate-antibiotics-init2.png" width='500'>
 ### estimateAntibiotics.topLeft()
 ```
 estimateAntibiotics.topLeft(oDom, config)
