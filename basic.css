@@ -124,7 +124,9 @@ text {
 
 #centerDiv{
     width: 1020px;
-    transform: translate(240px,-535px);
+    transform: translate(240px,-495px) scaleX(0.9);
+    transform-origin :510px 35px;
+
 }
 
 .div2{
