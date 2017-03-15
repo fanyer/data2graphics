@@ -257,20 +257,35 @@ estimateAntibiotics.init(oDom, config)
 
 //config example
 {
-  top:[{
-      color:'steelblue',
-      x:0,
-      y:1,
-      direction:'left'
-    },{
+  top: [{
+        x: -7,
+        y: 5,
+        color: '',
+        direction: 'left'
+    }, ... , {
 
-      }],
-    bottom:[{
-
-      }]
+        x: 5,
+        y: 3,
+        color: '',
+        direction: 'left'
+    }],
+    bottom: [{
+        x: -2,
+        y: 1,
+        color: '',
+        direction: 'left'
+    }, ... , {
+        x: 7,
+        y: 2,
+        color: 'orange',
+        direction: 'right'
+    }],
+    gap: [3, 6] //gap is the x value of central orange range's start & end
 }
 
 ```
+Detailed Config shows [here](https://pkgo.in/itg/data2graphics/blob/master/lib/estimate-default-config.js)
+
 It will render as below:
 
 <img src="./docs/estimate-antibiotics-init.png" width='1000'>
