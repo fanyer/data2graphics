@@ -12,4 +12,4 @@ var oDiv1= document.querySelector('#div1')
 
 estimateAntibiotics.init(oDiv1)
 
-// intakeFatProportion(oDiv1)
+
