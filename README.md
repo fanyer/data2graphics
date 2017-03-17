@@ -261,23 +261,59 @@ estimateAntibiotics.init(oDom, config)
         x: -7,
         y: 5,
         color: '',
+        key: {
+           cn: '头孢菌素类',
+           en: 'Cephalosporins'
+       },
+       data: {
+           rank: 0.2807,
+           median: 117.4241,
+           absolute: 59.31948
+       },
         direction: 'left'
     }, ... , {
 
         x: 5,
         y: 3,
         color: '',
+        key: {
+           cn: '青霉素',
+           en: 'Penicillins'
+       },
+       data: {
+           rank: 0.2506,
+           median: 128.4729,
+           absolute: 61.05134
+       },
         direction: 'left'
     }],
     bottom: [{
         x: -2,
         y: 1,
         color: '',
+        key: {
+           cn: '青霉素',
+           en: 'Penicillins'
+       },
+       data: {
+           rank: 0.2506,
+           median: 128.4729,
+           absolute: 61.05134
+       },
         direction: 'left'
     }, ... , {
         x: 7,
         y: 2,
         color: 'orange',
+        key: {
+           cn: '青霉素',
+           en: 'Penicillins'
+       },
+       data: {
+           rank: 0.2506,
+           median: 128.4729,
+           absolute: 61.05134
+       },
         direction: 'right'
     }],
     gap: [3, 6] //gap is the x value of central orange range's start & end
