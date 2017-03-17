@@ -42,8 +42,8 @@ function intakeSugarDistribution(parrent, config1, config2) {
     };
 
     var xArr2 = config2 || {
-        "type": "标准值",
-        "data": {
+        'type': '标准值',
+        'data': {
             '膳食纤维': 3.5,
             '低聚果糖': 2.2,
             '低聚异麦芽糖': 3.2,
@@ -1025,7 +1025,7 @@ function curveGraph(parent, config) {
             '维生素B2': -14,
             '维生素B3': -5,
             '维生素B5': -8,
-            '维生素B6': -13,
+            '维生素B6': 13,
             '维生素B7': 6,
             '维生素B9': -20,
             '维生素B12': 9,
@@ -1072,9 +1072,7 @@ function curveGraph(parent, config) {
     var y = d3.scaleLinear().domain([0 - 0.5, 15 + 0.5]).range([0, height]);
 
     var xAxis = d3.axisTop(x).ticks(5).tickSize(-height).tickFormat(function (d, i) {
-        // if (i > 0 && i < 6) {
         return axisLabels[d];
-        // }
     });
 
     var yAxis = d3.axisLeft(y).ticks(15).tickSize(-width).tickFormat(function (d, i) {
@@ -1106,6 +1104,7 @@ function curveGraph(parent, config) {
     function customYAxis(g) {
         g.call(yAxis);
         g.select('.domain').remove();
+        g.selectAll('.tick text').remove();
         g.selectAll('.tick line').attr('stroke', 'seagreen').attr('stroke-width', '3').attr('opacity', '0.6');
         g.selectAll('.tick:not(:first-of-type) line').attr('stroke', 'seagreen');
         g.selectAll('.tick:nth-child(1) line').attr('stroke', 'seagreen').attr('stroke-width', '1').attr('opacity', '0.6');
@@ -1134,38 +1133,72 @@ function curveGraph(parent, config) {
         });
     });
 
-    // lineData.unshift({
-    //     x: pointCurve(data[0]),
-    //     y: -0.5
-    // });
+    lineData.unshift({
+        x: pointCurve(data[0]),
+        y: -0.5
+    });
 
-    // lineData.push({
-    //     x: pointCurve(data[15]),
-    //     y: 15.5
-    // })
-
+    lineData.push({
+        x: pointCurve(data[15]),
+        y: 15.5
+    });
 
     var lineDataBezeire = vBezeireArr(lineData, 1 / 4);
 
-    // console.log(lineDataBezeire)
-
-    g.selectAll('path').data(lineDataBezeire).enter().append('path').attr("class", "line").attr("stroke", "salmon").attr("stroke-width", 3).attr("fill", "none").attr("filter", "url(#blur)").attr('d', line);
+    g.selectAll('.line').data(lineDataBezeire).enter().append('path').attr("class", "line").attr("stroke", "steelblue").attr("stroke-width", 3).attr("fill", "none")
+    // .attr("filter", "url(#blur)")
+    .attr('d', line);
 
     // ripple
-    console.log(lineData[0]);
+    // recursive Ripple percent, this will modify obj itself
+    function percent(obj, factor) {
 
-    // recursive Arr percent
-    
+        for (var i in obj) {
 
-    // d3.range(0, 1, 0.02).forEach((e, i) => {
-    //     let rippleLeft = vBezeireArr(percent(lineData,e), 1 / 4),
-    //       rippleRight=vBezeireArr(percent(lineData,e), 1 / 4);
+            if (obj[i].constructor === Array) {
+                percent(obj[i], factor);
+            } else if (obj[i].constructor === Object) {
+                percent(obj[i], factor);
+            } else if (obj[i].constructor === Number) {
+                i === 'x' && (obj[i] = (obj[i] - 0.5) * factor + 0.5);
+            }
+        }
 
+        return obj;
+    }
 
-    //     curveRipple()
+    // recursive Ripple minus, this will modify obj itself
+    function minus(obj, num) {
 
-    // })
+        for (var i in obj) {
 
+            if (obj[i].constructor === Array) {
+                minus(obj[i], num);
+            } else if (obj[i].constructor === Object) {
+
+                minus(obj[i], num);
+            } else if (obj[i].constructor === Number) {
+                i === 'x' && (obj[i] = num - obj[i]);
+            }
+        }
+
+        return obj;
+    }
+
+    function ripple(g, direction, dataArr) {
+        g.append('g').selectAll(direction).data(dataArr).enter().append('path').attr("class", direction).attr("opacity", 0.15).attr("stroke", function (d) {
+            return direction === 'left' ? 'salmon' : 'seagreen';
+        }).attr("stroke-width", 1).attr("fill", "none").attr('d', line);
+    }
+
+    d3.range(0, 1, 0.04).forEach(function (e, i) {
+
+        var rippleRight = vBezeireArr(minus(percent(minus(JSON.parse(JSON.stringify(lineData)), 6), e), 6), 1 / 4),
+            rippleLeft = vBezeireArr(percent(JSON.parse(JSON.stringify(lineData)), e), 1 / 4);
+
+        ripple(g, 'left', rippleLeft);
+        ripple(g, 'right', rippleRight);
+    });
 }
 
 function linkGraph(parent, config) {
@@ -1409,7 +1442,103 @@ function estimateFiber(parrent, config) {
     context.restore();
 }
 
-// export * from './lib/estimate-antibiotics'
+d3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+
+// usual basic function
+var index$1 = function index(s, find) {
+    return s.indexOf(find) + 1;
+};
+
+// extend prototype
+// var _proto = Object.prototype;
+
+// for fast quert
+var _cache = {};
+
+// extend operator
+var _alias = [/@/g, "_e.", /AND/gi, "&&", /OR/gi, "||", /<>/g, "!=", /NOT/gi, "!", /([^=<>])=([^=]|$)/g, '$1==$2'];
+
+var _rQuote = /""/g;
+var _rQuoteTemp = /!~/g;
+
+// compile
+var _complite = function _complite(code) {
+    return eval("0," + code);
+};
+
+// convert operator to standard js symbols
+var _interpret = function _interpret(exp) {
+    exp = exp.replace(_rQuote, "!~");
+    var arr = exp.split('"');
+    var i,
+        n = arr.length;
+    var k = _alias.length;
+
+    for (var i = 0; i < n; i += 2) {
+        var s = arr[i];
+        for (var j = 0; j < k; j += 2) {
+            if (index$1(s, _alias[j]) > -1) {
+                s = s.replace(_alias[j], _alias[j + 1]);
+            }
+        }
+        arr[i] = s;
+    }
+
+    for (var i = 1; i < n; i += 2) {
+        arr[i] = arr[i].replace(_rQuoteTemp, '\\"');
+    }
+    return arr.join('"');
+};
+
+// define template function
+var _templ = function (_list) {
+    var _ret = [];
+    var _i = -1;
+
+    for (var _k in _list) {
+        var _e = _list[_k];
+        if (_e != SQL.prototype[_k]) {
+            if ($C) {
+                _ret[++_i] = _e;
+            }
+        }
+    }
+    return _ret;
+}.toString();
+
+// extend Query method
+var Query = function Query(exp) {
+    if (!exp) {
+        return [];
+    }
+
+    var fn = _cache[exp];
+
+    try {
+        if (!fn) {
+            var code = _interpret(exp);
+            code = _templ.replace("$C", code);
+            fn = _cache[exp] = _complite(code);
+        }
+        return fn(this.data);
+    } catch (e) {
+        return [];
+    }
+};
+
+function SQL(data) {
+    this.type = 'SQL';
+    this.data = data;
+}
+
+
+
+SQL.prototype = {
+    constructor: SQL,
+    Query: Query
+};
+
+var d3$6 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 exports.intakeSugarDistribution = intakeSugarDistribution;
 exports.intakeFiberStruct = intakeFiberStruct;
