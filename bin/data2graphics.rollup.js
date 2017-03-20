@@ -1442,7 +1442,254 @@ function estimateFiber(parrent, config) {
     context.restore();
 }
 
-d3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+d3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+
+
+
+function pattern(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [30, 35];
+    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 40;
+    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'pattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = 'orange';
+        i < inter[0] && (color = 'seagreen');
+        i > inter[1] && (color = 'salmon');
+        return color;
+    });
+
+    return ptn;
+}
+
+
+
+function detectSVG(parent, id) {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+    id && (svg.id = id);
+
+    parent.append(svg);
+
+    return svg;
+}
+
+var baseConf = {
+    top: [{
+        x: -7,
+        y: 5,
+        color: '',
+        key: {
+            cn: '头孢菌素类',
+            en: 'Cephalosporins'
+        },
+        data: {
+            rank: 0.2807,
+            median: 117.4241,
+            absolute: 59.31948
+        },
+        direction: 'left'
+    }, {
+        x: -6,
+        y: 7,
+        color: '',
+        key: {
+            cn: '青霉素',
+            en: 'Penicillins'
+        },
+        data: {
+            rank: 0.2506,
+            median: 128.4729,
+            absolute: 61.05134
+        },
+        direction: 'left'
+    }, {
+        x: -5,
+        y: 8,
+        color: '',
+        key: {
+            cn: '林可酰胺类',
+            en: 'Lincosamides'
+        },
+        data: {
+            rank: 0.606,
+            median: 383.8253,
+            absolute: 441.8302
+        },
+        direction: 'right'
+    }, {
+        x: -4,
+        y: 6,
+        color: '',
+        key: {
+            cn: '利福霉素类',
+            en: 'Rifampins'
+        },
+        data: {
+            rank: 0.0012,
+            median: 0,
+            absolute: 0
+        },
+        direction: 'right'
+    }, {
+        x: -3,
+        y: 2,
+        color: '',
+        key: {
+            cn: '多粘霉素类',
+            en: 'Polymyxins'
+        },
+        data: {
+            rank: 0.4012,
+            median: 4.52788140,
+            absolute: 2.895497
+        },
+        direction: 'right'
+    }, {
+        x: 1,
+        y: 1,
+        color: '',
+        key: {
+            cn: '碳青霉烯类',
+            en: 'Carbapenems'
+        },
+        data: {
+            rank: 0.0012,
+            median: 0,
+            absolute: 0
+        },
+        direction: 'left'
+    }, {
+        x: 2,
+        y: 4,
+        color: '',
+        key: {
+            cn: '糖肽类',
+            en: 'Glycopeptides'
+        },
+        data: {
+            rank: 0.5807,
+            median: 1.63446,
+            absolute: 2.246455
+        },
+        direction: 'right'
+    }, {
+        x: 5,
+        y: 3,
+        color: '',
+        key: {
+            cn: '氨基糖苷类',
+            en: 'Aminoglycosides'
+        },
+        data: {
+            rank: 0.7506,
+            median: 41.34121,
+            absolute: 71.78424
+        },
+        direction: 'left'
+    }],
+    bottom: [{
+        x: -2,
+        y: 1,
+        color: '',
+        key: {
+            cn: 'β-内酰胺',
+            en: 'β-lactam'
+        },
+        data: {
+            rank: 0.7265,
+            median: 0.08101419,
+            absolute: 0.6476569
+        },
+        direction: 'left'
+    }, {
+        x: -1,
+        y: 3,
+        color: '',
+        key: {
+            cn: '四环类素',
+            en: 'Tetracyclines'
+        },
+        data: {
+            rank: 0.5771,
+            median: 362.3124,
+            absolute: 385.8537
+        },
+        direction: 'left'
+    }, {
+        x: 0,
+        y: 4,
+        color: '',
+        key: {
+            cn: '磷霉素类',
+            en: 'Fosfomycins'
+        },
+        data: {
+            rank: 0.6590,
+            median: 0.3104377,
+            absolute: 1.35659
+        },
+        direction: 'right'
+    }, {
+        x: 3,
+        y: 5,
+        color: '',
+        key: {
+            cn: '氯霉素类',
+            en: 'Chloramphenicois'
+        },
+        data: {
+            rank: 0.0012,
+            median: 362.3124,
+            absolute: 385.8537
+        },
+        direction: 'left'
+    }, {
+        x: 4,
+        y: 6,
+        color: 'seagreen',
+        key: {
+            cn: '大环内酯类',
+            en: 'Macrolides'
+        },
+        data: {
+            rank: 0.4843,
+            median: 354.3231,
+            absolute: 359.5278
+        },
+        direction: 'right'
+    }, {
+        x: 6,
+        y: 7,
+        color: 'orange',
+        key: {
+            cn: '磺胺类',
+            en: 'Sulfonamides'
+        },
+        data: {
+            rank: 0.8795,
+            median: 34.39402,
+            absolute: 116.4283
+        },
+        direction: 'left'
+    }, {
+        x: 7,
+        y: 2,
+        color: 'orange',
+        key: {
+            cn: '奎诺酮类',
+            en: 'Quinolones'
+        },
+        data: {
+            rank: 0.8036,
+            median: 0,
+            absolute: 0.8209219
+        },
+        direction: 'right'
+    }],
+    gap: [3, 6] //gap is the x value of central orange range's start & end
+};
 
 // usual basic function
 var index$1 = function index(s, find) {
@@ -1531,7 +1778,9 @@ function SQL(data) {
     this.data = data;
 }
 
-
+function sql(data) {
+    return new SQL(data);
+}
 
 SQL.prototype = {
     constructor: SQL,
@@ -1540,6 +1789,294 @@ SQL.prototype = {
 
 var d3$6 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
+function EstimateAntibiotics() {
+    this.type = 'EstimateAntibiotics';
+}
+
+/**
+ * @param  {Dom}
+ * @param  {Json}
+ * @return {[type]}
+ */
+function init(parent, config) {
+    var input = config || baseConf;
+
+    detectSVG(parent);
+
+    var svg = d3$6.select('#' + parent.id + ' svg'),
+        margin = { top: 50, right: 600, bottom: 50, left: 630 };
+
+    svg.attr('width', 2700).attr('height', 1200);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        gTop = svg.append('g').attr('class', 'gTop').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
+        gBottom = svg.append('g').attr('class', 'gBottom').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    // here set tag pattern
+    var gapArr = [(baseConf.gap[0] + 7) * 40 / 15, (baseConf.gap[1] + 7) * 40 / 15];
+
+    pattern(svg, [Math.floor(gapArr[0]), Math.floor(gapArr[1])]);
+
+    $(parent).append($('<div/>', {
+        id: 'centerDiv',
+        class: 'centerDiv'
+    }));
+
+    $('#' + parent.id + ' #centerDiv').append($('<div/>', {
+        id: 'div2',
+        class: 'div2'
+    })).append($('<div/>', {
+        id: 'div3',
+        class: 'div3'
+    }));
+
+    var centerDivWidth = parseFloat($('#centerDiv').css('width'));
+
+    var maskHeight = 578;
+
+    baseConf.top.map(function (e, i) {
+        var color = e.x < baseConf.gap[0] ? 'seagreen' : e.x <= baseConf.gap[1] ? 'orange' : 'salmon';
+
+        copy15('top', e.direction, color, e.x, e.y);
+    });
+
+    baseConf.bottom.map(function (e, i) {
+        var color = e.x < baseConf.gap[0] ? 'seagreen' : e.x <= baseConf.gap[1] ? 'orange' : 'salmon';
+
+        copy15('bottom', e.direction, color, e.x, e.y);
+    });
+
+    /**
+     * [clippath description] to mask
+     * @type {[type]}
+     */
+    var clippath = svg.selectAll('.clippath').data([1, 2]).enter().append('clipPath').attr('id', function (d, i) {
+        return 'clip-' + i;
+    }).append('rect').attr('width', '1420').attr('class', 'clippath').attr('transform', function (d, i) {
+        return 'translate(0,' + (525 * i - 20) + ')';
+    }).attr('height', maskHeight);
+
+    /**
+     * [locate description] sql to locate
+     * @param  {[type]} x        [description]
+     * @param  {[type]} vertical [description] true means top
+     * @return {[type]}          [description]
+     */
+    function locate(x, vertical) {
+        var testArr = baseConf[vertical === true ? 'top' : 'bottom'];
+        var match = sql(testArr).Query('@x==' + x);
+
+        return match[0];
+    }
+
+    function basicCurve(arr) {
+        var postion = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top';
+        var direction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'left';
+        var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
+        var dx = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+        var dy = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+
+
+        var r = 100;
+
+        var dir = direction === 'left' ? 1 : -1;
+
+        var num = postion === 'top' ? 0 : 1;
+
+        var Container = postion === 'top' ? gTop : gBottom;
+
+        var gChild = Container.attr('clip-path', 'url(#clip-' + num + ')').append('g').attr('class', 'pathContainer');
+
+        gChild.selectAll('.basicCurve').data(arr).enter().append('path').attr('d', function (d, i) {
+            return 'M0 ' + (margin.top + d.offset) + 'L ' + (width - r) * dir + ' ' + (margin.top + d.offset) + 'A ' + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 1 : 0) + '' + (width - d.offset) * dir + ' ' + (margin.top + r) + '\n                    L ' + (width - d.offset) * dir + ' ' + height;
+        }).style('stroke', color).attr('class', 'basicCurve').attr('stroke-width', function (d) {
+            return d.strokeWidth;
+        }).attr('fill', 'none');
+
+        // this  line cause not pure
+        var vertical = postion === 'top' ? true : false;
+        var key = locate(dx, vertical).key;
+        var data = locate(dx, vertical).data;
+
+        if (direction === 'left' && postion === 'top') {
+
+            gChild.attr('transform', 'translate(' + (-width / 2 + 40 / 2 + dx * 50 + 1) + ',' + (maskHeight - 140 - dy * 50) + ')');
+
+            // this  line cause not pure
+            curveTag(50, 542 - dy * 50, key, data, color);
+        } else if (direction === 'right' && postion === 'top') {
+
+            gChild.attr('transform', 'translate(' + (width + width / 2 - 40 / 2 + dx * 50) + ',' + (maskHeight - 140 - dy * 50) + ')');
+
+            curveTag(2200, 542 - dy * 50, key, data, color);
+        } else if (direction === 'left' && postion === 'bottom') {
+
+            var x = -width / 2 + 40 / 2 + dx * 50 + 1;
+            var y = maskHeight - 390 + dy * 50 - 560;
+
+            gChild.style('transform-origin', '0 500px');
+            gChild.style('transform', 'translate(' + x + 'px,' + y + 'px) scaleY(-1)');
+
+            curveTag(50, 592 + dy * 50, key, data, color);
+        } else if (direction === 'right' && postion === 'bottom') {
+
+            var _x6 = width + width / 2 - 40 / 2 + dx * 50 + 1;
+            var _y = maskHeight - 390 + dy * 50 - 560;
+
+            gChild.style('transform-origin', '0 500px');
+            gChild.style('transform', 'translate(' + _x6 + 'px,' + _y + 'px) scaleY(-1)');
+
+            curveTag(2200, 592 + dy * 50, key, data, color);
+        }
+
+        return gChild;
+    }
+
+    /**
+     * [copy15 description]  15 bio parameters
+     * @param  {[type]} pos   [description]
+     * @param  {[type]} color [description]
+     * @param  {[type]} dx    [description]
+     * @param  {[type]} dy    [description]
+     * @return {[type]}       [description]
+     */
+    function copy15(pos, direction, color, dx, dy) {
+        return basicCurve([{
+            offset: 0 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 4 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 8 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 12 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 16 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 20 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 24 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 28 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 32 + 1,
+            strokeWidth: 1
+        }, {
+            offset: 36 + 1,
+            strokeWidth: 1
+
+        }], pos, direction, color, dx, dy);
+    }
+
+    // text title
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '41%').style('fill', 'seagreen').style('font-size', '36').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
+
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '44%').style('fill', 'seagreen').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
+
+    // text
+    var centralText = [{
+        color: 'seagreen',
+        text: '推荐用药',
+        pos: -1,
+        value: baseConf.gap[0] + 7
+    }, {
+        color: 'orange',
+        text: '谨慎用药',
+        pos: 0,
+        value: baseConf.gap[1] - baseConf.gap[0] + 1
+    }, {
+        color: 'salmon',
+        text: '警惕用药',
+        pos: 1,
+        value: 7 - baseConf.gap[1]
+    }];
+
+    svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', function (d, i) {
+        return 'translate(' + (width / 2 + margin.left - 75 + d.pos * 270) + ',630)';
+    }).append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('fill', 'none').style('stroke', function (d, i) {
+        return d.color;
+    });
+
+    svg.selectAll('g.centralText').append('text').text(function (d, i) {
+        return d.text;
+    }).attr('x', 75).attr('y', 35).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+        return d.color;
+    }).style('font-size', '25px');
+
+    svg.selectAll('g.centralText').append('text').text(function (d, i) {
+        return d.value;
+    }).attr('x', 75).attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+        return d.color;
+    }).style('font-size', '25px');
+
+    // tag at both sides
+    function curveTag() {
+        var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 200;
+        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
+        var text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var data = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+        var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'seagreen';
+
+        var gTag = svg.append('g').attr('transform', 'translate(' + x + ',' + y + ')');
+
+        gTag.append('rect').attr('width', 400).attr('height', 30).attr('rx', 20).attr('fill', 'url(#pattern1)').attr('ry', '50%').attr('stroke', 'steelblue').attr('stroke-width', 1);
+
+        gTag.append('text').text('中间值: ' + data.median).style('fill', color).attr('stroke-width', 2).attr('x', 130).attr('dx', 20).attr('y', 35).attr('text-anchor', 'start').attr('alignment-baseline', 'hanging');
+
+        gTag.append('text').text('▼ ' + data.absolute).style('fill', color).attr('stroke-width', 2).attr('x', data.rank * 400 - 28).attr('dx', 20).attr('y', 0).attr('dy', -4).attr('text-anchor', 'start').attr('alignment-baseline', 'baseline');
+
+        var textAlign = x < 1000 ? 400 : -150;
+        gTag.append('text').text(text.cn).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+
+        gTag.append('text').text(text.en).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('dy', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+
+        // rank tag
+        var rankAlign = x < 1000 ? 600 : -350;
+        gTag.append('text').text('人群排名: ' + d3$6.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+
+        var rankRectAlign = x < 1000 ? 580 : -150;
+
+        gTag.append('rect').style('fill', color).attr('x', rankRectAlign).attr('y', -4).attr('width', 3).attr('height', 39);
+    }
+}
+
+function topLeft(argument) {
+    // body...
+}
+
+function topRight(argument) {
+    // body...
+}
+
+function bottomRight(argument) {
+    // body...
+}
+
+function bottomLeft(argument) {
+    // body...
+}
+
+EstimateAntibiotics.prototype = {
+    constructor: estimateAntibiotics,
+    init: init,
+    topLeft: topLeft,
+    topRight: topRight,
+    bottomRight: bottomRight,
+    bottomLeft: bottomLeft,
+    index: ''
+};
+
+var estimateAntibiotics = new EstimateAntibiotics();
+
+exports.estimateAntibiotics = estimateAntibiotics;
 exports.intakeSugarDistribution = intakeSugarDistribution;
 exports.intakeFiberStruct = intakeFiberStruct;
 exports.scoreLevel = scoreLevel;
