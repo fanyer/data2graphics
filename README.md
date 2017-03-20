@@ -18,6 +18,7 @@ this library outputs graphics with interfaces as below
   * bottomRight
   * bottomLeft
   * index
+* metabolism(for the Professional)
 
 
 ****
@@ -393,6 +394,22 @@ estimateAntibiotics.index(oDom, config)
 It will render as below:
 
 <img src="./docs/estimate-antibiotics-index.png" width='500'>
+
+
+### metabolism()      
+-------for the Professional
+```
+metabolism(oDom, config)
+
+//config example
+{
+
+}
+
+```
+It will render as below:
+
+<img src="./docs/metabolism.png" width='1000'>
 
 
 ## How to join development?
