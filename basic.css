@@ -124,26 +124,33 @@ text {
 
 #centerDiv{
     width: 770px;
+    height: 60px;
+    opacity: 0.7;
     transform: translate(985px,-655px);
     /*transform-origin :510px 45px;*/
 
 }
 
-.div2{
-    width: 78%;
+.div1{
     height: 60px;
     display: inline-block;
     background: seagreen;
     opacity: 0.7;
     border-radius: 20px 0 0 20px;
 }
-.div3{
-    width: 19%;
+.div2{
     height: 60px;
-    margin-left: 10px;
-    opacity: 0.7;
     display: inline-block;
     background: orange;
+    margin-right: 10px;
+    margin-left: 10px;
+    opacity: 0.7;
+}
+.div3{
+    height: 60px;
+    opacity: 0.7;
+    display: inline-block;
+    background: salmon;
     border-radius: 0 20px 20px 0;
 }
 

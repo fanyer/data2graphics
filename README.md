@@ -317,11 +317,14 @@ estimateAntibiotics.init(oDom, config)
        },
         direction: 'right'
     }],
-    gap: [3, 6] //gap is the x value of central orange range's start & end
+    gap: [3, 6] //gap is the x value of central orange range's start & end and the end should be greater than the start.
 }
 
 ```
 Detailed Config shows [here](https://pkgo.in/itg/data2graphics/blob/master/lib/estimate-default-config.js)
+
+
+Please be prudent and precise to control the gap and x,y
 
 It will render as below:
 
