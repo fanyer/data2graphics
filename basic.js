@@ -1,8 +1,8 @@
 // import './basic.css'
 // import {intakeFatProportion} from './lib/intake-fat-distribution'
-import estimateAntibiotics from './lib/estimate-antibiotics'
+import {metabolism} from './lib/metabolism'
 
-var oDiv1= document.querySelector('#div1')
+var oDiv1= document.querySelector('#div1');
 
 // var config ={
 //   'sature': 14,
@@ -10,6 +10,6 @@ var oDiv1= document.querySelector('#div1')
 // }
 
 
-estimateAntibiotics.init(oDiv1)
+metabolism(oDiv1)
 
 
