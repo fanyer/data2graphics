@@ -332,71 +332,7 @@ It will render as below:
 
 
 <img src="./docs/estimate-antibiotics-init2.png" width='1000'>
-### estimateAntibiotics.topLeft()
-```
-estimateAntibiotics.topLeft(oDom, config)
 
-//config example
-{
-
-}
-
-```
-It will render as below:
-
-<img src="./docs/estimate-antibiotics-top-left.png" width='500'>
-### estimateAntibiotics.topRight()
-```
-estimateAntibiotics.topRight(oDom, config)
-
-//config example
-{
-
-}
-
-```
-It will render as below:
-
-<img src="./docs/estimate-antibiotics-top-right.png" width='500'>
-### estimateAntibiotics.bottomRight()
-```
-estimateAntibiotics.bottomRight(oDom, config)
-
-//config example
-{
-
-}
-
-```
-It will render as below:
-
-<img src="./docs/estimate-antibiotics-bottom-right.png" width='500'>
-### estimateAntibiotics.bottomLeft()
-```
-estimateAntibiotics.bottomLeft(oDom, config)
-
-//config example
-{
-
-}
-
-```
-It will render as below:
-
-<img src="./docs/estimate-antibiotics-bottom-left.png" width='500'>
-### estimateAntibiotics.index()
-```
-estimateAntibiotics.index(oDom, config)
-
-//config example
-{
-
-}
-
-```
-It will render as below:
-
-<img src="./docs/estimate-antibiotics-index.png" width='500'>
 
 
 ### metabolism()      
