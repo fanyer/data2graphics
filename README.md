@@ -254,6 +254,9 @@ It will render as below:
 
 ### estimateAntibiotics.init()
 ```
+//this is exported default as an obj
+import estimateAntibiotics from 'data2graphics'
+
 estimateAntibiotics.init(oDom, config)
 
 //config example
