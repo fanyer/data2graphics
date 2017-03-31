@@ -259,13 +259,13 @@ import estimateAntibiotics from 'data2graphics'
 
 estimateAntibiotics.init(oDom, config)
 
-//config example
+//advanced config example, and this can allow disoder in arr
 {
   top: [{
         x: -7,
         y: 5,
         color: '',
-        key: {
+        tag: {
            cn: '头孢菌素类',
            en: 'Cephalosporins'
        },
@@ -280,7 +280,7 @@ estimateAntibiotics.init(oDom, config)
         x: 5,
         y: 3,
         color: '',
-        key: {
+        tag: {
            cn: '青霉素',
            en: 'Penicillins'
        },
@@ -295,7 +295,7 @@ estimateAntibiotics.init(oDom, config)
         x: -2,
         y: 1,
         color: '',
-        key: {
+        tag: {
            cn: '青霉素',
            en: 'Penicillins'
        },
@@ -309,7 +309,7 @@ estimateAntibiotics.init(oDom, config)
         x: 7,
         y: 2,
         color: 'orange',
-        key: {
+        tag: {
            cn: '青霉素',
            en: 'Penicillins'
        },
@@ -321,6 +321,22 @@ estimateAntibiotics.init(oDom, config)
         direction: 'right'
     }],
     gap: [3, 6] //gap is the x value of central orange range's start & end and the end should be greater than the start.
+}
+
+
+
+//for simplified usage, this set default order in array, and remove x ,y , direction keys.
+{
+  color: 'orange',
+  tag: {
+     cn: '青霉素',
+     en: 'Penicillins'
+ },
+ data: {
+     rank: 0.2506,
+     median: 128.4729,
+     absolute: 61.05134
+ }
 }
 
 ```
