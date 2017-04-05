@@ -15,12 +15,13 @@ using v8::Value;
 
 
 
-verctor<int> main(){
+
+verctor<int> Parse(){
 
 }
 
 void init(Local<Object> exports) {
-  NODE_SET_METHOD(exports, "hello", Method);
+  NODE_SET_METHOD(exports, "parse", Parse);
 }
 
 
