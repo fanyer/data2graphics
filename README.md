@@ -40,7 +40,7 @@ this library outputs graphics with interfaces as below
 ****
 
 #### parser
-The `parser` interface is a data-transform tool, docs [here](./parser/README.md).
+The `parser` interface is a data-transforming tool, docs [here](./parser/README.md).
 
 
 #### intakeSugarDistribution()
