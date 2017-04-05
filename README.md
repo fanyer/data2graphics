@@ -1,6 +1,7 @@
 ## Reports' Graphics API Referrence
 
 this library outputs graphics with interfaces as below
+* parser
 * intakeSugarDistribution
 * intakeFiberStruct
 * scoreLevel
@@ -37,6 +38,10 @@ this library outputs graphics with interfaces as below
 2. To be specific, `oDom` should have an `id` for the best.
 
 ****
+
+#### parser
+The `parser` interface is a data-transform tool, docs [here](./parser/README.md).
+
 
 #### intakeSugarDistribution()
 after import this function , you can call it as below:
