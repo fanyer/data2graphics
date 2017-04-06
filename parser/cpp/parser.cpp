@@ -1,29 +1,39 @@
 #include "iostream"
 #include "string"
-#include "verctor"
-#include "v8.h"
+#include "node.h"
 
-using namespace v8;
-using v8::Exception;
-using v8::FunctionCallbackInfo;
-using v8::Isolate;
-using v8::Local;
-using v8::Number;
-using v8::Object;
-using v8::String;
-using v8::Value;
+using namespace std;
+
+namespace data2graphics
+{
+
+    using v8::Exception;
+    using v8::FunctionCallbackInfo;
+    using v8::Isolate;
+    using v8::Local;
+    using v8::Number;
+    using v8::Object;
+    using v8::String;
+    using v8::Value;
 
 
 
 
-verctor<int> Parse(){
+    void Parse(const FunctionCallbackInfo<Value> &args)
+    {
+        Isolate *isolate = args.GetIsolate();
+
+        cout<<args.Length();
+
+    }
+
+    void init(Local<Object> exports)
+    {
+        NODE_SET_METHOD(exports, "parse", Parse);
+    }
+
+
+
+    NODE_MODULE(parser, init);
 
 }
-
-void init(Local<Object> exports) {
-  NODE_SET_METHOD(exports, "parse", Parse);
-}
-
-
-
-NODE_MODULE(parser, init);
