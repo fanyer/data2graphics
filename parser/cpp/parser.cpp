@@ -8,6 +8,8 @@ namespace data2graphics
 {
 
     using v8::Exception;
+    using v8::Context;
+    using v8::Function;
     using v8::FunctionCallbackInfo;
     using v8::Isolate;
     using v8::Local;
