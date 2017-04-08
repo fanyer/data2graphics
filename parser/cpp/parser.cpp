@@ -19,8 +19,6 @@ namespace data2graphics
     using v8::Value;
 
 
-
-
     void Parse(const FunctionCallbackInfo<Value> &args)
     {
         Isolate *isolate = args.GetIsolate();
