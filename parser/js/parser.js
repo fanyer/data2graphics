@@ -1,3 +1,13 @@
-export function parse(argument) {
-  // body...
+/**
+ * [parse description]
+ * @param  {[type]} input [an Array]
+ *                        like
+ *                        
+ * @return {[type]}       [description]
+ */
+export function parse(input) {
+  var output={};
+
+  
+
 }

@@ -11,6 +11,7 @@ namespace data2graphics
     using v8::Context;
     using v8::Function;
     using v8::FunctionCallbackInfo;
+    using v8::FunctionTemplate;
     using v8::Isolate;
     using v8::Local;
     using v8::Number;
@@ -23,8 +24,10 @@ namespace data2graphics
     {
         Isolate *isolate = args.GetIsolate();
 
-        cout<<args.Length();
+        cout << args.Length();
+        Local<Number> num = Number::New(isolate, value);
 
+        args.GetReturnValue().Set(num);
     }
 
     void init(Local<Object> exports)
