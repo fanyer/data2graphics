@@ -23,9 +23,15 @@ namespace data2graphics
     void Parse(const FunctionCallbackInfo<Value> &args)
     {
         Isolate *isolate = args.GetIsolate();
+        Local<Object> obj = Object::New(isolate);
+
+        obj->Set(String::NewFromUtf8(isolate, "top"), args[0]->ToString());
+        obj->Set(String::NewFromUtf8(isolate, "bottom"), args[0]->ToString());
+        obj->Set(String::NewFromUtf8(isolate, "gap"), args[0]->ToString());
+
+
 
         cout << args.Length();
-        Local<Number> num = Number::New(isolate, value);
 
         args.GetReturnValue().Set(num);
     }
