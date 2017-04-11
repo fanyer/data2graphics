@@ -15,9 +15,17 @@ namespace data2graphics
     using v8::Isolate;
     using v8::Local;
     using v8::Number;
+    using v8::Array;
     using v8::Object;
     using v8::String;
     using v8::Value;
+
+    struct Antibiotics
+    {
+        Local<Array> top;
+        Local<Array> bottom;
+        Local<Array> gap;
+    };
 
 
     void Parse(const FunctionCallbackInfo<Value> &args)
@@ -33,7 +41,7 @@ namespace data2graphics
 
         cout << args.Length();
 
-        args.GetReturnValue().Set(num);
+        args.GetReturnValue().Set(obj);
     }
 
     void init(Local<Object> exports)
