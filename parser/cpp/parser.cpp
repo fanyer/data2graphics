@@ -22,9 +22,21 @@ namespace data2graphics
 
     struct Antibiotics
     {
-        Local<Array> top;
-        Local<Array> bottom;
-        Local<Array> gap;
+        Local<Array> arr1;
+        Local<Array> arr2;
+        Local<Array> arr3;
+        Local<Array> arr4;
+        Local<Array> arr5;
+        Local<Array> arr6;
+        Local<Array> arr7;
+        Local<Array> arr8;
+        Local<Array> arr9;
+        Local<Array> arr10;
+        Local<Array> arr11;
+        Local<Array> arr12;
+        Local<Array> arr13;
+        Local<Array> arr14;
+        Local<Array> arr15;
     };
 
 

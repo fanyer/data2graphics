@@ -9,6 +9,9 @@
         'sources': ['parser.cpp'],
         'cglags':[],
         'cglags!':[],
+        "include_dirs" : [
+            "<!(node -e \"require('nan')\")"
+        ],
         'conditions':[
             ['OS=="mac"',{
                 'xcode_settings':{
@@ -18,8 +21,5 @@
             }]
         ]
 
-    },{
-        'target_name':''
-    }
     }]
 }
