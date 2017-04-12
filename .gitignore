@@ -2,5 +2,6 @@ node_modules
 aaa.js
 npm-debug.log
 pdf
+docs/*.zip
 bundle.js
 parser/cpp/build
