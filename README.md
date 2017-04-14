@@ -37,6 +37,8 @@ this library outputs graphics with interfaces as below
 
 2. To be specific, `oDom` should have an `id` for the best.
 
+3. For all texts that may contain the Greek Letters, attention should be paid on its unicode encoding transforming.
+
 ****
 
 #### parser
