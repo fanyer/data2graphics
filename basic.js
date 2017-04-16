@@ -3,6 +3,7 @@
 import { metabolism } from './lib/metabolism'
 import { curveGraph } from './lib/guide-goodness'
 import { scoreLevel } from './lib/score-level'
+import { sankey } from './lib/sankey'
 import estimateAntibiotics from './lib/estimate-antibiotics'
 
 var oDiv1 = document.querySelector('#div1');
@@ -223,26 +224,74 @@ var config = {
         },
         direction: 'right'
     }],
-    gap: [8,7] //gap is the x value of central orange range's start & end, and start must lower than end
+    gap: [8, 7] //gap is the x value of central orange range's start & end, and start must lower than end
 }
 
 
 
 // estimateAntibiotics.init(oDiv1,config)
-    // metabolism(oDiv1)
-    scoreLevel(oDiv1,{
-    'score': 46.7,
-    'data': {
-        '葡甘露聚糖': 0.2,
-        '氨糖': 0.5,
-        '饱和脂肪酸': 0.3,
-        '不饱和脂肪酸': 0.8,
-        '鞘脂类': 0.77,
-        '胆汁酸': 0.12,
-        '胆红素': 0.34,
-        '胆固醇': 0.96,
-        '淀粉': 0.43,
-        '膳食纤维': 0.213
-    }
-})
+// metabolism(oDiv1)
+scoreLevel(oDiv1, {
+        "score": 46.7,
+        "data": {
+            "低聚果糖": {
+                "value": 0.4,
+                "en": "Fructo-oligosaccharide"
+            },
+            "低聚异麦芽糖": {
+                "value": 0.6,
+                "en": "Isomalto-oligosaccharide"
+            },
+            "\u03B2-葡聚糖": {
+                "value": 0.3,
+                "en": "\u03B2-glucan"
+            },
+            "葡甘露聚糖": {
+                "value": 0.2,
+                "en": "Glucomammam"
+            },
+            "抗性麦芽糊精": {
+                "value": 0.9,
+                "en": "Resistant malyodextrins"
+            },
+            "氨糖": {
+                "value": 0.5,
+                "en": "Glucosamine"
+            },
+            "饱和脂肪酸": {
+                "value": 0.3,
+                "en": "Saturated fat"
+            },
+            "不饱和脂肪酸": {
+                "value": 0.8,
+                "en": "Unsaturated fat"
+            },
+            "鞘脂类": {
+                "value": 0.77,
+                "en": "Sphingolipid"
+            },
+            "胆汁酸": {
+                "value": 0.12,
+                "en": "Bile acid"
+            },
+            "胆红素": {
+                "value": 0.34,
+                "en": "Bilirubin"
+            },
+            "胆固醇": {
+                "value": 0.96,
+                "en": "Cholestreol"
+            },
+            "淀粉": {
+                "value": 0.43,
+                "en": "Starch"
+            },
+            "膳食纤维": {
+                "value": 0.213,
+                "en": "Dietary fiber"
+            }
+        }
+    })
     // curveGraph(oDiv1)
+
+// sankey(oDiv1)
