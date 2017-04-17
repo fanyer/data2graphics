@@ -224,7 +224,7 @@ var config = {
         },
         direction: 'right'
     }],
-    gap: [8, 7] //gap is the x value of central orange range's start & end, and start must lower than end
+    gap: [5, 7] //gap is the x value of central orange range's start & end, and start must lower than end
 }
 
 

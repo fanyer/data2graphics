@@ -5,8 +5,6 @@ body {
     margin: 0;
 }
 
-
-
 canvas {
     font-family: 'adad';
 }
@@ -61,15 +59,18 @@ circle {
 
 /*histogram*/
 
+
 /*.bar rect {
     fill: steelblue;
 }*/
+
 
 /*.bar text {
     fill: #fff;
     font: 10px sans-serif;
 }
 */
+
 
 /*level-score*/
 
@@ -120,25 +121,24 @@ text {
     font-weight: 100;
 }
 
-
-
-#centerDiv{
+#centerDiv {
     width: 770px;
     height: 60px;
-    opacity: 0.7;
-    transform: translate(985px,-655px);
+    border: 10px solid #fff;
+     /*opacity: 0.7;*/
+    transform: translate(985px, -660px);
     /*transform-origin :510px 45px;*/
-
 }
 
-.div1{
+.div1 {
     height: 60px;
     display: inline-block;
     background: seagreen;
     opacity: 0.7;
     border-radius: 20px 0 0 20px;
 }
-.div2{
+
+.div2 {
     height: 60px;
     display: inline-block;
     background: orange;
@@ -146,7 +146,8 @@ text {
     margin-left: 10px;
     opacity: 0.7;
 }
-.div3{
+
+.div3 {
     height: 60px;
     opacity: 0.7;
     display: inline-block;
@@ -154,9 +155,6 @@ text {
     border-radius: 0 20px 20px 0;
 }
 
-
-.basicCurve path{
+.basicCurve path {
     stroke: seagreen;
 }
-
-
