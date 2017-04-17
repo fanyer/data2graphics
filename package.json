@@ -29,7 +29,7 @@
     "d3-format": "^1.0.2",
     "d3-path": "^1.0.3",
     "d3-request": "^1.0.2",
-    "d3-sankey": "^0.4.1",
+    "d3-sankey": "git+ssh://git@pkgo.in:fanyer/d3-sankey-custom.git",
     "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
     "d3-shape": "^1.0.4",
