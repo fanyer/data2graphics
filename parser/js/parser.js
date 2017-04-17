@@ -31,12 +31,12 @@ export function parse(input) {
 
         let cn = input[e][0];
         let en = input[e][4];
-        let rank = input[e][3];
+        let rank = input[e][3] / 100;
         let median = input[e][1];
         let absolute = input[e][2];
 
-        let color = (rank < 75 ?
-            "seagreen" : (rank < 90 ?
+        let color = (rank < 0.75 ?
+            "seagreen" : (rank < 0.9 ?
                 "orange" : "salmon"));
 
         return {
@@ -51,7 +51,8 @@ export function parse(input) {
                 "median": median,
                 "absolute": absolute
             },
-            "color": color
+            "color": color,
+            "direction": configTpl.top[i].direction
         }
     });
 
@@ -60,12 +61,12 @@ export function parse(input) {
 
         let cn = input[e][0];
         let en = input[e][4];
-        let rank = input[e][3];
+        let rank = input[e][3] / 100;
         let median = input[e][1];
         let absolute = input[e][2];
 
-        let color = (rank < 75 ?
-            "seagreen" : (rank < 90 ?
+        let color = (rank < 0.75 ?
+            "seagreen" : (rank < 0.9 ?
                 "orange" : "salmon"));
 
         return {
@@ -80,14 +81,54 @@ export function parse(input) {
                 "median": median,
                 "absolute": absolute
             },
-            "color": color
+            "color": color,
+            "direction": configTpl.bottom[i].direction
         }
     });
 
 
 
-    return output = {
+
+    // calculate the gap
+    let gap = [];
+    let output
+    console.log(gap)
+
+    output = {
         "top": top,
-        "bottom": bottom
+        "bottom": bottom,
+        "gap": [0, 4]
     };
+
+    return output;
+}
+
+const standard=[75.90];
+
+
+// arr should be ascended, here is ascended input
+function firstGreen(arr) {
+    if (arr[0][3] >= 75) {
+        console., info('no green!\n');
+        return false;
+    }
+
+    return [0, true];
+
+}
+
+function firstOrange(arr) {
+    if () {}
+}
+
+function firstRed(arr) {
+    if (arr[arr.length - 1][3] <= 90) {
+        console., info('no red!\n');
+        return false;
+    }
+
+    for (var i = 0; i < arr.length; i++) {
+      arr[i]
+    }
+
 }
