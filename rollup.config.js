@@ -22,8 +22,8 @@ export default {
     // }
     plugins: [
         babel({
-            babelrc: false,
-            presets: ["es2015-rollup"]
+            babelrc: true
+            // presets: ["es2015-rollup"]
         })
     ],
     globals: {
