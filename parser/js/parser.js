@@ -91,7 +91,6 @@ export function parse(input) {
 
     // calculate the gap
     let gap = [];
-    let output
     console.log(gap)
 
     output = {
@@ -103,13 +102,13 @@ export function parse(input) {
     return output;
 }
 
-const standard=[75.90];
+const standard=[75,90];
 
 
 // arr should be ascended, here is ascended input
 function firstGreen(arr) {
-    if (arr[0][3] >= 75) {
-        console., info('no green!\n');
+    if (arr[0][3] >= standard[0]) {
+        console.info('no green!\n');
         return false;
     }
 
@@ -118,12 +117,12 @@ function firstGreen(arr) {
 }
 
 function firstOrange(arr) {
-    if () {}
+    if (true) {}
 }
 
 function firstRed(arr) {
-    if (arr[arr.length - 1][3] <= 90) {
-        console., info('no red!\n');
+    if (arr[arr.length - 1][3] <= standard[1]) {
+        console.info('no red!\n');
         return false;
     }
 
