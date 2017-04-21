@@ -4,19 +4,14 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('babel-runtime/core-js/json/stringify'), require('babel-runtime/core-js/object/keys'), require('babel-runtime/core-js/object/assign'), require('d3'), require('babel-runtime/core-js/object/values'), require('babel-runtime/core-js/array/from')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'babel-runtime/core-js/json/stringify', 'babel-runtime/core-js/object/keys', 'babel-runtime/core-js/object/assign', 'd3', 'babel-runtime/core-js/object/values', 'babel-runtime/core-js/array/from'], factory) :
-	(factory((global.data2grahics = global.data2grahics || {}),global._JSON$stringify,global._Object$keys,global._Object$assign,global.D3,global._Object$values,global._Array$from));
-}(this, (function (exports,_JSON$stringify,_Object$keys,_Object$assign,D3,_Object$values,_Array$from) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
+	(factory((global.data2grahics = global.data2grahics || {}),global.D3));
+}(this, (function (exports,D3) { 'use strict';
 
-_JSON$stringify = 'default' in _JSON$stringify ? _JSON$stringify['default'] : _JSON$stringify;
-_Object$keys = 'default' in _Object$keys ? _Object$keys['default'] : _Object$keys;
-_Object$assign = 'default' in _Object$assign ? _Object$assign['default'] : _Object$assign;
 D3 = 'default' in D3 ? D3['default'] : D3;
-_Object$values = 'default' in _Object$values ? _Object$values['default'] : _Object$values;
-_Array$from = 'default' in _Array$from ? _Array$from['default'] : _Array$from;
 
-const baseConf1 = {
+var baseConf1 = {
     "type": "检测值",
     "data": {
         '膳食纤维': 5,
@@ -28,7 +23,7 @@ const baseConf1 = {
     }
 };
 
-const baseConf2 = {
+var baseConf2 = {
     'type': '标准值',
     'data': {
         '膳食纤维': 3.5,
@@ -40,18 +35,25 @@ const baseConf2 = {
     }
 };
 
-var d3 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+function clone2(arr) {
+  return Object.assign([], arr);
+}
+
+var d3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-array'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function intakeSugarDistribution(parrent, config1, config2) {
+
+    // to extend boundary straight line  
+    // under Policy  ,dirty, 2017.4.20 fanyer 
     Array.prototype.extendArrBoundary = function () {
         var dx = this[1].x - this[0].x;
         var dy = this[1].y - this[0].y;
         this.unshift({
-            x: this[0].x - dx,
+            x: this[0].x - (dx - 0.2),
             y: this[0].y
         });
         this.push({
-            x: this[this.length - 1].x + dx,
+            x: this[this.length - 1].x + (dx - 0.2),
             y: this[this.length - 1].y
         });
     };
@@ -60,12 +62,13 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
     var xArr2 = config2 || baseConf2;
 
-    var labels = _Object$keys(xArr1.data);
+    // construct basic params
+    var labels = Object.keys(xArr1.data);
 
     var lineData1 = [];
     var lineData2 = [];
 
-    labels.map((e, i) => {
+    labels.map(function (e, i) {
         lineData1.push({
             x: i + 1,
             y: xArr1.data[labels[i]]
@@ -79,6 +82,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
     lineData1.extendArrBoundary();
     lineData2.extendArrBoundary();
 
+    // define line style
     var line = d3.line().defined(function (d) {
         return d;
     }).x(function (d) {
@@ -87,29 +91,33 @@ function intakeSugarDistribution(parrent, config1, config2) {
         return y(d.y);
     }).curve(d3.curveBasis);
 
+    // detect svg or canvas
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute('width', '1000');
     svg.setAttribute('height', '500');
     parrent.append(svg);
 
     var svg = d3.select("svg"),
-        margin = { top: 20, right: 40, bottom: 50, left: 40 },
+        margin = { top: 20, right: 100, bottom: 50, left: 40 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var formatNumber = d3.format(".1f");
 
+    // define basic location Axis
     var x = d3.scaleLinear().domain([1 - 0.8, 6 + 0.8]).range([0, width]);
 
-    var y = d3.scaleLinear().domain([0, 7]).range([height, 0]);
+    var y = d3.scaleLinear().domain([0, 10]).range([height, 0]);
 
-    var xAxis = d3.axisBottom(x).ticks(6).tickSize(5).tickFormat(d => {
+    var xAxis = d3.axisBottom(x).ticks(6).tickSize(5).tickFormat(function (d) {
         return labels[d - 1];
     });
 
-    var yAxis = d3.axisRight(y).ticks(6).tickSize(width).tickFormat(function (d) {
+    var yAxis = d3.axisRight(y).ticks(10).tickSize(width).tickFormat(function (d) {
         var s = formatNumber(d / 1e6);
+        // return d
+        // return this.parentNode.nextSibling ? "\xa0" + s : "$" + s + " million";
     });
 
     g.append("g").attr("transform", "translate(0," + height + ")").call(customXAxis);
@@ -119,19 +127,21 @@ function intakeSugarDistribution(parrent, config1, config2) {
     function customXAxis(g) {
         g.call(xAxis);
         g.select(".domain").remove();
+        g.selectAll(".tick text").attr("x", 4).attr("dy", 24);
     }
 
     function customYAxis(g) {
         g.call(yAxis);
         g.select(".domain").remove();
-
+        // g.selectAll(".tick:not(:first-of-type) line").attr("stroke", "#777").attr("stroke-dasharray", "2,2");
         g.selectAll(".tick:not(:first-of-type) line").attr("stroke", "#ccc");
         g.selectAll(".tick text").attr("x", 4).attr("dy", -4);
     }
 
+    //curve xVertical
     function dataMax(arr1, arr2) {
-        var max = JSON.parse(_JSON$stringify(arr1));
-        max.forEach((e, i, arr) => {
+        var max = JSON.parse(JSON.stringify(arr1));
+        max.forEach(function (e, i, arr) {
             arr1[i].y > arr2[i].y || (e.y = arr2[i].y);
         });
         return max;
@@ -139,45 +149,47 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
     var max = dataMax(lineData1, lineData2);
 
-    max.forEach((e, i, arr) => {
+    max.forEach(function (e, i, arr) {
         if (i < 7 && i > 0) {
             g.append('g').datum([{ x: e.x, y: 0 }, { x: e.x, y: e.y }]).append('path').attr("class", "line0").attr('stroke-dasharray', '3,3').attr('d', line);
         }
     });
 
+    // curve standard
     var total = [lineData1, lineData2];
 
-    total.forEach((E, I, Arr) => {
+    total.forEach(function (E, I, Arr) {
 
-        E.map((e, i, arr) => {
+        E.map(function (e, i, arr) {
 
             if (i < E.length - 1) {
-                let p1 = e,
+                var p1 = e,
                     p2 = E[i + 1],
                     vs = 1 - 1 / 4,
                     pMiddle1 = { x: vs * p1.x + (1 - vs) * p2.x, y: p1.y },
                     pMiddle2 = { x: (1 - vs) * p1.x + vs * p2.x, y: p2.y };
 
-                let bezeire = [p1, pMiddle1, pMiddle2, p2];
+                var bezeire = [p1, pMiddle1, pMiddle2, p2];
 
                 svg.datum(bezeire).append("path").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("class", "line" + I).attr("d", line);
             }
         });
     });
 
-    var curveRipple = function (Ripple) {
-        Ripple.forEach((E, I, Arr) => {
+    //  curve ripple
+    var curveRipple = function curveRipple(Ripple) {
+        Ripple.forEach(function (E, I, Arr) {
 
-            E.map((e, i, arr) => {
+            E.map(function (e, i, arr) {
 
                 if (i < E.length - 1) {
-                    let p1 = e,
+                    var p1 = e,
                         p2 = E[i + 1],
                         vs = 3 / 4,
                         pMiddle1 = { x: vs * p1.x + (1 - vs) * p2.x, y: p1.y },
                         pMiddle2 = { x: (1 - vs) * p1.x + vs * p2.x, y: p2.y };
 
-                    let bezeire = [p1, pMiddle1, pMiddle2, p2];
+                    var bezeire = [p1, pMiddle1, pMiddle2, p2];
 
                     svg.datum(bezeire).append("path").attr("transform", "translate(" + margin.left + "," + margin.top + ")").style("opacity", 0.3).attr("class", "line" + I).attr("d", line);
                 }
@@ -187,7 +199,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
     function percent(arr, factor) {
         var newArr = [];
-        arr.forEach((e, i, arr) => {
+        arr.forEach(function (e, i, arr) {
             newArr[i] = {
                 x: e.x,
                 y: e.y * factor
@@ -196,26 +208,38 @@ function intakeSugarDistribution(parrent, config1, config2) {
         return newArr;
     }
 
-    d3.range(0, 1, 0.02).forEach((e, i) => {
-        let percent1 = percent(lineData1, e),
+    d3.range(0, 1, 0.02).forEach(function (e, i) {
+        var percent1 = percent(lineData1, e),
             percent2 = percent(lineData2, e);
 
-        let Ripple = [percent1, percent2];
+        var Ripple = [percent1, percent2];
         curveRipple(Ripple);
     });
 
-    svg.selectAll(".dot").data([].concat(lineData1, lineData2)).enter().append("circle").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("class", "dot").attr("cx", line.x()).attr("cy", line.y()).attr("r", 3.5);
+    //  draw symbol
+    function reduce(arr) {
+        var newArr = clone2(arr);
+        newArr.pop();
+        newArr.shift();
+        return newArr;
+    }
 
-    let y1Destiny = lineData1.pop();
-    let y2Destiny = lineData2.pop();
+    var dotArr1 = reduce(lineData1);
+    var dotArr2 = reduce(lineData2);
+
+    svg.selectAll(".dot").data([].concat(dotArr1, dotArr2)).enter().append("circle").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("class", "dot").attr("cx", line.x()).attr("cy", line.y()).attr("r", 3.5);
+
+    // legend
+    var y1Destiny = lineData1.pop();
+    var y2Destiny = lineData2.pop();
 
     var y1pixel = parseFloat(line([y1Destiny]).match(/,(\d|\.)+\Z/gi)[0].slice(1, -1));
     var y2pixel = parseFloat(line([y2Destiny]).match(/,(\d|\.)+\Z/gi)[0].slice(1, -1));
 
-    ['检测值', '标准值'].forEach((e, i) => {
+    ['检测值', '标准值'].forEach(function (e, i) {
 
         g.append('text').attr('transform', function (d) {
-            return e === '标准值' ? 'translate(900,' + (y1pixel + 20) + ')' : 'translate(900,' + (y2pixel + 20) + ')';
+            return e === '标准值' ? 'translate(880,' + (y1pixel + 7) + ')' : 'translate(880,' + (y2pixel + 7) + ')';
         }).attr('class', 'text' + i).text(function (d) {
             return e;
         });
@@ -231,11 +255,11 @@ var baseConf = {
     '鞘脂类': 0.4
 };
 
-var d3$1 = _Object$assign({}, D3, require('d3-array'), require('d3-shape'), require('d3-format'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+var d3$1 = Object.assign({}, D3, require('d3-array'), require('d3-shape'), require('d3-format'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function intakeFiberStruct(parrent, config) {
 
-    const input = config || baseConf;
+    var input = config || baseConf;
 
     var max = 350,
         min = 110,
@@ -243,11 +267,14 @@ function intakeFiberStruct(parrent, config) {
 
     var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-    const labels = _Object$keys(input);
-    labels.sort((a, b) => input[a] - input[b]);
+    var labels = Object.keys(input);
+    labels.sort(function (a, b) {
+        return input[a] - input[b];
+    });
 
-    const data = _Object$values(input);
+    var data = Object.values(input);
 
+    // detect browser canvas api
     if (!parrent.querySelector("canvas")) {
         parrent.appendChild(document.createElement("canvas"));
     }
@@ -258,7 +285,7 @@ function intakeFiberStruct(parrent, config) {
     canvas.width = 1200;
     canvas.height = 900;
 
-    let width = canvas.width,
+    var width = canvas.width,
         height = canvas.height;
     var radius = Math.min(width, height) / 2;
 
@@ -270,12 +297,11 @@ function intakeFiberStruct(parrent, config) {
         context.scale(window.devicePixelRatio * 2, window.devicePixelRatio * 2);
     }
 
-    console.log(width);
-
     context.translate(width / 2, height / 2);
     context.lineWidth = 1.5;
     context.save();
 
+    // draw text & number
     context.textBaseline = "hanging";
     context.textAlign = "center";
 
@@ -284,17 +310,18 @@ function intakeFiberStruct(parrent, config) {
     context.fillText("膳食纤维", 0, 0);
     context.restore();
 
+    // circles layers
     context.save();
 
     var radius = [d3$1.range(min, min + d, 10), d3$1.range(min + d, min + 2 * d, 10), d3$1.range(min + 2 * d, min + 3 * d, 10), d3$1.range(min + 3 * d, min + 4 * d + 10, 10)];
 
     context.globalAlpha = 0.8;
-    radius.forEach((e, i) => {
+    radius.forEach(function (e, i) {
         context.strokeStyle = 'steelblue';
         radius[i].forEach(function (e2, i2) {
             context.setLineDash([4, 5]);
 
-            let arc = d3$1.arc().outerRadius(e2).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
+            var arc = d3$1.arc().outerRadius(e2).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
 
             context.beginPath();
             arc();
@@ -304,22 +331,23 @@ function intakeFiberStruct(parrent, config) {
     });
     context.restore();
 
+    // draw arcs
     context.save();
 
     var arcs = d3$1.pie()(data);
 
-    arcs.sort((a, b) => {
+    arcs.sort(function (a, b) {
         return a.value - b.value;
     });
 
     var arc = d3$1.arc().innerRadius(min).context(context);
 
-    arcs.forEach((E, I) => {
+    arcs.forEach(function (E, I) {
         context.beginPath();
 
         I > 3 ? context.strokeStyle = 'seagreen' : context.strokeStyle = 'steelblue';
 
-        d3$1.range(min, min + 210 - I * 30, 10).map((e, i) => {
+        d3$1.range(min, min + 210 - I * 30, 10).map(function (e, i) {
             arc.outerRadius(e)(E);
             context.stroke();
         });
@@ -327,6 +355,7 @@ function intakeFiberStruct(parrent, config) {
         context.restore();
     });
 
+    // legends
     context.save();
     context.strokeStyle = 'salmon';
     context.fillStyle = 'salmon';
@@ -341,20 +370,22 @@ function intakeFiberStruct(parrent, config) {
         return [[angle, min], [angle, max + 50]];
     }
 
-    function generateXY(angle, extend) {
+    function generateXY(angle) {
+        var extend = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+
+        // coordiantes convention   RL => XY
         angle = Math.PI / 2 - angle;
 
-        var extend = arguments[1] || 10;
         var onOff = (max + 50) * Math.cos(angle) >= 0;
 
         return [[(max + 50) * Math.cos(angle), -(max + 50) * Math.sin(angle)], [(max + 50) * Math.cos(angle) + (onOff ? extend : -extend), -(max + 50) * Math.sin(angle)]];
     }
 
-    arcs.forEach((e, i) => {
+    arcs.forEach(function (e, i) {
 
         context.beginPath();
-        let lengendsRL = generateRL(e.startAngle + 0.2);
-        let lengendsXY = generateXY(e.startAngle + 0.2, 50);
+        var lengendsRL = generateRL(e.startAngle + 0.2);
+        var lengendsXY = generateXY(e.startAngle + 0.2, 50);
 
         radialLine(lengendsRL);
         line(lengendsXY);
@@ -431,7 +462,7 @@ var baseConf$1 = {
 
 function bend(ctx, text, r) {
     ctx.save();
-    if (r === -370) {
+    if (r >= -370) {
         ctx.font = "10px adad";
         ctx.rotate(-0.015 * text.length / 2 - 0.02);
     } else {
@@ -439,19 +470,27 @@ function bend(ctx, text, r) {
     }
 
     for (var i = 0; i < text.length; i++) {
-        ctx.rotate(r === -400 ? 0.04 : 0.018);
+        ctx.rotate(r >= -370 ? 0.018 : 0.04);
         ctx.fillText(text[i], 0, r);
     }
 
     ctx.restore();
 }
 
-var d3$2 = _Object$assign({}, D3, require('d3-format'), require('d3-request'), require('d3-array'), require('d3-drag'), require('d3-color'), require('d3-shape'), require('d3-scale'));
+var d3$2 = Object.assign({}, D3, require('d3-format'), require('d3-request'), require('d3-array'), require('d3-drag'), require('d3-color'), require('d3-shape'), require('d3-scale'));
 
-function scoreLevel(parrent, config) {
+function scoreLevel() {
+    var parent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+    var config = arguments[1];
+
+    /**
+     * [function description]
+     * @param  {[type]} factor [description]
+     * @return {[type]}        [description]
+     */
     Array.prototype.scale = function (factor, config) {
         var newArr = [];
-        this.forEach((e, i, arr) => {
+        this.forEach(function (e, i, arr) {
             newArr[i] = [e[0], min + (e[1] - min) * factor];
         });
         return newArr;
@@ -463,12 +502,15 @@ function scoreLevel(parrent, config) {
     var min = 150;
     var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-    const labels = _Object$keys(input.data);
-    const values = _Object$values(input.data).map((e, i) => e.value);
+    var labels = Object.keys(input.data);
+    var values = Object.values(input.data).map(function (e, i) {
+        return e.value;
+    });
 
-    if (!document.querySelector("canvas")) {
+    // detect browser canvas api
+    if (parent.querySelector("canvas") === null) {
         var canvas = document.createElement("canvas");
-        parrent.appendChild(canvas);
+        parent.appendChild(canvas);
     }
 
     var context = canvas.getContext("2d");
@@ -484,6 +526,7 @@ function scoreLevel(parrent, config) {
 
     context.save();
 
+    // draw text & number
     context.save();
     context.textBaseline = "hanging";
     context.textAlign = "center";
@@ -501,8 +544,9 @@ function scoreLevel(parrent, config) {
 
     context.restore();
 
+    // circles layers
     context.save();
-
+    // context.rotate(-Math.PI / 10)
 
     var radius = [];
     radius.push(d3$2.range(150, 200, 10));
@@ -511,12 +555,14 @@ function scoreLevel(parrent, config) {
     radius.push(d3$2.range(300, 350 + 10, 10));
 
     context.globalAlpha = 0.3;
-    radius.forEach((e, i) => {
+    radius.forEach(function (e, i) {
         context.strokeStyle = colors[i];
         radius[i].forEach(function (e2, i2) {
             i2 > 4 || i2 < 1 ? context.setLineDash([10, 0]) : context.setLineDash([2, 4]);
 
-            let arc = d3$2.arc().outerRadius(e2).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
+            var arc = d3$2.arc().outerRadius(e2).innerRadius(0).startAngle(0)
+            // .padAngel(1)
+            .endAngle(Math.PI * 2).context(context);
 
             context.beginPath();
             arc();
@@ -524,19 +570,32 @@ function scoreLevel(parrent, config) {
             context.stroke();
         });
     });
-
+    // context.rotate(Math.PI/7)
     context.restore();
 
+    // first cicle layer  to be optimised later 2017.4.20
+    context.save();
+    context.strokeStyle = 'seagreen';
+    context.globalAlpha = 0.7;
+    context.setLineDash([4, 0]);
+
+    context.beginPath();
+    d3$2.arc().outerRadius(140).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
+
+    context.stroke();
+    context.restore();
+
+    // draw curve
     context.save();
     var curveLineData = [];
     var axisLineData = [];
     var pi = Math.PI;
     context.globalAlpha = 0.9;
 
-    values.map((e, i) => {
-        let r = d3$2.scaleLinear().domain([0, 1]).range([min, max]);
+    values.map(function (e, i) {
+        var r = d3$2.scaleLinear().domain([0, 1]).range([min, max]);
 
-        let point = [2 * pi / labels.length * i, r(e)];
+        var point = [2 * pi / labels.length * i, r(e)];
 
         curveLineData.push(point);
     });
@@ -544,48 +603,53 @@ function scoreLevel(parrent, config) {
     var radial = d3$2.radialLine().curve(d3$2.curveCatmullRomClosed.alpha(0.9)).context(context);
 
     context.setLineDash([5, 0]);
-
+    // context.shadowBlur = 1;
     context.strokeStyle = "seagreen";
     context.shadowColor = "seagreen";
     context.beginPath();
     radial(curveLineData);
     context.stroke();
-
+    // context.rotate(Math.PI / 2)
     context.restore();
 
+    // draw internal bundle curve
     context.save();
     context.strokeStyle = "seagreen";
 
     context.beginPath();
     context.globalAlpha = 0.3;
-    d3$2.range(0, 1, 0.04).forEach((e, i) => {
+    d3$2.range(0, 1, 0.04).forEach(function (e, i) {
         radial(curveLineData.scale(e));
     });
     context.stroke();
     context.restore();
 
+    // draw a axis line
     context.save();
     context.beginPath();
     context.lineWidth = 2;
-    let bundaryPoints = [];
+    var bundaryPoints = [];
 
     context.strokeStyle = 'salmon';
     context.lineWidth = 1;
 
     var innerborder = axisLineData;
-    var outerborder = axisLineData.map(e => e.scale(2.33));
+    var outerborder = axisLineData.map(function (e) {
+        return e.scale(2.33);
+    });
 
     var axis = d3$2.radialLine().context(context);
 
-    d3$2.range(0, 2 * Math.PI, 2 * pi / labels.length).forEach((e, i) => {
-        let r = d3$2.scaleLinear().domain([0, 1]).range([min, max]);
-        let startPoint = [2 * pi / labels.length * i, r(0)];
-        let endPoint = [2 * pi / labels.length * i, r(1)];
+    d3$2.range(0, 2 * Math.PI, 2 * pi / labels.length).forEach(function (e, i) {
+        var r = d3$2.scaleLinear().domain([0, 1]).range([min, max]);
+        var startPoint = [2 * pi / labels.length * i, r(0)];
+        var endPoint = [2 * pi / labels.length * i, r(1)];
         axis([startPoint, endPoint]);
     });
     context.stroke();
     context.restore();
 
+    // draw points
     context.save();
     context.strokeStyle = 'seagreen';
     context.lineWidth = 2;
@@ -594,7 +658,7 @@ function scoreLevel(parrent, config) {
     var points = d3$2.symbol().size(20).context(context);
 
     context.beginPath();
-    curveLineData.forEach((d, i) => {
+    curveLineData.forEach(function (d, i) {
         context.save();
         context.translate(d[1] * Math.sin(d[0]), -d[1] * Math.cos(d[0]));
         points();
@@ -605,6 +669,9 @@ function scoreLevel(parrent, config) {
     context.fill();
     context.restore();
 
+    // context.rotate(pi / 2)
+
+    // label
     context.save();
     context.strokeStyle = 'salmon';
     context.lineWidth = 4;
@@ -614,16 +681,18 @@ function scoreLevel(parrent, config) {
     context.beginPath();
 
     context.font = "16px adad";
-    labels.forEach((e, i) => {
+    labels.forEach(function (e, i) {
 
         context.save();
 
+        // if (i === 0||i===1) {
         context.rotate(pi * 2 / labels.length * i);
-
+        // context.fillText(e, 0, -400);
         bend(context, e, -400);
 
+        // context.fillText(input.data[e].en, 0, -370);
         bend(context, input.data[e].en, -370);
-
+        // }
 
         context.restore();
     });
@@ -631,12 +700,12 @@ function scoreLevel(parrent, config) {
     context.restore();
 }
 
-const intakeFatProportionConfig = {
+var intakeFatProportionConfig = {
     'sature': 42,
     'unsature': 58
 };
 
-const intakeFatDeviationConfig = {
+var intakeFatDeviationConfig = {
     'standard': 0.5,
     'data': {
         '饱和脂肪酸': 0.8739,
@@ -646,7 +715,17 @@ const intakeFatDeviationConfig = {
     }
 };
 
-var d3$3 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-axis'), require('d3-selection'), require('d3-color'), require('d3-scale'));
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+var d3$3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-axis'), require('d3-selection'), require('d3-color'), require('d3-scale'));
 
 function intakeFatProportion(parrent, config) {
 
@@ -661,8 +740,9 @@ function intakeFatProportion(parrent, config) {
 
     var input = config || intakeFatProportionConfig;
 
-    var data = _Object$values(input);
+    var data = Object.values(input);
 
+    // detect browser canvas api
     if (!parrent.querySelector('canvas')) {
         var canvas = document.createElement('canvas');
         parrent.appendChild(canvas);
@@ -679,10 +759,13 @@ function intakeFatProportion(parrent, config) {
 
     context.translate(width / 2, height / 2);
 
+    // context.transform(1,1,0,1,0,0)
+
     context.save();
 
     var arcs = d3$3.pie()(data);
 
+    // draw text & number
     context.textBaseline = 'middle';
     context.textAlign = 'center';
     context.globalAlpha = 0.4;
@@ -692,6 +775,7 @@ function intakeFatProportion(parrent, config) {
     context.fillText(data[0] + ':' + data[1], 0, 0);
     context.restore();
 
+    // circles layers
     context.save();
     context.setLineDash([4, 0]);
     context.globalAlpha = 0.7;
@@ -699,13 +783,13 @@ function intakeFatProportion(parrent, config) {
     var circle = d3$3.arc().startAngle(0).endAngle(2 * Math.PI).innerRadius(0).context(context);
 
     var radius = [max - 25, max];
-    radius.forEach((E, I) => {
+    radius.forEach(function (E, I) {
         context.lineWidth = I === 0 ? 2 : 10;
         context.setLineDash(I === 0 ? [4, 10] : [4, 0]);
 
-        let arc = d3$3.arc().innerRadius(E).outerRadius(E).padAngle(0.02).context(context);
+        var arc = d3$3.arc().innerRadius(E).outerRadius(E).padAngle(0.02).context(context);
 
-        arcs.forEach((e, i) => {
+        arcs.forEach(function (e, i) {
             context.save();
             context.strokeStyle = i === 0 ? 'seagreen' : 'steelblue';
 
@@ -717,6 +801,7 @@ function intakeFatProportion(parrent, config) {
         });
     });
 
+    // draw two circle attached
     var cornerRadius = 8;
     context.lineWidth = 15;
 
@@ -730,6 +815,7 @@ function intakeFatProportion(parrent, config) {
         context.fill();
     });
 
+    // move corner circle
     function corner(angle, radius, sign) {
         context.save();
         context.translate(sign * cornerRadius * Math.cos(angle) + Math.sqrt(radius * radius - cornerRadius * cornerRadius) * Math.sin(angle), sign * cornerRadius * Math.sin(angle) - Math.sqrt(radius * radius - cornerRadius * cornerRadius) * Math.cos(angle));
@@ -739,6 +825,7 @@ function intakeFatProportion(parrent, config) {
 
     context.restore();
 
+    // vertices and Interval ripple lines
     context.save();
     context.strokeStyle = 'steelblue';
     context.lineWidth = 2;
@@ -748,12 +835,13 @@ function intakeFatProportion(parrent, config) {
 
     var theta = arcs[0].startAngle - Math.PI;
 
+    //  generate vertical lines
     function vertical(theta, num, radius3) {
         var arr = [];
 
         arr.push([theta / 2 + Math.PI / 2, 0]);
 
-        [...Array(num)].map((e, i) => {
+        [].concat(toConsumableArray(Array(num))).map(function (e, i) {
             arr.push([theta / 2 + Math.PI / 2, radius3 * (i + 1) / num]);
             arr.push([theta / 2 + Math.PI / 2, -radius3 * (i + 1) / num]);
         });
@@ -762,14 +850,19 @@ function intakeFatProportion(parrent, config) {
     }
 
     var verticalArr = vertical(theta, 25, radius3);
-    verticalArr.sort((a, b) => a[1] - b[1]);
+    verticalArr.sort(function (a, b) {
+        return a[1] - b[1];
+    });
 
+    // vertices tangent 1st
     var theta2_1 = Math.acos(radius3 / rippleRadius);
     var theta2_2 = 2 * Math.PI - Math.acos(radius3 / rippleRadius);
 
+    // vertices tangent 1st
     var theta3_1 = Math.PI - (theta2_1 - theta);
     var theta3_2 = theta + theta2_1 + Math.PI;
 
+    //central polygon
     var centralPolygon = [[arcs[0].startAngle, rippleRadius], [0, 0], [arcs[1].startAngle, rippleRadius]];
 
     var radialLine = d3$3.radialLine().curve(d3$3.curveLinear).context(context);
@@ -780,13 +873,15 @@ function intakeFatProportion(parrent, config) {
 
     context.beginPath();
 
+    // radialLine(vertices)
+    // radialLine(verticalArr)
     radialLine(centralPolygon);
 
     context.stroke();
 
     context.save();
 
-    verticalArr.forEach((e, i) => {
+    verticalArr.forEach(function (e, i) {
         context.strokeStyle = e[1] > 0 ? 'steelblue' : 'seagreen';
         context.globalAlpha = 0.3;
 
@@ -794,9 +889,39 @@ function intakeFatProportion(parrent, config) {
 
         radialLine([0, 100], [0, 0], [0, 200]);
 
+        // e[1] < 10 && e[1] > -100 ?
+        //     radialCurve([vertices[0],
+        //         e,
+        //         vertices[1]
+        //     ]) :
+        //     radialCurve([vertices[0],
+        //         e,
+        //         vertices[1]
+        //     ]);
+
+        // radialLine([vertices[0],
+        //     [theta2, radius3],
+        //     e, [theta3, radius3],
+        //     vertices[1]
+        // ]);
+
+
+        // e[1] < 10 && e[1] > -100 ?
+        //     radialLine([vertices[0],
+        //         e,
+        //         vertices[1]
+        //     ]) :
+        //     radialCurve([vertices[1],
+        //         [theta2, radius3], e, [theta3, radius3],
+        //         vertices[0]
+        //     ]);
+
         var radius4 = radius3 * Math.abs(i - 25) / 25;
 
         if (e[1] > 160 || e[1] < -190) {
+
+            // console.log(theta3_2, radius4);
+            // console.log(vertices[0]);
             e[1] > 0 ? radialCurve([vertices[1], [theta2_1, radius4], e, [theta3_1, radius4], vertices[0]]) : radialCurve([vertices[0], [theta3_2, radius4], e, [theta2_2, radius4], vertices[1]]);
         } else {
 
@@ -809,13 +934,14 @@ function intakeFatProportion(parrent, config) {
 
     context.restore();
 
+    // draw arcs
     context.save();
 
     var radius3 = 250;
 
     var arc = d3$3.arc().innerRadius(0).context(context);
 
-    arcs.forEach((E, I) => {
+    arcs.forEach(function (E, I) {
         context.beginPath();
         context.strokeStyle = I === 0 ? 'seagreen' : 'steelblue';
 
@@ -830,9 +956,10 @@ function intakeFatDeviation(parrent, config) {
 
     var input = config || intakeFatDeviationConfig;
 
-    const labels = _Object$keys(input.data);
-    const data = _Object$values(input.data);
+    var labels = Object.keys(input.data);
+    var data = Object.values(input.data);
 
+    // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', '1000');
@@ -847,20 +974,23 @@ function intakeFatDeviation(parrent, config) {
 
     var formatNumber = d3$3.format('.2f');
 
+    // define basic location Axis
     var x = d3$3.scaleLinear().domain([0, 5]).range([height, 0]);
 
     var y = d3$3.scaleLinear().domain([0, 4 + 0.3]).range([0, width]);
 
-    var xAxis = d3$3.axisLeft(x).ticks(5).tickSize(-width).tickFormat(d => {
+    var xAxis = d3$3.axisLeft(x).ticks(5).tickSize(-width).tickFormat(function (d) {
         return labels[d - 1];
     });
 
-    var yAxis = d3$3.axisBottom(y).ticks(4).tickSize(-height).tickFormat((d, i) => {
+    var yAxis = d3$3.axisBottom(y).ticks(4).tickSize(-height).tickFormat(function (d, i) {
         if (i === 2) return '标准值';
         return d * 25;
     });
 
-    g.append('g').attr('class', 'axis axis--x').call(customXAxis);
+    g.append('g').attr('class', 'axis axis--x')
+    // .attr('transform', 'translate(0,0)')
+    .call(customXAxis);
 
     g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,' + height + ')').call(customYAxis);
 
@@ -881,29 +1011,87 @@ function intakeFatDeviation(parrent, config) {
         g.selectAll('.tick text').attr('x', 4).attr('dy', 24);
     }
 
+    //  draw bar 
     var barH = 26;
 
     var bar = g.selectAll('g.bar').data(data).enter().append('g').attr('class', 'bar').attr('transform', function (d, i) {
         return 'translate(0,' + (x(i + 1) - barH / 2) + ')';
     });
 
-    var barLine1 = d3$3.line().defined(d => d).x(d => {
+    var barLine1 = d3$3.line().defined(function (d) {
+        return d;
+    }).x(function (d) {
         return d[0];
-    }).y(d => d[1]).curve(d3$3.curveLinear);
-
-    var barLine2 = d3$3.line().defined(d => d).x(d => {
+    }).y(function (d) {
         return d[1];
-    }).y(d => d[0]).curve(d3$3.curveLinear);
+    }).curve(d3$3.curveLinear);
+
+    var barLine2 = d3$3.line().defined(function (d) {
+        return d;
+    }).x(function (d) {
+        return d[1];
+    }).y(function (d) {
+        return d[0];
+    }).curve(d3$3.curveLinear);
 
     var rect = bar.append('rect').attr('width', function (d) {
         return y(d * 4) + barH / 2;
     }).attr('stroke-width', '3').attr('rx', barH / 2).attr('ry', barH / 2).attr('transform', 'translate(' + -barH / 2 + ',0)').attr('stroke', 'steelblue').attr('height', barH);
 
-    bar.attr('clip-path', (e, i) => 'url(#clip-' + i + ')');
+    bar.attr('clip-path', function (e, i) {
+        return 'url(#clip-' + i + ')';
+    });
 
-    var clippath = bar.append('clipPath').attr('id', (d, i) => {
+    var clippath = bar.append('clipPath').attr('id', function (d, i) {
         return 'clip-' + i;
     }).append('rect').attr('width', '1000').attr('transform', 'translate(0,-5)').attr('height', '40');
+
+    // bar.append('g').data([
+    //         [
+    //             [100, 10],
+    //             [200, 21]
+    //         ],
+    //         [
+    //             [100, 20],
+    //             [200, 21]
+    //         ],
+    //         [
+    //             [100, 30],
+    //             [200, 31]
+    //         ],
+    //         [
+    //             [100, 40],
+    //             [200, 41]
+    //         ]
+
+    //     ])
+    //     .append('path')
+    //     .attr('stroke', 'steelblue')
+    //     .attr('d', barLine1);
+
+    // bar.append('g').data([
+    //         [
+    //             [100, 10],
+    //             [200, 21]
+    //         ],
+    //         [
+    //             [100, 20],
+    //             [200, 21]
+    //         ],
+    //         [
+    //             [100, 30],
+    //             [200, 31]
+    //         ],
+    //         [
+    //             [100, 40],
+    //             [200, 41]
+    //         ]
+
+    //     ])
+    //     .append('path')
+    //     .attr('stroke', 'steelblue')
+    //     .attr('d', barLine2);
+
 
     bar.append('text').attr('class', 'value').attr('x', function (d) {
         return y(d * 4);
@@ -912,17 +1100,19 @@ function intakeFatDeviation(parrent, config) {
     });
 }
 
-var d3$5 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$5 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+
+// factor   1/n
 
 
-
+// factor   1/n
 function vBezeireArr(Arr, factor) {
     var arr = [];
 
-    Arr.forEach((e, i) => {
+    Arr.forEach(function (e, i) {
         if (i === Arr.length - 1) return;
 
-        let p1 = e,
+        var p1 = e,
             p2 = Arr[i + 1],
             vs = 1 - factor,
             pMiddle1 = { x: p1.x, y: p1.y * vs + p2.y * factor },
@@ -934,7 +1124,9 @@ function vBezeireArr(Arr, factor) {
     return arr;
 }
 
-const curveGraphConfig = {
+//  for polar coordinate system
+
+var curveGraphConfig = {
     'standard': {
         'min': -25,
         '过低': -20,
@@ -965,7 +1157,7 @@ const curveGraphConfig = {
     }
 };
 
-const linkGraphConfig = {
+var linkGraphConfig = {
     "nodes": [{
         "name": "维生素A"
     }, {
@@ -1234,16 +1426,17 @@ const linkGraphConfig = {
     }]
 };
 
-var d3$4 = _Object$assign({}, D3, require('d3-shape'), require('d3-array'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$4 = Object.assign({}, D3, require('d3-shape'), require('d3-array'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 function curveGraph(parent, config) {
 
     var input = config || curveGraphConfig;
 
-    const axisLabels = _Object$keys(input.standard);
-    const labels = _Object$keys(input.data);
-    const data = _Object$values(input.data);
+    var axisLabels = Object.keys(input.standard);
+    var labels = Object.keys(input.data);
+    var data = Object.values(input.data);
 
+    // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('width', '500');
@@ -1266,31 +1459,36 @@ function curveGraph(parent, config) {
 
     var filter = svg.append("defs").append("filter").attr("id", "blur").append("feGaussianBlur").attr("stdDeviation", 1);
 
+    // define basic location Axis
     var x = d3$4.scaleLinear().domain([1 - 0.5, 5 + 0.5]).range([0, width]);
 
     var y = d3$4.scaleLinear().domain([0 - 0.5, 15 + 0.5]).range([0, height]);
 
-    var xAxis = d3$4.axisTop(x).ticks(5).tickSize(-height).tickFormat((d, i) => {
+    var xAxis = d3$4.axisTop(x).ticks(5).tickSize(-height).tickFormat(function (d, i) {
         return axisLabels[d];
     });
 
-    var yAxis = d3$4.axisLeft(y).ticks(15).tickSize(-width).tickFormat((d, i) => {
+    var yAxis = d3$4.axisLeft(y).ticks(15).tickSize(-width).tickFormat(function (d, i) {
+        // if (i === 2) return '标准值'
         return labels[i];
     });
 
-    g.append('g').attr('class', 'axis axis--x').call(customXAxis);
+    g.append('g').attr('class', 'axis axis--x')
+    // .attr('transform', 'translate(0,0)')
+    .call(customXAxis);
 
     g.append('g').attr('class', 'axis axis--y').call(customYAxis);
 
     function customXAxis(g) {
         g.call(xAxis);
         g.select('.domain').remove();
-
+        // g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#fff');
+        // text color
         g.selectAll('.tick text').attr('x', 0).attr('dy', -4);
         g.selectAll('.tick:nth-child(4n+1) text').style('font-family', 'adad').style('font-size', '20px').style('fill', 'chocolate');
         g.selectAll('.tick:nth-child(2n) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#f0c36d');
         g.selectAll('.tick:nth-child(3) text').style('font-family', 'adad').style('font-size', '20px').style('fill', 'seagreen');
-
+        // line color
         g.selectAll('.tick:nth-child(4n+1) line').attr('stroke', 'chocolate').attr('stroke-width', '3');
         g.selectAll('.tick:nth-child(2n) line').attr('stroke-width', '2').attr('stroke', '#f0c36d');
         g.selectAll('.tick:nth-child(3) line').attr('stroke-width', '3').attr('stroke', 'seagreen');
@@ -1331,11 +1529,12 @@ function curveGraph(parent, config) {
         return y(d.y);
     }).curve(d3$4.curveBasis);
 
+    // value mapping
     var pointCurve = d3$4.scaleLinear().domain([-25, 25]).range([0.5, 5.5]);
 
     var lineData = [];
 
-    data.map((e, i) => {
+    data.map(function (e, i) {
         lineData.push({
             x: pointCurve(e),
             y: i
@@ -1354,8 +1553,12 @@ function curveGraph(parent, config) {
 
     var lineDataBezeire = vBezeireArr(lineData, 1 / 4);
 
-    g.selectAll('.line').data(lineDataBezeire).enter().append('path').attr("class", "line").attr("stroke", "steelblue").attr("stroke-width", 3).attr("fill", "none").attr('d', line);
+    g.selectAll('.line').data(lineDataBezeire).enter().append('path').attr("class", "line").style("stroke", "seagreen").attr("stroke-width", 3).attr("fill", "none")
+    // .attr("filter", "url(#blur)")
+    .attr('d', line);
 
+    // ripple
+    // recursive Ripple percent, this will modify obj itself
     function percent(obj, factor) {
 
         for (var i in obj) {
@@ -1372,6 +1575,7 @@ function curveGraph(parent, config) {
         return obj;
     }
 
+    // recursive Ripple minus, this will modify obj itself
     function minus(obj, num) {
 
         for (var i in obj) {
@@ -1390,13 +1594,15 @@ function curveGraph(parent, config) {
     }
 
     function ripple(g, direction, dataArr) {
-        g.append('g').selectAll(direction).data(dataArr).enter().append('path').attr("class", direction).attr("opacity", 0.15).attr("stroke", d => direction === 'left' ? 'salmon' : 'seagreen').attr("stroke-width", 1).attr("fill", "none").attr('d', line);
+        g.append('g').selectAll(direction).data(dataArr).enter().append('path').attr("class", direction).attr("opacity", 0.15).attr("stroke", function (d) {
+            return direction === 'left' ? 'salmon' : 'seagreen';
+        }).attr("stroke-width", 1).attr("fill", "none").attr('d', line);
     }
 
-    d3$4.range(0, 1, 0.04).forEach((e, i) => {
+    d3$4.range(0, 1, 0.04).forEach(function (e, i) {
 
-        let rippleRight = vBezeireArr(minus(percent(minus(JSON.parse(_JSON$stringify(lineData)), 6), e), 6), 1 / 4),
-            rippleLeft = vBezeireArr(percent(JSON.parse(_JSON$stringify(lineData)), e), 1 / 4);
+        var rippleRight = vBezeireArr(minus(percent(minus(JSON.parse(JSON.stringify(lineData)), 6), e), 6), 1 / 4),
+            rippleLeft = vBezeireArr(percent(JSON.parse(JSON.stringify(lineData)), e), 1 / 4);
 
         ripple(g, 'left', rippleLeft);
         ripple(g, 'right', rippleRight);
@@ -1412,14 +1618,15 @@ function linkGraph(parent, config) {
         left: 100
     };
 
-    const input = config || linkGraphConfig;
+    var input = config || linkGraphConfig;
 
     var formatNumber = d3$4.format(',.0f'),
-        format = function (d) {
+        format = function format(d) {
         return formatNumber(d) + ' TWh';
     },
         color = d3$4.scaleOrdinal(d3$4.schemeCategory20);
 
+    // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('width', '1200');
@@ -1468,7 +1675,7 @@ function linkGraph(parent, config) {
 
     node.append('text').attr('x', -6).attr('y', function (d) {
         return d.dy / 2;
-    }).attr('dy', '.35em').attr('dx', '1.35em').attr('text-anchor', (d, i) => {
+    }).attr('dy', '.35em').attr('dx', '1.35em').attr('text-anchor', function (d, i) {
         return i > 15 ? 'start' : 'end';
     }).attr('transform', null).text(function (d) {
         return d.name;
@@ -1476,10 +1683,12 @@ function linkGraph(parent, config) {
         return d.x < width / 2;
     }).attr('x', 6 + sankey.nodeWidth()).attr('text-anchor', 'start');
 
-    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').attr('d', path).style('stroke', d => {
+    //  link
+    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').attr('d', path).style('stroke', function (d) {
         return d.color || 'salmon';
     }).style('stroke-width', function (d) {
         return Math.max(1, 2);
+        // return Math.max(1, d.dy);
     }).sort(function (a, b) {
         return b.dy - a.dy;
     });
@@ -1490,29 +1699,205 @@ function linkGraph(parent, config) {
 }
 
 var baseConf$2 = {
-    '维生素1': 3,
-    '维生素2': 1,
-    '维生素3': 1,
-    '维生素4': 2,
-    '维生素5': 3,
-    '维生素6': 2,
-    '维生素7': 3,
-    '维生素8': 2,
-    '维生素9': 1,
-    '维生素10': 3,
-    '维生素11': 1,
-    '维生素12': 1,
-    '维生素13': 3,
-    '维生素14': 2,
-    '维生素15': 1,
-    '维生素16': 2
+    '维生素a': 3,
+    '维生素b': 1,
+    '维生素c': 1,
+    '维生素d': 2,
+    '维生素e': 3,
+    '维生素f': 2,
+    '维生素g': 3,
+    '维生素h': 2,
+    '维生素i': 1,
+    '维生素j': 3,
+    '维生素k': 1,
+    '维生素l': 1,
+    '维生素m': 3,
+    '维生素n': 2,
+    '维生素o': 1,
+    '维生素p': 2
 };
 
-var d3$6 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+function hex2rgba(hex) {
+    var c = void 0;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+        c = hex.substring(1).split('');
+        if (c.length == 3) {
+            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c = '0x' + c.join('');
+        return 'rgba(' + [c >> 16 & 255, c >> 8 & 255, c & 255].join(',') + ',1)';
+    }
+    throw new Error('Bad Hex');
+}
 
-function estimateFiber(parrent, config) {
+function colorNameToHex(color) {
+    var colors = {
+        "aliceblue": "#f0f8ff",
+        "antiquewhite": "#faebd7",
+        "aqua": "#00ffff",
+        "aquamarine": "#7fffd4",
+        "azure": "#f0ffff",
+        "beige": "#f5f5dc",
+        "bisque": "#ffe4c4",
+        "black": "#000000",
+        "blanchedalmond": "#ffebcd",
+        "blue": "#0000ff",
+        "blueviolet": "#8a2be2",
+        "brown": "#a52a2a",
+        "burlywood": "#deb887",
+        "cadetblue": "#5f9ea0",
+        "chartreuse": "#7fff00",
+        "chocolate": "#d2691e",
+        "coral": "#ff7f50",
+        "cornflowerblue": "#6495ed",
+        "cornsilk": "#fff8dc",
+        "crimson": "#dc143c",
+        "cyan": "#00ffff",
+        "darkblue": "#00008b",
+        "darkcyan": "#008b8b",
+        "darkgoldenrod": "#b8860b",
+        "darkgray": "#a9a9a9",
+        "darkgreen": "#006400",
+        "darkkhaki": "#bdb76b",
+        "darkmagenta": "#8b008b",
+        "darkolivegreen": "#556b2f",
+        "darkorange": "#ff8c00",
+        "darkorchid": "#9932cc",
+        "darkred": "#8b0000",
+        "darksalmon": "#e9967a",
+        "darkseagreen": "#8fbc8f",
+        "darkslateblue": "#483d8b",
+        "darkslategray": "#2f4f4f",
+        "darkturquoise": "#00ced1",
+        "darkviolet": "#9400d3",
+        "deeppink": "#ff1493",
+        "deepskyblue": "#00bfff",
+        "dimgray": "#696969",
+        "dodgerblue": "#1e90ff",
+        "firebrick": "#b22222",
+        "floralwhite": "#fffaf0",
+        "forestgreen": "#228b22",
+        "fuchsia": "#ff00ff",
+        "gainsboro": "#dcdcdc",
+        "ghostwhite": "#f8f8ff",
+        "gold": "#ffd700",
+        "goldenrod": "#daa520",
+        "gray": "#808080",
+        "green": "#008000",
+        "greenyellow": "#adff2f",
+        "honeydew": "#f0fff0",
+        "hotpink": "#ff69b4",
+        "indianred ": "#cd5c5c",
+        "indigo": "#4b0082",
+        "ivory": "#fffff0",
+        "khaki": "#f0e68c",
+        "lavender": "#e6e6fa",
+        "lavenderblush": "#fff0f5",
+        "lawngreen": "#7cfc00",
+        "lemonchiffon": "#fffacd",
+        "lightblue": "#add8e6",
+        "lightcoral": "#f08080",
+        "lightcyan": "#e0ffff",
+        "lightgoldenrodyellow": "#fafad2",
+        "lightgrey": "#d3d3d3",
+        "lightgreen": "#90ee90",
+        "lightpink": "#ffb6c1",
+        "lightsalmon": "#ffa07a",
+        "lightseagreen": "#20b2aa",
+        "lightskyblue": "#87cefa",
+        "lightslategray": "#778899",
+        "lightsteelblue": "#b0c4de",
+        "lightyellow": "#ffffe0",
+        "lime": "#00ff00",
+        "limegreen": "#32cd32",
+        "linen": "#faf0e6",
+        "magenta": "#ff00ff",
+        "maroon": "#800000",
+        "mediumaquamarine": "#66cdaa",
+        "mediumblue": "#0000cd",
+        "mediumorchid": "#ba55d3",
+        "mediumpurple": "#9370d8",
+        "mediumseagreen": "#3cb371",
+        "mediumslateblue": "#7b68ee",
+        "mediumspringgreen": "#00fa9a",
+        "mediumturquoise": "#48d1cc",
+        "mediumvioletred": "#c71585",
+        "midnightblue": "#191970",
+        "mintcream": "#f5fffa",
+        "mistyrose": "#ffe4e1",
+        "moccasin": "#ffe4b5",
+        "navajowhite": "#ffdead",
+        "navy": "#000080",
+        "oldlace": "#fdf5e6",
+        "olive": "#808000",
+        "olivedrab": "#6b8e23",
+        "orange": "#ffa500",
+        "orangered": "#ff4500",
+        "orchid": "#da70d6",
+        "palegoldenrod": "#eee8aa",
+        "palegreen": "#98fb98",
+        "paleturquoise": "#afeeee",
+        "palevioletred": "#d87093",
+        "papayawhip": "#ffefd5",
+        "peachpuff": "#ffdab9",
+        "peru": "#cd853f",
+        "pink": "#ffc0cb",
+        "plum": "#dda0dd",
+        "powderblue": "#b0e0e6",
+        "purple": "#800080",
+        "rebeccapurple": "#663399",
+        "red": "#ff0000",
+        "rosybrown": "#bc8f8f",
+        "royalblue": "#4169e1",
+        "saddlebrown": "#8b4513",
+        "salmon": "#fa8072",
+        "sandybrown": "#f4a460",
+        "seagreen": "#2e8b57",
+        "seashell": "#fff5ee",
+        "sienna": "#a0522d",
+        "silver": "#c0c0c0",
+        "skyblue": "#87ceeb",
+        "slateblue": "#6a5acd",
+        "slategray": "#708090",
+        "snow": "#fffafa",
+        "springgreen": "#00ff7f",
+        "steelblue": "#4682b4",
+        "tan": "#d2b48c",
+        "teal": "#008080",
+        "thistle": "#d8bfd8",
+        "tomato": "#ff6347",
+        "turquoise": "#40e0d0",
+        "violet": "#ee82ee",
+        "wheat": "#f5deb3",
+        "white": "#ffffff",
+        "whitesmoke": "#f5f5f5",
+        "yellow": "#ffff00",
+        "yellowgreen": "#9acd32"
+    };
 
-    const input = config || baseConf$2;
+    if (typeof colors[color.toLowerCase()] != 'undefined') return colors[color.toLowerCase()];
+
+    return false;
+}
+
+function name2rgba(colorName) {
+    var hex = colorNameToHex(colorName);
+    return hex2rgba(hex);
+}
+
+// to be optimized 2017.4.20 fanyer
+function addOpacity() {
+    var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rgba(250,128,114,1)';
+    var alpha = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.5;
+
+    return str.replace(/[^,]+(?=\))/, alpha.toString());
+}
+
+var d3$6 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
+
+function estimateFiber(parent, config) {
+
+    var input = config || baseConf$2;
 
     var max = 470,
         min = 110,
@@ -1520,27 +1905,37 @@ function estimateFiber(parrent, config) {
 
     var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-    const labels = _Object$keys(input);
-    const data = _Object$values(input);
+    var labels = Object.keys(input);
+    var data = Object.values(input);
 
-    if (!parrent.querySelector("canvas")) {
+    // detect browser canvas api
+    if (parent.querySelector("canvas") === null) {
         var canvas = document.createElement("canvas");
-        parrent.appendChild(canvas);
+        parent.appendChild(canvas);
     }
 
     var context = canvas.getContext("2d");
 
-    canvas.width = 1000;
-    canvas.height = 800;
+    canvas.width = 1100;
+    canvas.height = 900;
 
     var width = canvas.width,
         height = canvas.height,
         radius = Math.min(width, height) / 2;
 
-    context.translate(width / 2, height / 2);
+    if (window.devicePixelRatio) {
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        canvas.height = height * window.devicePixelRatio * 2;
+        canvas.width = width * window.devicePixelRatio * 2;
+        context.scale(window.devicePixelRatio * 2, window.devicePixelRatio * 2);
+    }
+
+    context.translate(width / 2 + 1, height / 2);
 
     context.save();
 
+    // draw text & number
     context.textBaseline = "hanging";
     context.textAlign = "center";
 
@@ -1549,37 +1944,53 @@ function estimateFiber(parrent, config) {
     context.fillText("膳食纤维", 0, 0);
     context.restore();
 
+    // circles layers
     context.save();
     context.strokeStyle = 'seagreen';
     context.setLineDash([4, 5]);
 
-    var radius = d3$6.range(min, min + 4 * d + 10, 20);
+    var radius = d3$6.range(min, min + 4 * d + 30, 20);
 
-    radius.forEach((e, i) => {
-        let arc = d3$6.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
+    radius.forEach(function (e, i) {
+        var arc = d3$6.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
 
         context.beginPath();
         arc();
 
         context.stroke();
     });
+    context.restore();
 
+    // first cicle layer  to be optimised later 2017.4.20
     context.save();
+    context.strokeStyle = 'seagreen';
+    context.globalAlpha = 0.7;
+    context.setLineDash([4, 0]);
 
-    var arcs = d3$6.pie()(_Array$from({ length: 16 }, e => 1));
+    context.beginPath();
+    d3$6.arc().outerRadius(min - 10).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
 
-    arcs.sort((a, b) => {
+    context.stroke();
+    context.restore();
+
+    // draw arcs
+    context.save();
+    var arcs = d3$6.pie()(Array.from({ length: 16 }, function (e) {
+        return 1;
+    }));
+
+    arcs.sort(function (a, b) {
         return a.startAngle - b.startAngle;
     });
 
-    var arc = d3$6.arc().innerRadius(min).context(context);
+    var arc = d3$6.arc().context(context);
 
     function switchStrokeColor(a) {
         switch (a) {
             case 1:
-                return "steelblue";
-            case 2:
                 return "seagreen";
+            case 2:
+                return "orange";
             case 3:
                 return "salmon";
             default:
@@ -1600,23 +2011,49 @@ function estimateFiber(parrent, config) {
         }
     }
 
-    arcs.forEach((E, I) => {
-        context.beginPath();
+    arcs.forEach(function (E, I) {
 
-        context.strokeStyle = switchStrokeColor(data[I]);
+        // context.strokeStyle = 'rgba(250,128,114,0.05)';
+        context.fillStyle = "rgba(255,255,255,1)";
+        // context.fillStyle = "rgba(250,128,114,0)";
 
-        let inMax = InMax(data[I]);
+        var inMax = InMax(data[I]);
 
-        d3$6.range(min, inMax, 10).map((e, i) => {
+        d3$6.range(min, inMax, 6).sort(function (a, b) {
+            return b - a;
+        }).map(function (e, i, arr) {
+
+            context.save();
+            context.beginPath();
 
             context.setLineDash([10, 0]);
-            arc.outerRadius(e)(E);
+            var strokeColor = switchStrokeColor(data[I]);
+            context.strokeStyle = i === 0 ? addOpacity(name2rgba(strokeColor), 1) : addOpacity(name2rgba(strokeColor), 0.5);
+
+            if (i === 0) {
+                context.lineWidth = 2;
+                arc.outerRadius(e).innerRadius(min)(E);
+            } else {
+                console.log(context.strokeStyle);
+                context.lineWidth = 1;
+
+                // (i===10)&&(arc.outerRadius(e).innerRadius(e)(E));
+                arc.outerRadius(e).innerRadius(e)(E);
+                // (I === 1) && (i === 10) && (arc.outerRadius(e).innerRadius(min)(E));
+                // (I === 1) && (i === 1) && (arc.outerRadius(e).innerRadius(min)(E));
+            }
+
+            // (i === 0) && (console.log(arc.outerRadius(e)(E)));
+            // (I === 1) && (i === 1) && (console.log(arc.outerRadius(e)(E).split('Z')[0]));
             context.stroke();
+
+            i === 0 && context.fill();
+            context.restore();
         });
-
-        context.restore();
     });
+    context.restore();
 
+    // label
     context.save();
     context.strokeStyle = 'salmon';
     context.lineWidth = 4;
@@ -1625,24 +2062,35 @@ function estimateFiber(parrent, config) {
     context.beginPath();
 
     context.font = "16px adad";
-    labels.forEach((e, i) => {
+    labels.forEach(function (e, i) {
 
         context.save();
-        context.rotate(Math.PI * 2 / 16 * i + Math.PI * 2 / 64);
-        bend(context, e, -380);
+        // 0.03 is for delusion
+        context.rotate(Math.PI * 2 / labels.length * i + Math.PI / labels.length - 0.02);
+        bend(context, e, -400);
 
         context.restore();
     });
     context.restore();
 }
 
-var d3$8 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 
 
-function pattern(svg, inter = [30, 35], percent = 100, width = 400) {
-    var ptn = svg.append('defs').append('pattern').attr('id', 'pattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$8.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', (d, i) => d * width).attr('y', 0).attr('fill', (d, i) => {
-        let color = 'orange';
+// for general
+
+
+// for estimate-antibotics
+function vPattern1(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [30, 35];
+    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
+    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$8.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = 'orange';
         i < inter[0] && (color = 'seagreen');
         i > inter[1] && (color = 'salmon');
         return color;
@@ -1651,10 +2099,12 @@ function pattern(svg, inter = [30, 35], percent = 100, width = 400) {
     return ptn;
 }
 
+//for the professional
 
 
 
 
+// pure w3c svg namespace
 function detectSVG(parent, id) {
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
@@ -1665,11 +2115,14 @@ function detectSVG(parent, id) {
     return svg;
 }
 
+// this will decrease flexible
+// for Shisan to use only
+
 var baseConf$3 = {
     top: [{
         x: -7,
         y: 5,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '头孢菌素类',
             en: 'Cephalosporins'
@@ -1683,7 +2136,7 @@ var baseConf$3 = {
     }, {
         x: -6,
         y: 7,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '青霉素',
             en: 'Penicillins'
@@ -1697,7 +2150,7 @@ var baseConf$3 = {
     }, {
         x: -5,
         y: 8,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '林可酰胺类',
             en: 'Lincosamides'
@@ -1711,7 +2164,7 @@ var baseConf$3 = {
     }, {
         x: -4,
         y: 6,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '利福霉素类',
             en: 'Rifampins'
@@ -1725,7 +2178,7 @@ var baseConf$3 = {
     }, {
         x: -3,
         y: 2,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '多粘霉素类',
             en: 'Polymyxins'
@@ -1739,7 +2192,7 @@ var baseConf$3 = {
     }, {
         x: 1,
         y: 1,
-        color: '',
+        color: 'orange',
         tag: {
             cn: '碳青霉烯类',
             en: 'Carbapenems'
@@ -1753,7 +2206,7 @@ var baseConf$3 = {
     }, {
         x: 2,
         y: 4,
-        color: '',
+        color: 'orange',
         tag: {
             cn: '糖肽类',
             en: 'Glycopeptides'
@@ -1767,7 +2220,7 @@ var baseConf$3 = {
     }, {
         x: 5,
         y: 3,
-        color: '',
+        color: 'salmon',
         tag: {
             cn: '氨基糖苷类',
             en: 'Aminoglycosides'
@@ -1782,7 +2235,7 @@ var baseConf$3 = {
     bottom: [{
         x: -2,
         y: 1,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: 'β-内酰胺',
             en: 'β-lactam'
@@ -1796,7 +2249,7 @@ var baseConf$3 = {
     }, {
         x: -1,
         y: 3,
-        color: '',
+        color: 'seagreen',
         tag: {
             cn: '四环类素',
             en: 'Tetracyclines'
@@ -1810,7 +2263,7 @@ var baseConf$3 = {
     }, {
         x: 0,
         y: 4,
-        color: '',
+        color: 'orange',
         tag: {
             cn: '磷霉素类',
             en: 'Fosfomycins'
@@ -1824,7 +2277,7 @@ var baseConf$3 = {
     }, {
         x: 3,
         y: 5,
-        color: '',
+        color: 'orange',
         tag: {
             cn: '氯霉素类',
             en: 'Chloramphenicois'
@@ -1838,7 +2291,7 @@ var baseConf$3 = {
     }, {
         x: 4,
         y: 6,
-        color: 'seagreen',
+        color: 'orange',
         tag: {
             cn: '大环内酯类',
             en: 'Macrolides'
@@ -1852,7 +2305,7 @@ var baseConf$3 = {
     }, {
         x: 6,
         y: 7,
-        color: 'orange',
+        color: 'salmon',
         tag: {
             cn: '磺胺类',
             en: 'Sulfonamides'
@@ -1866,7 +2319,7 @@ var baseConf$3 = {
     }, {
         x: 7,
         y: 2,
-        color: 'orange',
+        color: 'salmon',
         tag: {
             cn: '奎诺酮类',
             en: 'Quinolones'
@@ -1878,24 +2331,30 @@ var baseConf$3 = {
         },
         direction: 'right'
     }],
-    gap: [0, 4] };
+    gap: [0, 4] //gap is the x value of central orange range's start & end, and start must lower than end
+};
 
-var index$1 = function (s, find) {
+// usual basic function
+var index$1 = function index(s, find) {
     return s.indexOf(find) + 1;
 };
 
+// for fast query
 var _cache = {};
 
+// extend operator
 var _alias = [/@/g, "_e.", /AND/gi, "&&", /OR/gi, "||", /<>/g, "!=", /NOT/gi, "!", /([^=<>])=([^=]|$)/g, '$1==$2'];
 
 var _rQuote = /""/g;
 var _rQuoteTemp = /!~/g;
 
-var _complite = function (code) {
+// compile
+var _complite = function _complite(code) {
     return eval("0," + code);
 };
 
-var _interpret = function (exp) {
+// convert operator to standard js symbols
+var _interpret = function _interpret(exp) {
     exp = exp.replace(_rQuote, "!~");
     var arr = exp.split('"');
     var i,
@@ -1918,6 +2377,7 @@ var _interpret = function (exp) {
     return arr.join('"');
 };
 
+// define template function
 var _templ = function (_list) {
     var _ret = [];
     var _i = -1;
@@ -1933,7 +2393,8 @@ var _templ = function (_list) {
     return _ret;
 }.toString();
 
-var Query = function (exp) {
+// extend Query method
+var Query = function Query(exp) {
     if (!exp) {
         return [];
     }
@@ -1966,92 +2427,142 @@ SQL.prototype = {
     Query: Query
 };
 
-var d3$7 = _Object$assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function EstimateAntibiotics() {
     this.type = 'EstimateAntibiotics';
 }
 
+/**
+ * @param  {Dom}
+ * @param  {Json}
+ * @return {[type]}
+ */
 function init(parent, config) {
-    let input = config || baseConf$3;
+
+    // let input = config ? handleConfig(baseConf, config) : baseConf;
+    var input = config || baseConf$3;
 
     detectSVG(parent);
 
-    let svg = d3$7.select('#' + parent.id + ' svg'),
+    var svg = d3$7.select('#' + parent.id + ' svg'),
         margin = { top: 50, right: 600, bottom: 50, left: 630 };
 
     svg.attr('width', 2700).attr('height', 1200);
 
-    let width = svg.attr('width') - margin.left - margin.right,
+    var width = svg.attr('width') - margin.left - margin.right,
         height = svg.attr('height') - margin.top - margin.bottom,
         gTop = svg.append('g').attr('class', 'gTop').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
         gBottom = svg.append('g').attr('class', 'gBottom').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    pattern(svg, [75, 90]);
+    // // here set tag vPattern1
+    // let gapArr = [
+    //     (input.gap[0] + 7) * 40 / 15,
+    //     (input.gap[1] + 7) * 40 / 15
+    // ];
 
-    $(parent).append($('<div/>', {
-        id: 'centerDiv',
-        class: 'centerDiv'
-    }));
+    // vPattern1(svg, [Math.floor(gapArr[0]), Math.floor(gapArr[1])]);
+    vPattern1(svg, [75, 90]);
 
-    const centerDivWidth = parseFloat($('#centerDiv').css('width'));
+    // $(parent)
+    //     .append($('<div/>', {
+    //         id: 'centerDiv',
+    //         class: 'centerDiv'
+    //     }));
 
-    $('#' + parent.id + ' #centerDiv').append($('<div/>', {
-        id: 'div1',
-        class: 'div1'
-    })).append($('<div/>', {
-        id: 'div2',
-        class: 'div2'
-    })).append($('<div/>', {
-        id: 'div3',
-        class: 'div3'
-    }));
+    // const centerDivWidth = parseFloat($('#centerDiv').css('width'));
 
-    $('#centerDiv #div1').css({
-        'width': 50 * (input.gap[0] + 7)
-    });
-    $('#centerDiv #div2').css({
-        'width': 50 * (input.gap[1] - input.gap[0] + 1) - 10,
-        'border-radius': () => {
-            let str = '';
+    // $('#' + parent.id + ' #centerDiv')
+    //     .append($('<div/>', {
+    //         id: 'div1',
+    //         class: 'div1'
+    //     }))
+    //     .append($('<div/>', {
+    //         id: 'div2',
+    //         class: 'div2'
+    //     }))
+    //     .append($('<div/>', {
+    //         id: 'div3',
+    //         class: 'div3'
+    //     }));
 
-            input.gap[0] === -7 && (str = '20px 0 0 20px');
-            input.gap[1] === 7 && (str = '0 20px 20px 0');
-            return str;
-        }
-    });
-    $('#centerDiv #div3').css({
-        'width': 50 * (7 - input.gap[1])
-    });
+    // // let bias=0;
 
-    input.gap[0] < -7 && centerDivOne('salmon');
-    input.gap[0] > 7 && centerDivOne('seagreen');
-    input.gap[0] <= -7 && input.gap[1] >= 7 && centerDivOne('orange');
 
-    function centerDivOne(color) {
-        $('#centerDiv').html('').css({
-            'width': 770,
-            'background-color': color,
-            'border-radius': '20px 20px 20px 20px'
-        });
-    }
+    // $('#centerDiv #div1').css({
+    //     'width': 50 * (input.gap[0] + 7)
+    // });
+    // $('#centerDiv #div2').css({
+    //     'width': 50 * (input.gap[1] - input.gap[0] + 1) - 10,
+    //     'border-radius': () => {
+    //         let str = '';
 
-    const maskHeight = 578;
+    //         (input.gap[0] === -7) && (str = '20px 0 0 20px');
+    //         (input.gap[1] === 7) && (str = '0 20px 20px 0');
+    //         return str;
+    //     }
+    // });
+    // $('#centerDiv #div3').css({
+    //     'width': 50 * (7 - input.gap[1])
+    // });
 
-    input.top.map((e, i) => {
+
+    // (input.gap[0] < -7) && (centerDivOne('salmon'));
+    // (input.gap[0] > 7) && (centerDivOne('seagreen'));
+    // (input.gap[0] <= -7) && (input.gap[1] >= 7) && (centerDivOne('orange'));
+
+    // function centerDivOne(color) {
+    //     $('#centerDiv').html('').css({
+    //         'width': 744,
+    //         'background-color': color
+    //         // 'border-radius': '20px 20px 20px 20px'
+    //     });
+
+    // }
+
+
+    var maskHeight = 578;
+
+    // console.log(input.bottom[6])
+    // console.log(baseConf.bottom[6])
+
+
+    input.top.map(function (e, i) {
+        // let color = (e.x < input.gap[0] ?
+        //     'seagreen' :
+        //     (e.x <= input.gap[1] ?
+        //         'orange' :
+        //         'salmon'));
 
         copy15('top', e.direction, e.color, e.x, e.y);
     });
 
-    input.bottom.map((e, i) => {
+    input.bottom.map(function (e, i) {
+        // let color = (e.x < input.gap[0] ?
+        //     'seagreen' :
+        //     (e.x <= input.gap[1] ?
+        //         'orange' :
+        //         'salmon'));
 
-        copy15('bottom', e.direction, e.color, e.x, e.y);
+        // copy15('bottom', e.direction, e.color, e.x, e.y)
     });
 
-    var clippath = svg.selectAll('.clippath').data([1, 2]).enter().append('clipPath').attr('id', (d, i) => {
+    /**
+     * [clippath description] to mask
+     * @type {[type]}
+     */
+    var clippath = svg.selectAll('.clippath').data([1, 2]).enter().append('clipPath').attr('id', function (d, i) {
         return 'clip-' + i;
-    }).append('rect').attr('width', '1420').attr('class', 'clippath').attr('transform', (d, i) => 'translate(0,' + (525 * i - 20) + ')').attr('height', maskHeight);
+    }).append('rect').attr('width', '1420').attr('class', 'clippath').attr('transform', function (d, i) {
+        return 'translate(0,' + (525 * i - 20) + ')';
+    }).attr('height', maskHeight);
 
+    /**
+     * [locate description] sql to locate
+     * @param  {[type]} x        [description]
+     * @param  {[type]} vertical [description] true means top
+     * @return {[type]}          [description]
+     */
     function locate(x, vertical) {
         var testArr = input[vertical === true ? 'top' : 'bottom'];
         var match = sql(testArr).Query('@x==' + x);
@@ -2059,29 +2570,41 @@ function init(parent, config) {
         return match[0];
     }
 
-    function basicCurve(arr, postion = 'top', direction = 'left', color = 'steelblue', dx = 0, dy = 0) {
+    function basicCurve(arr) {
+        var postion = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top';
+        var direction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'left';
+        var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
+        var dx = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+        var dy = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+        var base = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 1;
 
-        let r = 100;
 
-        let dir = direction === 'left' ? 1 : -1;
+        var r = 100;
 
-        let num = postion === 'top' ? 0 : 1;
+        var dir = direction === 'left' ? 1 : -1;
 
-        let Container = postion === 'top' ? gTop : gBottom;
+        var num = postion === 'top' ? 0 : 1;
 
-        let gChild = Container.attr('clip-path', 'url(#clip-' + num + ')').append('g').attr('class', 'pathContainer');
+        var Container = postion === 'top' ? gTop : gBottom;
 
-        gChild.selectAll('.basicCurve').data(arr).enter().append('path').attr('d', (d, i) => `M0 ` + (margin.top + d.offset) + `L ` + (width - r) * dir + ' ' + (margin.top + d.offset) + `A ` + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 1 : 0) + '' + (width - d.offset) * dir + ` ` + (margin.top + r) + `
-                    L ` + (width - d.offset) * dir + ` ` + height).style('stroke', color).attr('class', 'basicCurve').attr('stroke-width', d => d.strokeWidth).attr('fill', 'none');
+        var gChild = Container.attr('clip-path', 'url(#clip-' + num + ')').append('g').attr('class', 'pathContainer');
 
-        let vertical = postion === 'top' ? true : false;
-        let key = locate(dx, vertical).tag;
-        let data = locate(dx, vertical).data;
+        gChild.selectAll('.basicCurve').data(arr).enter().append('path').attr('d', function (d, i) {
+            return 'M0 ' + (margin.top + d.offset) + 'L ' + (width - r) * dir + ' ' + (margin.top + d.offset) + 'A ' + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 1 : 0) + '' + (width - d.offset) * dir + ' ' + (margin.top + r) + '\n                    L ' + (width - d.offset) * dir + ' ' + height;
+        }).style('stroke', color).style('stroke-opacity', 0.5).attr('class', 'basicCurve').attr('stroke-width', function (d) {
+            return d.strokeWidth;
+        }).attr('fill', 'none');
+
+        // this  line cause not pure
+        var vertical = postion === 'top' ? true : false;
+        var key = locate(dx, vertical).tag;
+        var data = locate(dx, vertical).data;
 
         if (direction === 'left' && postion === 'top') {
 
             gChild.attr('transform', 'translate(' + (-width / 2 + 40 / 2 + dx * 50 + 1) + ',' + (maskHeight - 140 - dy * 50) + ')');
 
+            // this  line cause not pure
             curveTag(50, 542 - dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'top') {
 
@@ -2090,8 +2613,8 @@ function init(parent, config) {
             curveTag(2200, 542 - dy * 50, key, data, color);
         } else if (direction === 'left' && postion === 'bottom') {
 
-            let x = -width / 2 + 40 / 2 + dx * 50 + 1;
-            let y = maskHeight - 390 + dy * 50 - 560;
+            var x = -width / 2 + 40 / 2 + dx * 50 + 1;
+            var y = maskHeight - 390 + dy * 50 - 560;
 
             gChild.style('transform-origin', '0 500px');
             gChild.style('transform', 'translate(' + x + 'px,' + y + 'px) scaleY(-1)');
@@ -2099,11 +2622,11 @@ function init(parent, config) {
             curveTag(50, 592 + dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'bottom') {
 
-            let x = width + width / 2 - 40 / 2 + dx * 50 + 1;
-            let y = maskHeight - 390 + dy * 50 - 560;
+            var _x7 = width + width / 2 - 40 / 2 + dx * 50 + 1;
+            var _y = maskHeight - 390 + dy * 50 - 560;
 
             gChild.style('transform-origin', '0 500px');
-            gChild.style('transform', 'translate(' + x + 'px,' + y + 'px) scaleY(-1)');
+            gChild.style('transform', 'translate(' + _x7 + 'px,' + _y + 'px) scaleY(-1)');
 
             curveTag(2200, 592 + dy * 50, key, data, color);
         }
@@ -2111,46 +2634,61 @@ function init(parent, config) {
         return gChild;
     }
 
+    //Boss's policy
+
+
+    /**
+     * [copy15 description]  15 bio parameters
+     * @param  {[type]} pos   [description]
+     * @param  {[type]} color [description]
+     * @param  {[type]} dx    [description]
+     * @param  {[type]} dy    [description]
+     * @return {[type]}       [description]
+     */
     function copy15(pos, direction, color, dx, dy) {
+        var base = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1;
+
         return basicCurve([{
             offset: 0 + 1,
-            strokeWidth: 1
+            strokeWidth: base
         }, {
-            offset: 4 + 1,
-            strokeWidth: 1
+            offset: 3 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 8 + 1,
-            strokeWidth: 1
+            offset: 6 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 12 + 1,
-            strokeWidth: 1
+            offset: 9 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 16 + 1,
-            strokeWidth: 1
+            offset: 12 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 20 + 1,
-            strokeWidth: 1
+            offset: 15 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 24 + 1,
-            strokeWidth: 1
+            offset: 18 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 28 + 1,
-            strokeWidth: 1
+            offset: 21 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 32 + 1,
-            strokeWidth: 1
+            offset: 24 * base + 1,
+            strokeWidth: base
         }, {
-            offset: 36 + 1,
-            strokeWidth: 1
+            offset: 27 * base + 1,
+            strokeWidth: base
 
         }], pos, direction, color, dx, dy);
     }
 
+    // text title
     svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '41%').style('fill', 'seagreen').style('font-size', '36').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
 
     svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '44%').style('fill', 'seagreen').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
 
-    let centralText = [{
+    // text
+    var centralText = [{
         color: 'seagreen',
         text: '推荐用药',
         pos: -1,
@@ -2167,42 +2705,70 @@ function init(parent, config) {
         value: 7 - input.gap[1]
     }];
 
-    svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', (d, i) => 'translate(' + (width / 2 + margin.left - 75 + d.pos * 270) + ',630)').append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('fill', 'none').style('stroke', (d, i) => d.color);
+    svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', function (d, i) {
+        return 'translate(' + (width / 2 + margin.left - 75 + d.pos * 270) + ',630)';
+    }).append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('fill', 'none').style('stroke', function (d, i) {
+        return d.color;
+    });
 
-    svg.selectAll('g.centralText').append('text').text((d, i) => d.text).attr('x', 75).attr('y', 35).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', (d, i) => d.color).style('font-size', '25px');
+    svg.selectAll('g.centralText').append('text').text(function (d, i) {
+        return d.text;
+    }).attr('x', 75).attr('y', 35).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+        return d.color;
+    }).style('font-size', '25px');
 
-    svg.selectAll('g.centralText').append('text').text((d, i) => d.value).attr('x', 75).attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', (d, i) => d.color).style('font-size', '25px');
+    svg.selectAll('g.centralText').append('text').text(function (d, i) {
+        return d.value;
+    }).attr('x', 75).attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+        return d.color;
+    }).style('font-size', '25px');
 
-    function curveTag(x = 200, y = 100, text = {}, data = {}, color = 'seagreen') {
+    // tag at both sides
+    function curveTag() {
+        var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 200;
+        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
+        var text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var data = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+        var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'seagreen';
+
         var gTag = svg.append('g').attr('transform', 'translate(' + x + ',' + y + ')');
 
-        gTag.append('rect').attr('width', 400).attr('height', 22).attr('rx', 15).attr('fill', 'url(#pattern1)').attr('ry', '50%').attr('stroke', 'steelblue').attr('stroke-width', 1);
+        gTag.append('rect').attr('width', 400).attr('height', 22).attr('rx', 15).attr('fill', 'url(#vpattern1)').attr('ry', '50%').attr('stroke', 'steelblue').attr('stroke-width', 1);
 
         gTag.append('text').text('中间值: ' + data.median).style('fill', color).attr('stroke-width', 2).attr('x', 130).attr('dx', 20).attr('y', 35).attr('text-anchor', 'start').attr('alignment-baseline', 'hanging');
 
         gTag.append('text').text('▼ ' + data.absolute).style('fill', color).attr('stroke-width', 2).attr('x', data.rank * 400 - 28).attr('dx', 20).attr('y', 0).attr('dy', -4).attr('text-anchor', 'start').attr('alignment-baseline', 'baseline');
 
-        let textAlign = x < 1000 ? 400 : -150;
+        var textAlign = x < 1000 ? 400 : -150;
         gTag.append('text').text(text.cn).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
         gTag.append('text').text(text.en).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('dy', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
-        let rankAlign = x < 1000 ? 600 : -350;
+        // rank tag
+        var rankAlign = x < 1000 ? 600 : -350;
         gTag.append('text').text('人群排名: ' + d3$7.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
-        let rankRectAlign = x < 1000 ? 580 : -150;
+        var rankRectAlign = x < 1000 ? 580 : -150;
 
         gTag.append('rect').style('fill', color).attr('x', rankRectAlign).attr('y', -4).attr('width', 3).attr('height', 39);
     }
 }
 
-function topLeft(argument) {}
+function topLeft(argument) {
+    // body...
+}
 
-function topRight(argument) {}
+function topRight(argument) {
+    // body...
+}
 
-function bottomRight(argument) {}
+function bottomRight(argument) {
+    // body...
+}
 
-function bottomLeft(argument) {}
+function bottomLeft(argument) {
+    // body...
+}
 
 EstimateAntibiotics.prototype = {
     constructor: estimateAntibiotics,
