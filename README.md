@@ -19,6 +19,7 @@ this library outputs graphics with interfaces as below
   * bottomRight
   * bottomLeft
   * index
+* amountBile
 * metabolism(for the Professional)
 
 
@@ -400,6 +401,20 @@ It will render as below:
 <img src="./docs/estimate-antibiotics-init2.png" width='1000'>
 
 
+### amountBile()
+```
+amountBile(oDom, config)
+
+//config example
+{
+  "bileAcid":6,
+  "cholesterol":2
+}
+
+```
+It will render as below:
+
+<img src="./docs/amount-bile.png" width='600'>
 
 ### metabolism()      
 -------for the Professional
