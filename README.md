@@ -186,13 +186,19 @@ intakeFatProportion(oDom, config)
 }
 
 ```
-There will be 2 cases:
+There will be 3 cases:
 
 When the proportion is small enough 
 
 It will render as below:
 
 <img src="./docs/intake-fat-proportion2.png" width='500'>
+
+When the proportion is large enough 
+
+It will render as below:
+
+<img src="./docs/intake-fat-proportion3.png" width='500'>
 
 When the proportion is somehow normal 
 
@@ -408,7 +414,7 @@ It will render as below:
 <img src="./docs/estimate-antibiotics-init.png" width='1000'>
 
 
-<img src="./docs/estimate-antibiotics-init2.png" width='1000'>
+<img src="./docs/formeasure-antibiotics.png" width='1000'>
 
 
 ### amountBile()
