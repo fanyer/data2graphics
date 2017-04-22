@@ -186,6 +186,14 @@ intakeFatProportion(oDom, config)
 }
 
 ```
+There will be 2 cases:
+When the proportion is small enough 
+It will render as below:
+
+<img src="./docs/intake-fat-proportion2.png" width='500'>
+
+When the proportion is somehow normal 
+
 It will render as below:
 
 <img src="./docs/intake-fat-proportion.png" width='500'>
