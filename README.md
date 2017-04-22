@@ -187,7 +187,9 @@ intakeFatProportion(oDom, config)
 
 ```
 There will be 2 cases:
+
 When the proportion is small enough 
+
 It will render as below:
 
 <img src="./docs/intake-fat-proportion2.png" width='500'>
@@ -285,22 +287,22 @@ estimateFiber(oDom, config)
 
 //config example
 {
-   '维生素1': 1,
-   '维生素2': 1,
-   '维生素3': 3,
-   '维生素4': 2,
-   '维生素5': 1,
-   '维生素6': 3,
-   '维生素7': 1,
-   '维生素8': 2,
-   '维生素9': 2,
-   '维生素10': 1,
-   '维生素11': 1,
-   '维生素12': 3,
-   '维生素13': 3,
-   '维生素14': 1,
-   '维生素15': 2,
-   '维生素16': 3
+   '维生素a': 1,
+   '维生素b': 1,
+   '维生素c': 3,
+   '维生素d': 2,
+   '维生素e': 1,
+   '维生素f': 3,
+   '维生素g': 1,
+   '维生素h': 2,
+   '维生素i': 2,
+   '维生素j': 1,
+   '维生素k': 1,
+   '维生素l': 3,
+   '维生素m': 3,
+   '维生素n': 1,
+   '维生素o': 2,
+   '维生素p': 3
 }
 
 ```
