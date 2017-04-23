@@ -5,3 +5,4 @@ pdf
 docs/*.zip
 bundle.js
 parser/cpp/build
+tmp
