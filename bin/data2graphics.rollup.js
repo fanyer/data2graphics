@@ -725,10 +725,243 @@ var toConsumableArray = function (arr) {
   }
 };
 
+var d3$4 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-axis'), require('d3-selection'), require('d3-color'), require('d3-scale'));
+
+//x,y may depend on the context tranlate origin
+var vestConfig = [{
+    x: 0,
+    y: -310
+}, {
+    x: -14,
+    y: -280
+}, {
+    x: -21,
+    y: -272
+}, {
+    x: -30,
+    y: -264
+}, {
+    x: -90,
+    y: -234
+}, {
+    x: -110,
+    y: -224
+}];
+
+function onion(context) {
+    var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['seagreen', 'steelblue'];
+    var vest = arguments[2];
+
+
+    var vestData = vest || vestConfig;
+
+    var mirrorVestData = vestData.map(function (e, i) {
+        return {
+            x: -e.x,
+            y: e.y
+        };
+    });
+
+    var curve = d3$4.line().x(function (d) {
+        return d.x;
+    }).y(function (d) {
+        return d.y;
+    }).curve(d3$4.curveCatmullRom.alpha(1)).context(context);
+
+    // lefthand
+    context.save();
+    context.lineWidth = 2;
+    context.strokeStyle = color[0];
+    context.beginPath();
+
+    curve(vestData);
+    context.stroke();
+
+    context.restore();
+
+    // righthand
+    context.save();
+    context.lineWidth = 2;
+    context.strokeStyle = color[1];
+    context.beginPath();
+
+    curve(mirrorVestData);
+    context.stroke();
+
+    context.restore();
+
+    // lefthand erase arc
+    context.save();
+    // context.lineWidth = 3;
+    context.strokeStyle = color[1];
+    context.fillStyle = '#fff';
+    context.beginPath();
+
+    curve([].concat(toConsumableArray(vestData), [{
+        x: 0,
+        y: -200
+    }]));
+    context.fill();
+
+    context.restore();
+
+    // righthand erase arc
+    context.save();
+    // context.lineWidth = 3;
+    context.strokeStyle = color[1];
+    context.fillStyle = '#fff';
+    context.beginPath();
+
+    curve([].concat(toConsumableArray(mirrorVestData), [{
+        x: -50,
+        y: -190
+    }]));
+    context.fill();
+
+    context.restore();
+}
+
+// gt 6     vs >=6
+function onionGt6(context) {
+    var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['seagreen', 'steelblue'];
+    var arr = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['left', 'right'];
+    var vest = arguments[3];
+
+
+    var vestData = vest || vestConfig;
+
+    var mirrorVestData = vestData.map(function (e, i) {
+        return {
+            x: -e.x,
+            y: e.y
+        };
+    });
+
+    var curve = d3$4.line().x(function (d) {
+        return d.x;
+    }).y(function (d) {
+        return d.y;
+    }).curve(d3$4.curveCatmullRom.alpha(1)).context(context);
+
+    // lefthand
+    function lefthand() {
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = color[0];
+        context.beginPath();
+
+        curve(vestData);
+        context.stroke();
+
+        context.restore();
+    }
+
+    // righthand
+    function righthand() {
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = color[1];
+        context.beginPath();
+
+        curve(mirrorVestData);
+        context.stroke();
+
+        context.restore();
+    }
+
+    arr.length === 2 && lefthand() && righthand();
+    if (arr.length === 1) {
+        arr[0] == 'left' ? lefthand() : righthand();
+    }
+
+    // lefthand()
+    // righthand()
+
+
+    // lefthand erase arc
+    context.save();
+    // context.lineWidth = 3;
+    context.strokeStyle = color[1];
+    context.fillStyle = '#fff';
+    context.beginPath();
+
+    curve([].concat(toConsumableArray(vestData), [{
+        x: 0,
+        y: -200
+    }]));
+    context.fill();
+
+    context.restore();
+
+    // righthand erase arc
+    context.save();
+    // context.lineWidth = 3;
+    context.strokeStyle = color[1];
+    context.fillStyle = '#fff';
+    context.beginPath();
+
+    curve([].concat(toConsumableArray(mirrorVestData), [{
+        x: 0,
+        y: -200
+    }]));
+    context.fill();
+
+    context.restore();
+}
+
+/**
+ * [gt6 description]  
+ * @param  {[type]} argument [description]
+ * @return {[type]}          [description]
+ */
+
+var p0 = [0, 310];
+var p2 = [Math.PI, 310];
+
+function gt6(context) {
+    var arr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [p0, p2];
+    var color = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'seagreen';
+    var gt6 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    return function () {
+
+        var curve = d3$4.radialLine().curve(d3$4.curveCatmullRom.alpha(0.7)).context(context);
+
+        var p0 = arr[0];
+        var p2 = arr[1];
+
+        //value 250 is the radius3 in intake-fat-proportion
+        var p1 = void 0;
+        if (gt6) {
+            p1 = [(p0[0] + p2[0]) / 2, 250 + 2];
+        } else {
+            p1 = [(0 + p2[0]) / 2, 250 + 2];
+        }
+
+        arr.splice(1, 0, p1);
+        console.log(arr);
+
+        context.save();
+        // context.lineWidth = 3;
+        context.strokeStyle = color;
+        context.fillStyle = '#fff';
+        context.beginPath();
+
+        curve(arr);
+
+        context.fill();
+        context.stroke();
+
+        context.restore();
+    }();
+}
+
 var d3$3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-axis'), require('d3-selection'), require('d3-color'), require('d3-scale'));
 
 function intakeFatProportion(parrent, config) {
-
+    // max is the most outside
+    // max-25 is the second
+    // 310 is the 3rd
+    // radius3 is the 4th
     var max = 350;
     var min = 110;
     var d = (max - min) / 6;
@@ -742,7 +975,15 @@ function intakeFatProportion(parrent, config) {
 
     var data = Object.values(input);
 
-    // detect browser canvas api
+    var vsTmp = data[1] / data[0];
+    // let vs = (vsTmp >= 1 ? vsTmp : 1 / vsTmp);
+    var vs = vsTmp;
+
+    /**
+     * detect browser canvas api
+     * @param  {[type]} !parrent.querySelector('canvas') [description]
+     * @return {[type]}                                  [description]
+     */
     if (!parrent.querySelector('canvas')) {
         var canvas = document.createElement('canvas');
         parrent.appendChild(canvas);
@@ -763,19 +1004,23 @@ function intakeFatProportion(parrent, config) {
 
     context.save();
 
-    var arcs = d3$3.pie()(data);
+    var arcs = [{
+        'data': data[0],
+        'endAngle': Math.PI * 2,
+        'startAngle': Math.PI * 2 * (data[1] / (data[0] + data[1])),
+        'index': 0,
+        'value': data[0]
+    }, {
+        'data': data[1],
+        'startAngle': 0,
+        'endAngle': Math.PI * 2 * (data[1] / (data[0] + data[1])),
+        'index': 1,
+        'value': data[1]
+    }];
 
-    // draw text & number
-    context.textBaseline = 'middle';
-    context.textAlign = 'center';
-    context.globalAlpha = 0.4;
-
-    context.fillStyle = 'black';
-    context.font = '144px adad';
-    context.fillText(data[0] + ':' + data[1], 0, 0);
-    context.restore();
-
-    // circles layers
+    /**
+     * two circles layers most outside
+     */
     context.save();
     context.setLineDash([4, 0]);
     context.globalAlpha = 0.7;
@@ -785,11 +1030,23 @@ function intakeFatProportion(parrent, config) {
     var radius = [max - 25, max];
     radius.forEach(function (E, I) {
         context.lineWidth = I === 0 ? 2 : 10;
-        context.setLineDash(I === 0 ? [4, 10] : [4, 0]);
+        if (I === 1) {
+            context.setLineDash([4, 0]);
+        }
 
         var arc = d3$3.arc().innerRadius(E).outerRadius(E).padAngle(0.02).context(context);
 
         arcs.forEach(function (e, i) {
+            if (I === 0) {
+
+                if (i === 0) {
+                    context.setLineDash([5, 10]);
+                } else {
+                    context.setLineDash([5, 10]);
+                    // context.setLineDash([5 * vs, 10 * vs])
+                }
+            }
+
             context.save();
             context.strokeStyle = i === 0 ? 'seagreen' : 'steelblue';
 
@@ -800,8 +1057,12 @@ function intakeFatProportion(parrent, config) {
             context.restore();
         });
     });
+    context.restore();
 
-    // draw two circle attached
+    /**
+     * draw two circle attached
+     */
+    context.save();
     var cornerRadius = 8;
     context.lineWidth = 15;
 
@@ -825,9 +1086,83 @@ function intakeFatProportion(parrent, config) {
 
     context.restore();
 
-    // vertices and Interval ripple lines
+    /**
+     * draw arcs
+     */
     context.save();
-    context.strokeStyle = 'steelblue';
+
+    var radius3 = 250;
+
+    var arc = d3$3.arc().innerRadius(0).context(context);
+
+    arcs.forEach(function (E, I) {
+        context.beginPath();
+        context.strokeStyle = I === 0 ? 'seagreen' : 'steelblue';
+
+        arc.outerRadius(radius3)(E);
+        context.stroke();
+    });
+
+    context.restore();
+
+    /**
+     * draw onion curve   =>  two sharp corner
+     */
+
+    var twoSharpPoint = [[Math.PI * 2, 310], [arcs[0].startAngle, 310]];
+
+    // console.log(twoSharpPoint)
+
+    if (vs < 1 / 6) {
+
+        context.save();
+        context.beginPath();
+
+        onionGt6(context, ['seagreen', 'steelblue'], ['left']);
+        context.restore();
+
+        context.save();
+        context.rotate(arcs[1].endAngle);
+        onionGt6(context, ['steelblue', 'seagreen'], ['right']);
+
+        context.restore();
+
+        gt6(context, twoSharpPoint, 'steelblue', false);
+    } else if (vs > 6) {
+
+        context.save();
+        context.beginPath();
+
+        onionGt6(context, ['seagreen', 'steelblue'], ['right']);
+        context.restore();
+
+        context.save();
+        context.rotate(arcs[1].endAngle);
+        onionGt6(context, ['steelblue', 'seagreen'], ['left']);
+
+        context.restore();
+
+        gt6(context, twoSharpPoint, 'seagreen', true);
+    } else {
+
+        context.save();
+        context.beginPath();
+
+        onion(context, ['seagreen', 'steelblue']);
+        context.restore();
+
+        context.save();
+        context.rotate(arcs[1].endAngle);
+        // console.log(arcs[0].startAngle)
+        onion(context, ['steelblue', 'seagreen']);
+        context.restore();
+    }
+
+    /**
+     * vertices and Interval ripple lines
+     */
+    context.save();
+    context.strokeStyle = '#2aa198';
     context.lineWidth = 2;
 
     var rippleRadius = 310;
@@ -850,9 +1185,8 @@ function intakeFatProportion(parrent, config) {
     }
 
     var verticalArr = vertical(theta, 25, radius3);
-    verticalArr.sort(function (a, b) {
-        return a[1] - b[1];
-    });
+    // verticalArr.sort((a, b) => (a[1] - b[1]))
+
 
     // vertices tangent 1st
     var theta2_1 = Math.acos(radius3 / rippleRadius);
@@ -863,7 +1197,7 @@ function intakeFatProportion(parrent, config) {
     var theta3_2 = theta + theta2_1 + Math.PI;
 
     //central polygon
-    var centralPolygon = [[arcs[0].startAngle, rippleRadius], [0, 0], [arcs[1].startAngle, rippleRadius]];
+    var centralPolygon = [[arcs[0].endAngle, rippleRadius], [0, 0], [arcs[1].endAngle, rippleRadius]];
 
     var radialLine = d3$3.radialLine().curve(d3$3.curveLinear).context(context);
 
@@ -882,6 +1216,8 @@ function intakeFatProportion(parrent, config) {
     context.save();
 
     verticalArr.forEach(function (e, i) {
+        // context.save()
+
         context.strokeStyle = e[1] > 0 ? 'steelblue' : 'seagreen';
         context.globalAlpha = 0.3;
 
@@ -928,28 +1264,24 @@ function intakeFatProportion(parrent, config) {
             radialLine([vertices[0], e, vertices[1]]);
         }
 
-        context.stroke();
-        context.restore();
+        // context.stroke()
+        // context.restore()
     });
 
     context.restore();
 
-    // draw arcs
+    /**
+     * draw text & number
+     */
     context.save();
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+    context.globalAlpha = 0.4;
 
-    var radius3 = 250;
-
-    var arc = d3$3.arc().innerRadius(0).context(context);
-
-    arcs.forEach(function (E, I) {
-        context.beginPath();
-        context.strokeStyle = I === 0 ? 'seagreen' : 'steelblue';
-
-        arc.outerRadius(radius3)(E);
-        context.stroke();
-
-        context.restore();
-    });
+    context.fillStyle = 'black';
+    context.font = '144px adad';
+    context.fillText(data[0] + ':' + data[1], 0, 0);
+    context.restore();
 }
 
 function intakeFatDeviation(parrent, config) {
@@ -1100,7 +1432,7 @@ function intakeFatDeviation(parrent, config) {
     });
 }
 
-var d3$5 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$6 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 // factor   1/n
 
@@ -1226,7 +1558,7 @@ var linkGraphConfig = {
     }, {
         "source": 0,
         "target": 21,
-        "color": "steelblue",
+        "color": "cyan",
         "value": 5
     }, {
         "source": 1,
@@ -1241,15 +1573,16 @@ var linkGraphConfig = {
     }, {
         "source": 1,
         "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 2,
-        "target": 18,
         "color": "khaki",
         "value": 5
     }, {
         "source": 2,
+        "target": 18,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 2,
+        "color": "steelblue",
         "target": 19,
         "value": 5
     }, {
@@ -1259,25 +1592,28 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 3,
+        "color": "salmon",
         "target": 19,
         "value": 5
     }, {
         "source": 3,
+        "color": "salmon",
         "target": 20,
         "value": 5
     }, {
         "source": 3,
         "target": 21,
-        "color": "steelblue",
+        "color": "salmon",
         "value": 5
     }, {
+        "color": "orange",
         "source": 4,
         "target": 20,
         "value": 5
     }, {
         "source": 4,
         "target": 21,
-        "color": "steelblue",
+        "color": "orange",
         "value": 5
     }, {
         "source": 4,
@@ -1426,7 +1762,7 @@ var linkGraphConfig = {
     }]
 };
 
-var d3$4 = Object.assign({}, D3, require('d3-shape'), require('d3-array'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$5 = Object.assign({}, D3, require('d3-shape'), require('d3-array'), require('d3-format'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 function curveGraph(parent, config) {
 
@@ -1438,7 +1774,7 @@ function curveGraph(parent, config) {
 
     // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    var svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', '500');
     svg.setAttribute('height', '1500');
     parent.append(svg);
@@ -1450,25 +1786,25 @@ function curveGraph(parent, config) {
         left: 200
     };
 
-    var svg = d3$4.select('svg'),
+    var svg = d3$5.select('svg'),
         width = +svg.attr('width') - margin.left - margin.right,
         height = +svg.attr('height') - margin.top - margin.bottom,
         g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var formatNumber = d3$4.format('.2f');
+    var formatNumber = d3$5.format('.2f');
 
     var filter = svg.append("defs").append("filter").attr("id", "blur").append("feGaussianBlur").attr("stdDeviation", 1);
 
     // define basic location Axis
-    var x = d3$4.scaleLinear().domain([1 - 0.5, 5 + 0.5]).range([0, width]);
+    var x = d3$5.scaleLinear().domain([1 - 0.5, 5 + 0.5]).range([0, width]);
 
-    var y = d3$4.scaleLinear().domain([0 - 0.5, 15 + 0.5]).range([0, height]);
+    var y = d3$5.scaleLinear().domain([0 - 0.5, 15 + 0.5]).range([0, height]);
 
-    var xAxis = d3$4.axisTop(x).ticks(5).tickSize(-height).tickFormat(function (d, i) {
+    var xAxis = d3$5.axisTop(x).ticks(5).tickSize(-height).tickFormat(function (d, i) {
         return axisLabels[d];
     });
 
-    var yAxis = d3$4.axisLeft(y).ticks(15).tickSize(-width).tickFormat(function (d, i) {
+    var yAxis = d3$5.axisLeft(y).ticks(15).tickSize(-width).tickFormat(function (d, i) {
         // if (i === 2) return '标准值'
         return labels[i];
     });
@@ -1515,22 +1851,22 @@ function curveGraph(parent, config) {
             for (var i = 0; i < times; i++) {
                 var clone = svg.node().appendChild(this.cloneNode(true));
                 console.log(clone);
-                d3$4.select(clone).attr("class", "clone");
+                d3$5.select(clone).attr("class", "clone");
             }
         });
         return appendTo.selectAll('.clone');
     }
 
-    var line = d3$4.line().defined(function (d) {
+    var line = d3$5.line().defined(function (d) {
         return d;
     }).x(function (d) {
         return x(d.x);
     }).y(function (d) {
         return y(d.y);
-    }).curve(d3$4.curveBasis);
+    }).curve(d3$5.curveBasis);
 
     // value mapping
-    var pointCurve = d3$4.scaleLinear().domain([-25, 25]).range([0.5, 5.5]);
+    var pointCurve = d3$5.scaleLinear().domain([-25, 25]).range([0.5, 5.5]);
 
     var lineData = [];
 
@@ -1599,7 +1935,7 @@ function curveGraph(parent, config) {
         }).attr("stroke-width", 1).attr("fill", "none").attr('d', line);
     }
 
-    d3$4.range(0, 1, 0.04).forEach(function (e, i) {
+    d3$5.range(0, 1, 0.04).forEach(function (e, i) {
 
         var rippleRight = vBezeireArr(minus(percent(minus(JSON.parse(JSON.stringify(lineData)), 6), e), 6), 1 / 4),
             rippleLeft = vBezeireArr(percent(JSON.parse(JSON.stringify(lineData)), e), 1 / 4);
@@ -1620,35 +1956,47 @@ function linkGraph(parent, config) {
 
     var input = config || linkGraphConfig;
 
-    var formatNumber = d3$4.format(',.0f'),
+    var margin = {
+        top: 20,
+        right: 100,
+        bottom: 20,
+        left: 100
+    };
+
+    var formatNumber = d3$5.format(',.0f'),
         format = function format(d) {
         return formatNumber(d) + ' TWh';
     },
-        color = d3$4.scaleOrdinal(d3$4.schemeCategory20);
+        color = d3$5.scaleOrdinal(d3$5.schemeCategory20);
 
     // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '1200');
+    svg.setAttribute('width', '800');
     svg.setAttribute('id', 'curveGraph');
-    svg.setAttribute('height', '1000');
+    svg.setAttribute('height', '1500');
 
     parent.append(svg);
 
-    var svg = d3$4.select('svg#curveGraph'),
+    var svg = d3$5.select('svg#curveGraph'),
         width = +svg.attr('width') - margin.left - margin.right - 100,
         height = +svg.attr('height') - margin.top - margin.bottom,
         g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var formatNumber = d3$4.format('.2f');
+    var formatNumber = d3$5.format('.2f');
 
-    var sankey = d3$4.sankey().nodeWidth(15).nodePadding(25).size([width, height]);
+    var sankey = d3$5.sankey().nodeWidth(3).nodePadding(40).size([width, height]);
 
     var path = sankey.link();
 
     sankey.nodes(input.nodes).links(input.links).layout(1000);
 
-    var y = d3$4.scaleLinear().domain([0, 9]).range([200, 600]);
+    console.log(input.nodes[16]);
+    Array.from(Array(47).keys()).forEach(function (e, i) {
+        // console.log(input.links[i])
+    });
+
+    var y = d3$5.scaleLinear().domain([0, 9]).range([300, 900]);
 
     var node = g.append('g').selectAll('.node').data(input.nodes).enter().append('g').attr('class', 'node').attr('transform', function (d, i) {
         if (d.x === 0) {
@@ -1657,37 +2005,53 @@ function linkGraph(parent, config) {
             var seperation = 0;
 
             if (i > 21) {
-                seperation = 40;
+                seperation = 60;
             }
             return 'translate(' + d.x + ',' + (d.y = y(i - 16) + seperation) + ')';
         }
     });
+    // .attr('transform', function(d, i) {
+    //     return 'translate(' + d.x + ',' + (d.y) + ')';
+    // });
+
 
     node.append('rect').attr('height', function (d) {
         return d.dy;
     }).attr('width', sankey.nodeWidth()).style('fill', function (d) {
         return d.color = color(d.name.replace(/ .*/, ''));
-    }).style('stroke', function (d) {
-        return d3$4.rgb(d.color).darker(2);
-    }).append('title').text(function (d) {
+    })
+    // .style('stroke', function(d) {
+    //     return d3.rgb(d.color).darker(2);
+    // })
+    .append('title').text(function (d) {
         return d.name + '\n' + format(d.value);
     });
 
-    node.append('text').attr('x', -6).attr('y', function (d) {
-        return d.dy / 2;
-    }).attr('dy', '.35em').attr('dx', '1.35em').attr('text-anchor', function (d, i) {
-        return i > 15 ? 'start' : 'end';
-    }).attr('transform', null).text(function (d) {
-        return d.name;
-    }).filter(function (d) {
-        return d.x < width / 2;
-    }).attr('x', 6 + sankey.nodeWidth()).attr('text-anchor', 'start');
+    // node.append('text')
+    //     // .attr('x', -6)
+    //     .attr('y', function(d) {
+    //         return d.dy / 2;
+    //     })
+    //     .attr('dy', '.35em')
+    //     .attr('dx', (d, i) => (i > 15 ? '2em' : '-2em'))
+    //     .attr('text-anchor', (d, i) => {
+    //         return i > 15 ? 'start' : 'end'
+    //     })
+    //     .attr('transform', null)
+    //     .text(function(d) {
+    //         return d.name;
+    //     })
+    //     .filter(function(d) {
+    //         return d.x < width / 2;
+    //     })
+    //     .attr('x', 6 + sankey.nodeWidth());
+
 
     //  link
-    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').attr('d', path).style('stroke', function (d) {
+    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').style('fill', 'none').attr('d', path).style('stroke', function (d) {
         return d.color || 'salmon';
     }).style('stroke-width', function (d) {
-        return Math.max(1, 2);
+        return Math.max(1, 3);
         // return Math.max(1, d.dy);
     }).sort(function (a, b) {
         return b.dy - a.dy;
@@ -1696,6 +2060,8 @@ function linkGraph(parent, config) {
     link.append('title').text(function (d) {
         return d.source.name + ' → ' + d.target.name + '\n' + format(d.value);
     });
+
+    
 }
 
 var baseConf$2 = {
@@ -1893,7 +2259,7 @@ function addOpacity() {
     return str.replace(/[^,]+(?=\))/, alpha.toString());
 }
 
-var d3$6 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
+var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
 
 function estimateFiber(parent, config) {
 
@@ -1949,10 +2315,10 @@ function estimateFiber(parent, config) {
     context.strokeStyle = 'seagreen';
     context.setLineDash([4, 5]);
 
-    var radius = d3$6.range(min, min + 4 * d + 30, 20);
+    var radius = d3$7.range(min, min + 4 * d + 30, 20);
 
     radius.forEach(function (e, i) {
-        var arc = d3$6.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
+        var arc = d3$7.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
 
         context.beginPath();
         arc();
@@ -1968,14 +2334,14 @@ function estimateFiber(parent, config) {
     context.setLineDash([4, 0]);
 
     context.beginPath();
-    d3$6.arc().outerRadius(min - 10).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
+    d3$7.arc().outerRadius(min - 10).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
 
     context.stroke();
     context.restore();
 
     // draw arcs
     context.save();
-    var arcs = d3$6.pie()(Array.from({ length: 16 }, function (e) {
+    var arcs = d3$7.pie()(Array.from({ length: 16 }, function (e) {
         return 1;
     }));
 
@@ -1983,32 +2349,34 @@ function estimateFiber(parent, config) {
         return a.startAngle - b.startAngle;
     });
 
-    var arc = d3$6.arc().context(context);
+    var arc = d3$7.arc().context(context);
 
     function switchStrokeColor(a) {
-        switch (a) {
-            case 1:
-                return "seagreen";
-            case 2:
-                return "orange";
-            case 3:
-                return "salmon";
-            default:
-                return "seagreen";
+
+        if (a < 75) {
+            return 'seagreen';
+        } else if (a > 90) {
+            return 'salmon';
+        } else {
+            return 'orange';
         }
     }
 
+    var rHeight = d3$7.scaleLinear().domain([0, 100]).range([min, min + 250]);
+
     function InMax(a) {
-        switch (a) {
-            case 1:
-                return min + 80;
-            case 2:
-                return min + 180;
-            case 3:
-                return min + 250;
-            default:
-                return min + 180;
-        }
+        // switch (a) {
+        //     case 1:
+        //         return min + 80;
+        //     case 2:
+        //         return min + 180;
+        //     case 3:
+        //         return min + 250;
+        //     default:
+        //         // return min + 180;
+        //         return min + 10;
+        // }
+        return rHeight(a);
     }
 
     arcs.forEach(function (E, I) {
@@ -2019,7 +2387,7 @@ function estimateFiber(parent, config) {
 
         var inMax = InMax(data[I]);
 
-        d3$6.range(min, inMax, 6).sort(function (a, b) {
+        d3$7.range(min, inMax, 6).sort(function (a, b) {
             return b - a;
         }).map(function (e, i, arr) {
 
@@ -2074,11 +2442,11 @@ function estimateFiber(parent, config) {
     context.restore();
 }
 
-var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 
 
-// for general
+// for amount-bile
 
 
 // for estimate-antibotics
@@ -2087,7 +2455,7 @@ function vPattern1(svg) {
     var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
     var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
 
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$8.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
         var color = 'orange';
@@ -2427,7 +2795,7 @@ SQL.prototype = {
     Query: Query
 };
 
-var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function EstimateAntibiotics() {
     this.type = 'EstimateAntibiotics';
@@ -2445,7 +2813,7 @@ function init(parent, config) {
 
     detectSVG(parent);
 
-    var svg = d3$7.select('#' + parent.id + ' svg'),
+    var svg = d3$8.select('#' + parent.id + ' svg'),
         margin = { top: 50, right: 600, bottom: 50, left: 630 };
 
     svg.attr('width', 2700).attr('height', 1200);
@@ -2544,7 +2912,7 @@ function init(parent, config) {
         //         'orange' :
         //         'salmon'));
 
-        // copy15('bottom', e.direction, e.color, e.x, e.y)
+        copy15('bottom', e.direction, e.color, e.x, e.y);
     });
 
     /**
@@ -2554,7 +2922,7 @@ function init(parent, config) {
     var clippath = svg.selectAll('.clippath').data([1, 2]).enter().append('clipPath').attr('id', function (d, i) {
         return 'clip-' + i;
     }).append('rect').attr('width', '1420').attr('class', 'clippath').attr('transform', function (d, i) {
-        return 'translate(0,' + (525 * i - 20) + ')';
+        return 'translate(0,' + (540 * i - 20) + ')';
     }).attr('height', maskHeight);
 
     /**
@@ -2576,7 +2944,7 @@ function init(parent, config) {
         var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
         var dx = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
         var dy = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-        var base = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 1;
+        var base = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 1.3;
 
 
         var r = 100;
@@ -2600,35 +2968,39 @@ function init(parent, config) {
         var key = locate(dx, vertical).tag;
         var data = locate(dx, vertical).data;
 
+        // crossroads offset
+        var allX = 100;
+        var allY = 0;
+
         if (direction === 'left' && postion === 'top') {
 
-            gChild.attr('transform', 'translate(' + (-width / 2 + 40 / 2 + dx * 50 + 1) + ',' + (maskHeight - 140 - dy * 50) + ')');
+            gChild.attr('transform', 'translate(' + (-width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX) + ',' + (maskHeight - 140 - dy * 50) + ')');
 
             // this  line cause not pure
             curveTag(50, 542 - dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'top') {
 
-            gChild.attr('transform', 'translate(' + (width + width / 2 - 40 / 2 + dx * 50) + ',' + (maskHeight - 140 - dy * 50) + ')');
+            gChild.attr('transform', 'translate(' + (width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX) + ',' + (maskHeight - 140 - dy * 50) + ')');
 
             curveTag(2200, 542 - dy * 50, key, data, color);
         } else if (direction === 'left' && postion === 'bottom') {
 
-            var x = -width / 2 + 40 / 2 + dx * 50 + 1;
-            var y = maskHeight - 390 + dy * 50 - 560;
+            var x = -width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX;
+            var y = maskHeight - 390 + dy * 50 - 540;
 
             gChild.style('transform-origin', '0 500px');
             gChild.style('transform', 'translate(' + x + 'px,' + y + 'px) scaleY(-1)');
 
-            curveTag(50, 592 + dy * 50, key, data, color);
+            curveTag(50, 615 + dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'bottom') {
 
-            var _x7 = width + width / 2 - 40 / 2 + dx * 50 + 1;
-            var _y = maskHeight - 390 + dy * 50 - 560;
+            var _x7 = width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX;
+            var _y = maskHeight - 390 + dy * 50 - 540;
 
             gChild.style('transform-origin', '0 500px');
             gChild.style('transform', 'translate(' + _x7 + 'px,' + _y + 'px) scaleY(-1)');
 
-            curveTag(2200, 592 + dy * 50, key, data, color);
+            curveTag(2200, 615 + dy * 50, key, data, color);
         }
 
         return gChild;
@@ -2646,7 +3018,7 @@ function init(parent, config) {
      * @return {[type]}       [description]
      */
     function copy15(pos, direction, color, dx, dy) {
-        var base = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1;
+        var base = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1.3;
 
         return basicCurve([{
             offset: 0 + 1,
@@ -2683,15 +3055,15 @@ function init(parent, config) {
     }
 
     // text title
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '41%').style('fill', 'seagreen').style('font-size', '36').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', 'seagreen').attr('font-size', '36px').attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
 
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50%').attr('y', '44%').style('fill', 'seagreen').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', 'seagreen').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
 
     // text
     var centralText = [{
         color: 'seagreen',
         text: '推荐用药',
-        pos: -1,
+        pos: -0.8,
         value: input.gap[0] + 7
     }, {
         color: 'orange',
@@ -2701,7 +3073,7 @@ function init(parent, config) {
     }, {
         color: 'salmon',
         text: '警惕用药',
-        pos: 1,
+        pos: 0.8,
         value: 7 - input.gap[1]
     }];
 
@@ -2746,12 +3118,42 @@ function init(parent, config) {
 
         // rank tag
         var rankAlign = x < 1000 ? 600 : -350;
-        gTag.append('text').text('人群排名: ' + d3$7.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+        gTag.append('text').text('人群排名: ' + d3$8.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
         var rankRectAlign = x < 1000 ? 580 : -150;
 
         gTag.append('rect').style('fill', color).attr('x', rankRectAlign).attr('y', -4).attr('width', 3).attr('height', 39);
     }
+
+    // for centralColorRect
+    function centralColorRect() {
+        var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [7, 5, 3];
+        var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.3;
+
+        var color = ['seagreen', 'orange', 'salmon'];
+
+        config.map(function (e, i) {
+            e === 0 && color.slice(i, 1);
+        });
+
+        svg.selectAll('.centralRect').data(config).enter().append('rect').attr('class', 'centralRect').attr('x', function (d, i) {
+            if (i === 0) {
+                return 1065;
+            }
+            if (i === 1) return 1065 + config[i - 1] * (31 * base);
+            if (i === 2) return 1065 + (15 - config[i]) * (31 * base);
+        }).attr('y', 570).attr('width', function (d, i) {
+            return d * (31 * base) - 3;
+        }).attr('height', 40).attr('fill-opacity', 0.5).attr('fill', function (d, i) {
+            // if(i===0) return color[i]
+            return color[i];
+            // return 'rgba(255,255,255,0)'
+        });
+        svg.append('rect').attr('width', 800).attr('x', 1000).attr('y', 566).attr('height', 4).attr('fill', '#fff');
+        svg.append('rect').attr('width', 800).attr('x', 1000).attr('y', 610).attr('height', 4).attr('fill', '#fff');
+    }
+
+    centralColorRect();
 }
 
 function topLeft(argument) {
