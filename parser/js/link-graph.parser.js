@@ -27,6 +27,8 @@ export function parse(rawData) {
 
 
 
+
+
 // a        21,22
 // b1       18,21,23
 // b2       16,21,20,23,25
