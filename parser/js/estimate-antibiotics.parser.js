@@ -96,7 +96,7 @@ export function parse(input) {
     output = {
         "top": top,
         "bottom": bottom,
-        "gap": [0, 4]
+        "gap": [-7, 7]
     };
 
     return output;
