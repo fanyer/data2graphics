@@ -5,6 +5,11 @@ const d3 = Object.assign({},
     require('d3-scale')
 );
 
-export function parse() {
+let f = d3.scaleLinear()
+    .domain([])
+    .range(p[])
 
+export function parse(rawData) {
+
+  return f(rawData)
 }
