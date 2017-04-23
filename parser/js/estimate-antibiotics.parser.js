@@ -90,19 +90,30 @@ export function parse(input) {
 
 
     // calculate the gap
-    let gap = [];
+    let seagreen = 0
+    let orange = 0
+    let salmon = 0;
+    [...top, ...bottom].map((e, i) => {
+        if (e.color === 'seagreen') seagreen += 1
+        if (e.color === 'orange') orange += 1
+        if (e.color === 'salmon') salmon += 1
+    })
+
+    let gap = [seagreen, orange, salmon];
     console.log(gap)
+
+
 
     output = {
         "top": top,
         "bottom": bottom,
-        "gap": [-7, 7]
+        "gap": gap
     };
 
     return output;
 }
 
-const standard=[75,90];
+const standard = [75, 90];
 
 
 // arr should be ascended, here is ascended input
@@ -127,7 +138,7 @@ function firstRed(arr) {
     }
 
     for (var i = 0; i < arr.length; i++) {
-      arr[i]
+        arr[i]
     }
 
 }
