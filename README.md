@@ -41,6 +41,8 @@ this library outputs graphics with interfaces as below
 
 3. For all texts that may contain the Greek Letters, attention should be paid on its unicode encoding transforming.
 
+4. Each component should impor basic styles like `import 'data2graphics/basic.css'`
+
 ****
 
 #### parser
