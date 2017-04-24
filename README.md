@@ -46,7 +46,7 @@ this library outputs graphics with interfaces as below
 ****
 
 #### parser
-The `parser` interface is a data-transforming tool, docs [here](./parser/README.md).
+The `parser` interface is a data-transforming tool, turn to [parser4data](https://pkgo.in/itg/parser4data).
 
 
 #### intakeSugarDistribution()
