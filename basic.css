@@ -1,9 +1,6 @@
-body {
-    /*background: salmon;*/
-    /*color: #fff;*/
-    padding: 0;
-    margin: 0;
-}
+  /*seagreen   #00ab84*/
+  /*orange   #e4be6f*/
+  /*salmon   #cb8d88*/
 
 canvas {
     font-family: 'adad';
@@ -103,9 +100,10 @@ path {
 }
 
 text {
-    font-family: Verdana;
-    font-weight: 100;
-    font-size: 16px;
+    /*font-family: Verdan
+    esa;*/
+    /*font-weight: 100;*/
+    /*font-size: 16px;*/
     fill: black;
 }
 
@@ -121,39 +119,7 @@ text {
     font-weight: 100;
 }
 
-#centerDiv {
-    width: 770px;
-    height: 60px;
-    border: 10px solid #fff;
-     /*opacity: 0.7;*/
-    transform: translate(985px, -660px);
-    /*transform-origin :510px 45px;*/
-}
 
-.div1 {
-    height: 60px;
-    display: inline-block;
-    background: seagreen;
-    opacity: 0.7;
-    border-radius: 20px 0 0 20px;
-}
-
-.div2 {
-    height: 60px;
-    display: inline-block;
-    background: orange;
-    margin-right: 10px;
-    margin-left: 10px;
-    opacity: 0.7;
-}
-
-.div3 {
-    height: 60px;
-    opacity: 0.7;
-    display: inline-block;
-    background: salmon;
-    border-radius: 0 20px 20px 0;
-}
 
 .basicCurve path {
     stroke: seagreen;
