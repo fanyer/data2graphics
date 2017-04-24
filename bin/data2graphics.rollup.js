@@ -1966,7 +1966,10 @@ function curveGraph(parent, config) {
         left: 200
     };
 
-    svg = d3$5.select(parent.id + ' svg'), width = +svg.attr('width') - margin.left - margin.right, height = +svg.attr('height') - margin.top - margin.bottom, g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    svg = d3$5.select('#' + parent.id + ' svg');
+    var width = +svg.attr('width') - margin.left - margin.right,
+        height = +svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var formatNumber = d3$5.format('.2f');
 
