@@ -52,33 +52,73 @@ The `parser` interface is a data-transforming tool, docs [here](./parser/README.
 #### intakeSugarDistribution()
 after import this function , you can call it as below:
 ```
-intakeDistribution(oDom, config1, config2)
+intakeSugarDistribution(oDom, config1, config2)
 
 //oDom is a dom object
 
 //config1 example
 {
-  'type': '检测值',
-  'data': {
-      '膳食纤维': 5,
-      '低聚果糖': 6.5,
-      '低聚异麦芽糖': 4,
-      'ß-葡萄糖': 2.5,
-      '葡甘露聚糖': 4,
-      '抗性麦芽糊精': 3
-   }
+    "type": "检测值",
+    "data": {
+        '膳食纤维': {
+            'value': 5,
+            'en': 'Dietary fiber'
+        },
+        '低聚果糖': {
+            'en': 'Fructo-oligosaccharide',
+            'value': 6.5
+        },
+        '低聚异麦芽糖': {
+            "en": "Isomalto-oligosaccharide",
+            'value': 4
+        },
+        'ß-葡萄糖': {
+            'value': 2.5,
+            "en": "𝜷-glucan"
+        },
+        '葡甘露聚糖': {
+            'value': 4,
+            "en": "Glucomammam"
+        },
+        '抗性麦芽糊精': {
+            'value': 3,
+            "en": "Resistant malyodextrins"
+        }
+    },
+    'cnFontSize': 20,
+    'enFontSize': 16
 }
 //config2 example
 {
-   'type': '标准值',
-   'data': {
-       '膳食纤维': 3.5,
-       '低聚果糖': 2.2,
-       '低聚异麦芽糖': 3.2,
-       'ß-葡萄糖': 6.2,
-       '葡甘露聚糖': 2.7,
-       '抗性麦芽糊精': 5.2
-   }
+    'type': '标准值',
+    'data': {
+        '膳食纤维': {
+            'value': 3.5,
+            'en': 'Dietary fiber'
+        },
+        '低聚果糖': {
+            'en': 'Fructo-oligosaccharide',
+            'value': 2.2
+        },
+        '低聚异麦芽糖': {
+            "en": "Isomalto-oligosaccharide",
+            'value': 3.2
+        },
+        'ß-葡萄糖': {
+            'value': 6.2,
+            "en": "𝜷-glucan"
+        },
+        '葡甘露聚糖': {
+            'value': 2.7,
+            "en": "Glucomammam"
+        },
+        '抗性麦芽糊精': {
+            'value': 5.2,
+            "en": "Resistant malyodextrins"
+        }
+    },
+    'cnFontSize': 20,
+    'enFontSize': 16
  }
 
 ```
@@ -305,22 +345,70 @@ estimateFiber(oDom, config)
 
 //config example
 {
-   '维生素a': 20,
-   '维生素b': 25,
-   '维生素c': 92,
-   '维生素d': 78,
-   '维生素e': 43,
-   '维生素f': 96,
-   '维生素g': 32,
-   '维生素h': 79,
-   '维生素i': 82,
-   '维生素j': 45,
-   '维生素k': 53,
-   '维生素l': 98,
-   '维生素m': 92,
-   '维生素n': 48,
-   '维生素o': 84,
-   '维生素p': 92
+    '维生素a': {
+        'en': '',
+        'value': 20
+    }
+    '维生素b': {
+        'en': '',
+        'value': 25
+    }
+    '维生素c': {
+        'en': '',
+        'value': 92
+    }
+    '维生素d': {
+        'en': '',
+        'value': 78
+    }
+    '维生素e': {
+        'en': '',
+        'value': 43
+    }
+    '维生素f': {
+        'en': '',
+        'value': 96
+    }
+    '维生素g': {
+        'en': '',
+        'value': 32
+    }
+    '维生素h': {
+        'en': '',
+        'value': 79
+    }
+    '维生素i': {
+        'en': '',
+        'value': 82
+    }
+    '维生素j': {
+        'en': '',
+        'value': 45
+    }
+    '维生素k': {
+        'en': '',
+        'value': 53
+    }
+    '维生素l': {
+        'en': '',
+        'value': 98
+    }
+    '维生素m': {
+        'en': '',
+        'value': 92
+    }
+    '维生素n': {
+        'en': '',
+        'value': 48
+    }
+    '维生素o': {
+        'en': '',
+        'value': 84
+    }
+    '维生素p': {
+        'en': '',
+        'value': 92
+    }
 }
 
 ```
@@ -477,7 +565,7 @@ You'd better have experience in tools and knowledges as below:
 
    for example:
    ```
-       @font-face {
+    @font-face {
         font-family: adad;
         src: url("/lib/fonts/NotoSans-Regular.ttf");
     }
