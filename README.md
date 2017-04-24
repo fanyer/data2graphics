@@ -424,7 +424,7 @@ It will render as below:
 <img src="./docs/estimate-antibiotics-init.png" width='1000'>
 
 
-<img src="./docs/formeasure-antibiotics.png" width='1000'>
+<!-- <img src="./docs/formeasure-antibiotics.png" width='1000'> -->
 
 
 ### amountBile()
@@ -472,6 +472,14 @@ You'd better have experience in tools and knowledges as below:
 #### 1. Q: how to configure font-family in canvas or svg?
 
    **A**: In canvas, fonts render in the thread of canvas on GPUs. As a result, it behaves totally different from odinary html or svg in the renderer thread. You'd better preload 3rd fonts at ahead.
+
+   for example:
+   ```
+       @font-face {
+        font-family: adad;
+        src: url("/lib/fonts/NotoSans-Regular.ttf");
+    }
+   ```
 
    **Included or required by js bundler like webpack are not valid.**
 
