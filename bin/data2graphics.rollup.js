@@ -38,7 +38,9 @@ var baseConf1 = {
             'value': 3,
             "en": "Resistant malyodextrins"
         }
-    }
+    },
+    'cnFontSize': 20,
+    'enFontSize': 16
 };
 
 var baseConf2 = {
@@ -68,7 +70,9 @@ var baseConf2 = {
             'value': 5.2,
             "en": "Resistant malyodextrins"
         }
-    }
+    },
+    'cnFontSize': 20,
+    'enFontSize': 16
 };
 
 function clone2(arr) {
@@ -103,8 +107,6 @@ function intakeSugarDistribution(parrent, config1, config2) {
     var enLabels = labels.map(function (e, i) {
         return xArr1.data[e].en;
     });
-
-    console.log(enLabels);
 
     var lineData1 = [];
     var lineData2 = [];
@@ -168,8 +170,8 @@ function intakeSugarDistribution(parrent, config1, config2) {
     function customXAxis(g) {
         g.call(xAxis);
         g.select(".domain").remove();
-        g.selectAll(".tick text").attr("x", 0).attr("dy", 24);
-        g.selectAll(".tick").append('text').attr('class', 'en').attr('dy', function (d, i) {
+        g.selectAll(".tick text").attr("font-size", 20).attr("x", 0).attr("dy", 24);
+        g.selectAll(".tick").append('text').attr('font-size', 16).attr('class', 'en').attr('dy', function (d, i) {
             return 54;
         }).text(function (d, i) {
             return enLabels[i];
@@ -1964,10 +1966,7 @@ function curveGraph(parent, config) {
         left: 200
     };
 
-    var svg = d3$5.select('svg'),
-        width = +svg.attr('width') - margin.left - margin.right,
-        height = +svg.attr('height') - margin.top - margin.bottom,
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    svg = d3$5.select(parent.id + ' svg'), width = +svg.attr('width') - margin.left - margin.right, height = +svg.attr('height') - margin.top - margin.bottom, g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var formatNumber = d3$5.format('.2f');
 
@@ -2667,8 +2666,8 @@ function amountBile(parent, config) {
 }
 
 var baseConf$4 = {
-    "deviation": 1,
-    "mean": 0,
+    // "deviation": 1,
+    // "mean": 0,
     "gap": [15500, 18000, 22000, 25000],
     "data": [{
         "x": [14000, 14500],
@@ -2807,7 +2806,7 @@ function metabolism(parent, config) {
         return d;
     });
 
-    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(30,' + (height + 30) + ')').call(customXAxis);
+    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(30,' + (height + 70) + ')').call(customXAxis);
 
     g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,0)').call(customYAxis);
 
@@ -2851,6 +2850,20 @@ function metabolism(parent, config) {
     var bins = d3$10.histogram().domain(x.domain()).thresholds(x.ticks(20))(data);
 
     g.append("path").datum(bins).attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
+
+    var bottomRectGap = [[input.data[0].x[0], input.gap[0]], [input.gap[0], input.gap[1]], [input.gap[1], input.gap[2]], [input.gap[2], input.gap[3]], [input.gap[3], input.data[input.data.length - 1].x[1]]];
+
+    console.log(bottomRectGap);
+
+    g.selectAll('rect.bottomRect').data(bottomRectGap).enter().append('rect').attr('transform', 'translate(30,0)').attr('x', function (d, i) {
+        return x(d[0]);
+    }).attr('y', function (d, i) {
+        return 620;
+    }).attr('width', function (d, i) {
+        return x(d[1]) - x(d[0]);
+    }).attr('height', 20).attr('fill', function (d, i) {
+        return 'seagreen';
+    });
 
     // console.log(d3.range(0,1,0.5))
 
