@@ -79,6 +79,10 @@ intakeDistribution(oDom, config1, config2)
  }
 
 ```
+This one is draw in colors with not deterministic.
+
+Here I set 'seagreen', 'steelblue'
+
 It will render as below:
 
 <img src="./docs/intake-sugar-distribution.png"  width='500'>
@@ -186,6 +190,11 @@ intakeFatProportion(oDom, config)
 }
 
 ```
+
+This one is draw in colors with not deterministic.
+
+Here I set 'seagreen', 'steelblue'
+
 There will be 3 cases:
 
 When the proportion is small enough 
