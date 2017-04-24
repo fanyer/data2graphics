@@ -1999,17 +1999,15 @@ function curveGraph(parent, config) {
         // g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#fff');
         // text color
         g.selectAll('.tick text').attr('x', 0).attr('dy', -4);
-        g.selectAll('.tick:nth-child(4n+1) text').style('font-family', 'adad').style('font-size', '20px').style('fill', 'chocolate');
-        g.selectAll('.tick:nth-child(2n) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#f0c36d');
-        g.selectAll('.tick:nth-child(3) text').style('font-family', 'adad').style('font-size', '20px').style('fill', 'seagreen');
+        g.selectAll('.tick:nth-child(4n+1) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#cb8d88');
+        g.selectAll('.tick:nth-child(2n) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#e4be6f');
+        g.selectAll('.tick:nth-child(3) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#00ab84');
         // line color
-        g.selectAll('.tick:nth-child(4n+1) line').attr('stroke', 'chocolate').attr('stroke-width', '3');
-        g.selectAll('.tick:nth-child(2n) line').attr('stroke-width', '2').attr('stroke', '#f0c36d');
-        g.selectAll('.tick:nth-child(3) line').attr('stroke-width', '3').attr('stroke', 'seagreen');
+        g.selectAll('.tick:nth-child(4n+1) line').attr('stroke', '#cb8d88').attr('stroke-width', '3');
+        g.selectAll('.tick:nth-child(2n) line').attr('stroke-width', '2').attr('stroke', '#e4be6f');
+        g.selectAll('.tick:nth-child(3) line').attr('stroke-width', '3').attr('stroke', '#00ab84');
 
         var text = g.selectAll('.tick text');
-        console.log(g);
-        console.log(text);
 
         cloneSelection(g, text, 1);
     }
@@ -2018,10 +2016,10 @@ function curveGraph(parent, config) {
         g.call(yAxis);
         g.select('.domain').remove();
         g.selectAll('.tick text').remove();
-        g.selectAll('.tick line').attr('stroke', 'seagreen').attr('stroke-width', '3').attr('opacity', '0.6');
-        g.selectAll('.tick:not(:first-of-type) line').attr('stroke', 'seagreen');
-        g.selectAll('.tick:nth-child(1) line').attr('stroke', 'seagreen').attr('stroke-width', '1').attr('opacity', '0.6');
-        g.selectAll('.tick:last-child line').attr('stroke', 'seagreen').attr('stroke-width', '1').attr('opacity', '0.6');
+        g.selectAll('.tick line').attr('stroke', '#00ab84').attr('stroke-width', '3').attr('opacity', '0.6');
+        g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#00ab84');
+        g.selectAll('.tick:nth-child(1) line').attr('stroke', '#00ab84').attr('stroke-width', '1').attr('opacity', '0.6');
+        g.selectAll('.tick:last-child line').attr('stroke', '#00ab84').attr('stroke-width', '1').attr('opacity', '0.6');
     }
 
     function cloneSelection(appendTo, toCopy, times) {
@@ -2067,7 +2065,7 @@ function curveGraph(parent, config) {
 
     var lineDataBezeire = vBezeireArr(lineData, 1 / 4);
 
-    g.selectAll('.line').data(lineDataBezeire).enter().append('path').attr("class", "line").style("stroke", "seagreen").attr("stroke-width", 3).attr("fill", "none")
+    g.selectAll('.line').data(lineDataBezeire).enter().append('path').attr("class", "line").style("stroke", "#00ab84").attr("stroke-width", 3).attr("fill", "none")
     // .attr("filter", "url(#blur)")
     .attr('d', line);
 
@@ -3572,7 +3570,11 @@ EstimateAntibiotics.prototype = {
 
 var estimateAntibiotics = new EstimateAntibiotics();
 
-// import './basic.css'
+Object.values = function (x) {
+    return Object.keys(x).reduce(function (y, z) {
+        return y.push(x[z]) && y;
+    }, []);
+};
 
 exports.estimateAntibiotics = estimateAntibiotics;
 exports.intakeSugarDistribution = intakeSugarDistribution;
