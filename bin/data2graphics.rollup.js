@@ -14,24 +14,60 @@ D3 = 'default' in D3 ? D3['default'] : D3;
 var baseConf1 = {
     "type": "检测值",
     "data": {
-        '膳食纤维': 5,
-        '低聚果糖': 6.5,
-        '低聚异麦芽糖': 4,
-        'ß-葡萄糖': 2.5,
-        '葡甘露聚糖': 4,
-        '抗性麦芽糊精': 3
+        '膳食纤维': {
+            'value': 5,
+            'en': 'Dietary fiber'
+        },
+        '低聚果糖': {
+            'en': 'Fructo-oligosaccharide',
+            'value': 6.5
+        },
+        '低聚异麦芽糖': {
+            "en": "Isomalto-oligosaccharide",
+            'value': 4
+        },
+        'ß-葡萄糖': {
+            'value': 2.5,
+            "en": "𝜷-glucan"
+        },
+        '葡甘露聚糖': {
+            'value': 4,
+            "en": "Glucomammam"
+        },
+        '抗性麦芽糊精': {
+            'value': 3,
+            "en": "Resistant malyodextrins"
+        }
     }
 };
 
 var baseConf2 = {
     'type': '标准值',
     'data': {
-        '膳食纤维': 3.5,
-        '低聚果糖': 2.2,
-        '低聚异麦芽糖': 3.2,
-        'ß-葡萄糖': 6.2,
-        '葡甘露聚糖': 2.7,
-        '抗性麦芽糊精': 5.2
+        '膳食纤维': {
+            'value': 3.5,
+            'en': 'Dietary fiber'
+        },
+        '低聚果糖': {
+            'en': 'Fructo-oligosaccharide',
+            'value': 2.2
+        },
+        '低聚异麦芽糖': {
+            "en": "Isomalto-oligosaccharide",
+            'value': 3.2
+        },
+        'ß-葡萄糖': {
+            'value': 6.2,
+            "en": "𝜷-glucan"
+        },
+        '葡甘露聚糖': {
+            'value': 2.7,
+            "en": "Glucomammam"
+        },
+        '抗性麦芽糊精': {
+            'value': 5.2,
+            "en": "Resistant malyodextrins"
+        }
     }
 };
 
@@ -64,6 +100,11 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
     // construct basic params
     var labels = Object.keys(xArr1.data);
+    var enLabels = labels.map(function (e, i) {
+        return xArr1.data[e].en;
+    });
+
+    console.log(enLabels);
 
     var lineData1 = [];
     var lineData2 = [];
@@ -71,11 +112,11 @@ function intakeSugarDistribution(parrent, config1, config2) {
     labels.map(function (e, i) {
         lineData1.push({
             x: i + 1,
-            y: xArr1.data[labels[i]]
+            y: xArr1.data[labels[i]].value
         });
         lineData2.push({
             x: i + 1,
-            y: xArr2.data[labels[i]]
+            y: xArr2.data[labels[i]].value
         });
     });
 
@@ -98,7 +139,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
     parrent.append(svg);
 
     var svg = d3.select("svg"),
-        margin = { top: 20, right: 100, bottom: 50, left: 40 },
+        margin = { top: 20, right: 100, bottom: 80, left: 40 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -127,7 +168,12 @@ function intakeSugarDistribution(parrent, config1, config2) {
     function customXAxis(g) {
         g.call(xAxis);
         g.select(".domain").remove();
-        g.selectAll(".tick text").attr("x", 4).attr("dy", 24);
+        g.selectAll(".tick text").attr("x", 0).attr("dy", 24);
+        g.selectAll(".tick").append('text').attr('class', 'en').attr('dy', function (d, i) {
+            return 54;
+        }).text(function (d, i) {
+            return enLabels[i];
+        });
     }
 
     function customYAxis(g) {
@@ -255,6 +301,11 @@ var baseConf = {
     '鞘脂类': 0.4
 };
 
+//  seagreen   #00ab84
+//  orange   #e4be6f
+//  salmon   #cb8d88
+
+
 var d3$1 = Object.assign({}, D3, require('d3-array'), require('d3-shape'), require('d3-format'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function intakeFiberStruct(parrent, config) {
@@ -305,21 +356,28 @@ function intakeFiberStruct(parrent, config) {
     context.textBaseline = "hanging";
     context.textAlign = "center";
 
-    context.fillStyle = colors[2];
-    context.font = "24px Verdana";
-    context.fillText("膳食纤维", 0, 0);
+    context.fillStyle = '#00ab84';
+    context.font = "24px adad";
+    context.fillText("膳食纤维", 0, -10);
     context.restore();
 
     // circles layers
     context.save();
 
-    var radius = [d3$1.range(min, min + d, 10), d3$1.range(min + d, min + 2 * d, 10), d3$1.range(min + 2 * d, min + 3 * d, 10), d3$1.range(min + 3 * d, min + 4 * d + 10, 10)];
+    var radius = [d3$1.range(min - 10, min + d, 10), d3$1.range(min + d, min + 2 * d, 10), d3$1.range(min + 2 * d, min + 3 * d, 10), d3$1.range(min + 3 * d, min + 4 * d + 10, 10)];
 
     context.globalAlpha = 0.8;
     radius.forEach(function (e, i) {
         context.strokeStyle = 'steelblue';
         radius[i].forEach(function (e2, i2) {
-            context.setLineDash([4, 5]);
+            context.save();
+
+            if (e2 === min - 10) {
+                context.setLineDash([4, 0]);
+                context.strokeStyle = '#00ab84';
+            } else {
+                context.setLineDash([4, 5]);
+            }
 
             var arc = d3$1.arc().outerRadius(e2).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
 
@@ -327,6 +385,7 @@ function intakeFiberStruct(parrent, config) {
             arc();
 
             context.stroke();
+            context.restore();
         });
     });
     context.restore();
@@ -343,23 +402,33 @@ function intakeFiberStruct(parrent, config) {
     var arc = d3$1.arc().innerRadius(min).context(context);
 
     arcs.forEach(function (E, I) {
+        context.save();
+
         context.beginPath();
+        console.log(E.data);
 
-        I > 3 ? context.strokeStyle = 'seagreen' : context.strokeStyle = 'steelblue';
+        if (E.data < 0.75) {
+            context.strokeStyle = '#00ab84';
+        } else if (E.data > 0.9) {
+            context.strokeStyle = 'salmon';
+        } else {
+            context.strokeStyle = 'orange';
+        }
 
-        d3$1.range(min, min + 210 - I * 30, 10).map(function (e, i) {
+        d3$1.range(min, min + 210 - 0 * 30, 10).map(function (e, i) {
             arc.outerRadius(e)(E);
             context.stroke();
         });
 
         context.restore();
     });
+    context.restore();
 
     // legends
     context.save();
-    context.strokeStyle = 'salmon';
-    context.fillStyle = 'salmon';
-    context.font = "24px Verdana";
+    context.strokeStyle = '#0ab38d';
+    context.fillStyle = '#0ab38d';
+    context.font = "24px adad";
     context.textBaseline = "middle";
 
     var radialLine = d3$1.radialLine().curve(d3$1.curveLinear).context(context);
@@ -477,6 +546,10 @@ function bend(ctx, text, r) {
     ctx.restore();
 }
 
+//  seagreen   #00ab84
+//  orange   #e4be6f
+//  salmon   #cb8d88
+
 var d3$2 = Object.assign({}, D3, require('d3-format'), require('d3-request'), require('d3-array'), require('d3-drag'), require('d3-color'), require('d3-shape'), require('d3-scale'));
 
 function scoreLevel() {
@@ -531,11 +604,11 @@ function scoreLevel() {
     context.textBaseline = "hanging";
     context.textAlign = "center";
 
-    context.fillStyle = colors[1];
+    context.fillStyle = '#e4be6f';
     context.font = "64px adad";
     context.fillText(input.score, 0, -80);
 
-    context.fillStyle = colors[2];
+    context.fillStyle = '#00ab84';
     context.font = "24px adad";
     context.fillText("综合打分", 0, 0);
 
@@ -575,7 +648,7 @@ function scoreLevel() {
 
     // first cicle layer  to be optimised later 2017.4.20
     context.save();
-    context.strokeStyle = 'seagreen';
+    context.strokeStyle = '#00ab84';
     context.globalAlpha = 0.7;
     context.setLineDash([4, 0]);
 
@@ -604,8 +677,8 @@ function scoreLevel() {
 
     context.setLineDash([5, 0]);
     // context.shadowBlur = 1;
-    context.strokeStyle = "seagreen";
-    context.shadowColor = "seagreen";
+    context.strokeStyle = "#00ab84";
+    context.shadowColor = "#00ab84";
     context.beginPath();
     radial(curveLineData);
     context.stroke();
@@ -614,7 +687,7 @@ function scoreLevel() {
 
     // draw internal bundle curve
     context.save();
-    context.strokeStyle = "seagreen";
+    context.strokeStyle = "#00ab84";
 
     context.beginPath();
     context.globalAlpha = 0.3;
@@ -651,9 +724,9 @@ function scoreLevel() {
 
     // draw points
     context.save();
-    context.strokeStyle = 'seagreen';
+    context.strokeStyle = '#00ab84';
     context.lineWidth = 2;
-    context.fillStyle = 'seagreen';
+    context.fillStyle = '#00ab84';
 
     var points = d3$2.symbol().size(20).context(context);
 
@@ -676,7 +749,7 @@ function scoreLevel() {
     context.strokeStyle = 'salmon';
     context.lineWidth = 4;
     context.textAlign = 'center';
-    context.fillStyle = 'seagreen';
+    context.fillStyle = '#00ab84';
 
     context.beginPath();
 
@@ -938,7 +1011,7 @@ function gt6(context) {
         }
 
         arr.splice(1, 0, p1);
-        console.log(arr);
+        // console.log(arr)
 
         context.save();
         // context.lineWidth = 3;
@@ -1547,53 +1620,58 @@ var linkGraphConfig = {
     }],
     "links": [{
         "source": 0,
+        "target": 22,
+        "color": "cyan",
+        "value": 5
+    }, {
+        "source": 0,
+        "target": 21,
+        "color": "cyan",
+        "value": 5
+    }, {
+        "source": 1,
+        "target": 18,
+        "color": "khaki",
+        "value": 5
+    }, {
+        "source": 1,
+        "target": 21,
+        "color": "khaki",
+        "value": 5
+    }, {
+        "source": 1,
+        "target": 23,
+        "color": "khaki",
+        "value": 5
+    }, {
+        "source": 2,
         "target": 16,
-        "color": "cyan",
-        "value": 5
-    }, {
-        "source": 0,
-        "target": 17,
-        "color": "cyan",
-        "value": 5
-    }, {
-        "source": 0,
-        "target": 21,
-        "color": "cyan",
-        "value": 5
-    }, {
-        "source": 1,
-        "target": 17,
-        "color": "khaki",
-        "value": 5
-    }, {
-        "source": 1,
-        "target": 18,
-        "color": "khaki",
-        "value": 5
-    }, {
-        "source": 1,
-        "target": 21,
-        "color": "khaki",
-        "value": 5
-    }, {
-        "source": 2,
-        "target": 18,
         "color": "steelblue",
         "value": 5
     }, {
         "source": 2,
         "color": "steelblue",
-        "target": 19,
+        "target": 20,
         "value": 5
     }, {
         "source": 2,
         "target": 21,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 2,
+        "target": 25,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 2,
+        "target": 23,
         "color": "steelblue",
         "value": 5
     }, {
         "source": 3,
         "color": "salmon",
-        "target": 19,
+        "target": 25,
         "value": 5
     }, {
         "source": 3,
@@ -1608,7 +1686,7 @@ var linkGraphConfig = {
     }, {
         "color": "orange",
         "source": 4,
-        "target": 20,
+        "target": 16,
         "value": 5
     }, {
         "source": 4,
@@ -1617,7 +1695,15 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 4,
+        "target": 17,
+        "value": 5
+    }, {
+        "source": 4,
         "target": 22,
+        "value": 5
+    }, {
+        "source": 4,
+        "target": 23,
         "value": 5
     }, {
         "source": 5,
@@ -1626,20 +1712,32 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 5,
-        "target": 22,
+        "target": 17,
         "value": 5
     }, {
         "source": 5,
-        "target": 23,
+        "target": 24,
+        "value": 5
+    }, {
+        "source": 5,
+        "target": 22,
         "value": 5
     }, {
         "source": 6,
-        "target": 21,
+        "target": 20,
         "color": "steelblue",
         "value": 5
     }, {
         "source": 6,
-        "target": 23,
+        "target": 19,
+        "value": 5
+    }, {
+        "source": 6,
+        "target": 21,
+        "value": 5
+    }, {
+        "source": 6,
+        "target": 22,
         "value": 5
     }, {
         "source": 6,
@@ -1647,6 +1745,19 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 7,
+        "target": 17,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 7,
+        "target": 18,
+        "value": 5
+    }, {
+        "source": 7,
+        "target": 20,
+        "value": 5
+    }, {
+        "source": 7,
         "target": 21,
         "color": "steelblue",
         "value": 5
@@ -1655,21 +1766,25 @@ var linkGraphConfig = {
         "target": 24,
         "value": 5
     }, {
-        "source": 7,
-        "target": 25,
-        "value": 5
-    }, {
         "source": 8,
-        "target": 21,
+        "target": 20,
         "color": "steelblue",
         "value": 5
     }, {
         "source": 8,
-        "target": 25,
+        "target": 21,
         "value": 5
     }, {
         "source": 8,
-        "target": 17,
+        "target": 22,
+        "value": 5
+    }, {
+        "source": 8,
+        "target": 23,
+        "value": 5
+    }, {
+        "source": 8,
+        "target": 24,
         "value": 5
     }, {
         "source": 9,
@@ -1677,87 +1792,150 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 9,
-        "target": 21,
+        "target": 19,
         "color": "steelblue",
         "value": 5
     }, {
         "source": 9,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 10,
-        "target": 17,
-        "value": 5
-    }, {
-        "source": 10,
-        "target": 19,
-        "value": 5
-    }, {
-        "source": 10,
-        "target": 23,
-        "value": 5
-    }, {
-        "source": 11,
-        "target": 23,
-        "value": 5
-    }, {
-        "source": 11,
-        "target": 18,
-        "value": 5
-    }, {
-        "source": 11,
-        "target": 19,
-        "value": 5
-    }, {
-        "source": 12,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 12,
         "target": 20,
         "value": 5
     }, {
-        "source": 12,
+        "source": 9,
         "target": 21,
-        "color": "steelblue",
         "value": 5
     }, {
-        "source": 13,
-        "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 13,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 13,
+        "source": 10,
         "target": 19,
         "value": 5
     }, {
-        "source": 14,
-        "target": 23,
-        "value": 5
-    }, {
-        "source": 14,
+        "source": 10,
         "target": 20,
         "value": 5
     }, {
-        "source": 14,
+        "source": 10,
         "target": 21,
-        "color": "steelblue",
         "value": 5
     }, {
-        "source": 15,
-        "target": 25,
+        "source": 10,
+        "target": 23,
         "value": 5
     }, {
-        "source": 15,
+        "source": 10,
         "target": 26,
         "value": 5
     }, {
-        "source": 15,
+        "source": 11,
+        "target": 16,
+        "value": 5
+    }, {
+        "source": 11,
+        "target": 20,
+        "value": 5
+    }, {
+        "source": 11,
+        "target": 21,
+        "value": 5
+    }, {
+        "source": 12,
         "target": 17,
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 18,
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 19,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 20,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 21,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 22,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 24,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 25,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 12,
+        "target": 26,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 13,
+        "target": 17,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 13,
+        "target": 19,
+        "value": 5
+    }, {
+        "source": 13,
+        "target": 20,
+        "value": 5
+    }, {
+        "source": 13,
+        "target": 21,
+        "value": 5
+    }, {
+        "source": 14,
+        "target": 16,
+        "value": 5
+    }, {
+        "source": 14,
+        "target": 18,
+        "value": 5
+    }, {
+        "source": 14,
+        "target": 20,
+        "value": 5
+    }, {
+        "source": 14,
+        "target": 21,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 14,
+        "target": 23,
+        "color": "steelblue",
+        "value": 5
+    }, {
+        "source": 15,
+        "target": 19,
+        "value": 5
+    }, {
+        "source": 15,
+        "target": 20,
+        "value": 5
+    }, {
+        "source": 15,
+        "target": 21,
+        "value": 5
+    }, {
+        "source": 15,
+        "target": 22,
+        "value": 5
+    }, {
+        "source": 15,
+        "target": 24,
         "value": 5
     }]
 };
@@ -1991,23 +2169,29 @@ function linkGraph(parent, config) {
 
     sankey.nodes(input.nodes).links(input.links).layout(1000);
 
-    console.log(input.nodes[16]);
-    Array.from(Array(47).keys()).forEach(function (e, i) {
-        // console.log(input.links[i])
-    });
+    // console.log(input.nodes[16])
+    // Array.from(Array(47).keys()).forEach((e, i) => {
+    //     // console.log(input.links[i])
+    // })
 
-    var y = d3$5.scaleLinear().domain([0, 9]).range([300, 900]);
+
+    var yL = d3$5.scaleLinear().domain([0, 15]).range([0, 1264]);
+
+    var yR = d3$5.scaleLinear().domain([0, 9]).range([364 - 70, 950 - 70]);
+
+    // console.log(input.nodes)
+
 
     var node = g.append('g').selectAll('.node').data(input.nodes).enter().append('g').attr('class', 'node').attr('transform', function (d, i) {
         if (d.x === 0) {
-            return 'translate(' + d.x + ',' + d.y + ')';
+            return 'translate(' + d.x + ',' + (d.y = yL(i)) + ')';
         } else {
             var seperation = 0;
 
             if (i > 21) {
-                seperation = 60;
+                seperation = 28;
             }
-            return 'translate(' + d.x + ',' + (d.y = y(i - 16) + seperation) + ')';
+            return 'translate(' + d.x + ',' + (d.y = yR(i - 16) + seperation) + ')';
         }
     });
     // .attr('transform', function(d, i) {
@@ -2015,10 +2199,15 @@ function linkGraph(parent, config) {
     // });
 
 
-    node.append('rect').attr('height', function (d) {
-        return d.dy;
+    node.append('rect').attr('height', function (d, i) {
+        if (i < 16) {
+            return d.dy;
+        } else {
+            return d.dy;
+        }
     }).attr('width', sankey.nodeWidth()).style('fill', function (d) {
-        return d.color = color(d.name.replace(/ .*/, ''));
+        // return d.color = color(d.name.replace(/ .*/, ''));
+        return d.color || '#b5d8e1';
     })
     // .style('stroke', function(d) {
     //     return d3.rgb(d.color).darker(2);
@@ -2096,160 +2285,9 @@ function hex2rgba(hex) {
     throw new Error('Bad Hex');
 }
 
-function colorNameToHex(color) {
-    var colors = {
-        "aliceblue": "#f0f8ff",
-        "antiquewhite": "#faebd7",
-        "aqua": "#00ffff",
-        "aquamarine": "#7fffd4",
-        "azure": "#f0ffff",
-        "beige": "#f5f5dc",
-        "bisque": "#ffe4c4",
-        "black": "#000000",
-        "blanchedalmond": "#ffebcd",
-        "blue": "#0000ff",
-        "blueviolet": "#8a2be2",
-        "brown": "#a52a2a",
-        "burlywood": "#deb887",
-        "cadetblue": "#5f9ea0",
-        "chartreuse": "#7fff00",
-        "chocolate": "#d2691e",
-        "coral": "#ff7f50",
-        "cornflowerblue": "#6495ed",
-        "cornsilk": "#fff8dc",
-        "crimson": "#dc143c",
-        "cyan": "#00ffff",
-        "darkblue": "#00008b",
-        "darkcyan": "#008b8b",
-        "darkgoldenrod": "#b8860b",
-        "darkgray": "#a9a9a9",
-        "darkgreen": "#006400",
-        "darkkhaki": "#bdb76b",
-        "darkmagenta": "#8b008b",
-        "darkolivegreen": "#556b2f",
-        "darkorange": "#ff8c00",
-        "darkorchid": "#9932cc",
-        "darkred": "#8b0000",
-        "darksalmon": "#e9967a",
-        "darkseagreen": "#8fbc8f",
-        "darkslateblue": "#483d8b",
-        "darkslategray": "#2f4f4f",
-        "darkturquoise": "#00ced1",
-        "darkviolet": "#9400d3",
-        "deeppink": "#ff1493",
-        "deepskyblue": "#00bfff",
-        "dimgray": "#696969",
-        "dodgerblue": "#1e90ff",
-        "firebrick": "#b22222",
-        "floralwhite": "#fffaf0",
-        "forestgreen": "#228b22",
-        "fuchsia": "#ff00ff",
-        "gainsboro": "#dcdcdc",
-        "ghostwhite": "#f8f8ff",
-        "gold": "#ffd700",
-        "goldenrod": "#daa520",
-        "gray": "#808080",
-        "green": "#008000",
-        "greenyellow": "#adff2f",
-        "honeydew": "#f0fff0",
-        "hotpink": "#ff69b4",
-        "indianred ": "#cd5c5c",
-        "indigo": "#4b0082",
-        "ivory": "#fffff0",
-        "khaki": "#f0e68c",
-        "lavender": "#e6e6fa",
-        "lavenderblush": "#fff0f5",
-        "lawngreen": "#7cfc00",
-        "lemonchiffon": "#fffacd",
-        "lightblue": "#add8e6",
-        "lightcoral": "#f08080",
-        "lightcyan": "#e0ffff",
-        "lightgoldenrodyellow": "#fafad2",
-        "lightgrey": "#d3d3d3",
-        "lightgreen": "#90ee90",
-        "lightpink": "#ffb6c1",
-        "lightsalmon": "#ffa07a",
-        "lightseagreen": "#20b2aa",
-        "lightskyblue": "#87cefa",
-        "lightslategray": "#778899",
-        "lightsteelblue": "#b0c4de",
-        "lightyellow": "#ffffe0",
-        "lime": "#00ff00",
-        "limegreen": "#32cd32",
-        "linen": "#faf0e6",
-        "magenta": "#ff00ff",
-        "maroon": "#800000",
-        "mediumaquamarine": "#66cdaa",
-        "mediumblue": "#0000cd",
-        "mediumorchid": "#ba55d3",
-        "mediumpurple": "#9370d8",
-        "mediumseagreen": "#3cb371",
-        "mediumslateblue": "#7b68ee",
-        "mediumspringgreen": "#00fa9a",
-        "mediumturquoise": "#48d1cc",
-        "mediumvioletred": "#c71585",
-        "midnightblue": "#191970",
-        "mintcream": "#f5fffa",
-        "mistyrose": "#ffe4e1",
-        "moccasin": "#ffe4b5",
-        "navajowhite": "#ffdead",
-        "navy": "#000080",
-        "oldlace": "#fdf5e6",
-        "olive": "#808000",
-        "olivedrab": "#6b8e23",
-        "orange": "#ffa500",
-        "orangered": "#ff4500",
-        "orchid": "#da70d6",
-        "palegoldenrod": "#eee8aa",
-        "palegreen": "#98fb98",
-        "paleturquoise": "#afeeee",
-        "palevioletred": "#d87093",
-        "papayawhip": "#ffefd5",
-        "peachpuff": "#ffdab9",
-        "peru": "#cd853f",
-        "pink": "#ffc0cb",
-        "plum": "#dda0dd",
-        "powderblue": "#b0e0e6",
-        "purple": "#800080",
-        "rebeccapurple": "#663399",
-        "red": "#ff0000",
-        "rosybrown": "#bc8f8f",
-        "royalblue": "#4169e1",
-        "saddlebrown": "#8b4513",
-        "salmon": "#fa8072",
-        "sandybrown": "#f4a460",
-        "seagreen": "#2e8b57",
-        "seashell": "#fff5ee",
-        "sienna": "#a0522d",
-        "silver": "#c0c0c0",
-        "skyblue": "#87ceeb",
-        "slateblue": "#6a5acd",
-        "slategray": "#708090",
-        "snow": "#fffafa",
-        "springgreen": "#00ff7f",
-        "steelblue": "#4682b4",
-        "tan": "#d2b48c",
-        "teal": "#008080",
-        "thistle": "#d8bfd8",
-        "tomato": "#ff6347",
-        "turquoise": "#40e0d0",
-        "violet": "#ee82ee",
-        "wheat": "#f5deb3",
-        "white": "#ffffff",
-        "whitesmoke": "#f5f5f5",
-        "yellow": "#ffff00",
-        "yellowgreen": "#9acd32"
-    };
 
-    if (typeof colors[color.toLowerCase()] != 'undefined') return colors[color.toLowerCase()];
 
-    return false;
-}
 
-function name2rgba(colorName) {
-    var hex = colorNameToHex(colorName);
-    return hex2rgba(hex);
-}
 
 // to be optimized 2017.4.20 fanyer
 function addOpacity() {
@@ -2258,6 +2296,13 @@ function addOpacity() {
 
     return str.replace(/[^,]+(?=\))/, alpha.toString());
 }
+
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+
+// color in this file should be hex
+
 
 var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
 
@@ -2312,7 +2357,7 @@ function estimateFiber(parent, config) {
 
     // circles layers
     context.save();
-    context.strokeStyle = 'seagreen';
+    context.strokeStyle = '#00ab84';
     context.setLineDash([4, 5]);
 
     var radius = d3$7.range(min, min + 4 * d + 30, 20);
@@ -2329,7 +2374,7 @@ function estimateFiber(parent, config) {
 
     // first cicle layer  to be optimised later 2017.4.20
     context.save();
-    context.strokeStyle = 'seagreen';
+    context.strokeStyle = '#00ab84';
     context.globalAlpha = 0.7;
     context.setLineDash([4, 0]);
 
@@ -2354,11 +2399,11 @@ function estimateFiber(parent, config) {
     function switchStrokeColor(a) {
 
         if (a < 75) {
-            return 'seagreen';
+            return '#00ab84';
         } else if (a > 90) {
-            return 'salmon';
+            return '#cb8d88';
         } else {
-            return 'orange';
+            return '#e4be6f';
         }
     }
 
@@ -2396,13 +2441,12 @@ function estimateFiber(parent, config) {
 
             context.setLineDash([10, 0]);
             var strokeColor = switchStrokeColor(data[I]);
-            context.strokeStyle = i === 0 ? addOpacity(name2rgba(strokeColor), 1) : addOpacity(name2rgba(strokeColor), 0.5);
+            context.strokeStyle = i === 0 ? addOpacity(hex2rgba(strokeColor), 1) : addOpacity(hex2rgba(strokeColor), 0.5);
 
             if (i === 0) {
                 context.lineWidth = 2;
                 arc.outerRadius(e).innerRadius(min)(E);
             } else {
-                console.log(context.strokeStyle);
                 context.lineWidth = 1;
 
                 // (i===10)&&(arc.outerRadius(e).innerRadius(e)(E));
@@ -2423,9 +2467,9 @@ function estimateFiber(parent, config) {
 
     // label
     context.save();
-    context.strokeStyle = 'salmon';
+    context.strokeStyle = '#cb8d88';
     context.lineWidth = 4;
-    context.fillStyle = 'seagreen';
+    context.fillStyle = '#00ab84';
 
     context.beginPath();
 
@@ -2442,12 +2486,27 @@ function estimateFiber(parent, config) {
     context.restore();
 }
 
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+
 var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 
 
 // for amount-bile
+function hPattern(svg) {
+    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
+    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
+    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
 
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'hpattern-' + color).attr('x', '0').attr('y', '0').attr('width', 1).attr('height', 1).selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('y', function (d, i) {
+        return d * height;
+    }).attr('x', 0).attr('width', 800).attr('height', 5).attr('fill', color);
+
+    return ptn;
+}
 
 // for estimate-antibotics
 function vPattern1(svg) {
@@ -2458,9 +2517,9 @@ function vPattern1(svg) {
     var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
-        var color = 'orange';
-        i < inter[0] && (color = 'seagreen');
-        i > inter[1] && (color = 'salmon');
+        var color = '#e4be6f';
+        i < inter[0] && (color = '#00ab84');
+        i > inter[1] && (color = '#cb8d88');
         return color;
     });
 
@@ -2468,7 +2527,23 @@ function vPattern1(svg) {
 }
 
 //for the professional
+function vPattern2(svg) {
+    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 40;
+    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 27;
+    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
 
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-' + color).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1');
+
+    ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 2);
+
+    ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
+        return d * width + 1;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        return color;
+    });
+
+    return ptn;
+}
 
 
 
@@ -2483,10 +2558,317 @@ function detectSVG(parent, id) {
     return svg;
 }
 
+var baseConf$3 = {
+  "bileAcid": 6,
+  "cholesterol": 2
+};
+
+var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-axis'), require('d3-scale'));
+
+function amountBile(parent, config) {
+
+    var input = config || baseConf$3;
+    detectSVG(parent);
+
+    var svg = d3$8.select('#' + parent.id + ' svg'),
+        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+
+    svg.attr('width', 1000).attr('height', 800);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    // var formatNumber = d3.format('.2%');
+
+    hPattern(svg, 50, 500, '#66c9b2');
+    hPattern(svg, 50, 500, '#f0938f');
+
+    // define basic location Axis
+    var x = d3$8.scaleLinear().domain([0, 2]).range([0, width]);
+
+    var y = d3$8.scaleLinear().domain([0, 9]).range([0, height]);
+
+    var yAxis = d3$8.axisLeft(y).ticks(9).tickSize(-width).tickFormat(function (d) {
+        // return 10-d
+    });
+
+    var xAxis = d3$8.axisBottom(x).ticks(1).tickSize(4).tickFormat(function (d, i) {
+        // return d
+    });
+
+    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(0,' + height + ')').call(customXAxis);
+
+    g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,0)').call(customYAxis);
+
+    function customXAxis(g) {
+        g.call(xAxis);
+        g.selectAll('.tick text').attr('x', 4).attr('dy', 24);
+    }
+
+    function customYAxis(g) {
+        g.call(yAxis);
+        g.selectAll('.domain').remove();
+        g.selectAll('.tick line').attr('stroke-width', 2);
+
+        g.selectAll('.tick text').attr('x', -24).attr('dy', 4);
+        g.selectAll('.tick line').attr('stroke', '#ccc');
+        g.select('.tick:last-child line').attr('stroke-width', 6);
+    }
+
+    // console.log(y(input.bileAcid))
+    var barWidth = 300;
+
+    g.append('rect').attr('class', 'bar').attr('fill', 'url(#hpattern-#f0938f)').attr('stroke-width', 8).attr('stroke', '#f0938f').attr('width', barWidth).attr('height', y(input.cholesterol)).attr('transform', function () {
+        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(9 - input.cholesterol - input.bileAcid) + ')';
+    });
+
+    g.append('rect').attr('class', 'bar').attr('fill', 'url(#hpattern-#66c9b2)').attr('stroke-width', 8).attr('stroke', '#66c9b2').attr('width', barWidth).attr('height', y(input.bileAcid)).attr('transform', function () {
+        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(9 - input.bileAcid) + ')';
+    });
+
+    g.append('line').attr('class', 'normLine').attr('stroke-width', 6).attr('x1', 0).attr('y1', function () {
+        return y(9 - input.bileAcid);
+    }).attr('x2', 810).attr('y2', function () {
+        return y(9 - input.bileAcid);
+    }).attr('stroke-dasharray', '20,8').attr('stroke', 'orange').attr('transform', function () {
+        // return 'translate(100,50)'
+    });
+
+    g.append('text').attr('class', 'text').attr('x', function () {
+        return 0;
+    }).attr('y', function () {
+        return y(9 - input.bileAcid) + 26;
+    }).style('fill', '#686868').style('font-family', 'adad').style('font-size', '26px').attr('text-anchor', 'start').text(function () {
+        return '正常水平';
+    });
+
+    function generateLegend(config) {
+        var legend = g.append('g').attr('class', 'lengend');
+
+        legend.append('rect').attr('x', config.x).attr('y', config.y).attr('width', 30).attr('height', 30).attr('alignment-baseline', 'baseline').attr('fill', config.color);
+
+        legend.append('text').attr('x', config.x + 30 + 10).attr('y', config.y + 30 - 7).attr('alignment-baseline', 'baseline').style('font-size', '24px').text(config.text);
+    }
+
+    var legendConfig1 = {
+        x: 100,
+        y: 22,
+        color: '#66c9b2',
+        text: '胆汁酸'
+    };
+    var legendConfig2 = {
+        x: 600,
+        y: 22,
+        color: '#f0938f',
+        text: '胆固醇'
+    };
+
+    generateLegend(legendConfig1);
+    generateLegend(legendConfig2);
+}
+
+var baseConf$4 = {
+    "deviation": 1,
+    "mean": 0,
+    "gap": [15500, 18000, 22000, 25000],
+    "data": [{
+        "x": [14000, 14500],
+        "y": 0.0025
+    }, {
+        "x": [14500, 15000],
+        "y": 0.003
+    }, {
+        "x": [15000, 15500],
+        "y": 0.0038
+    }, {
+        "x": [15500, 16000],
+        "y": 0.01
+    }, {
+        "x": [16000, 16500],
+        "y": 0.018
+    }, {
+        "x": [16500, 17000],
+        "y": 0.03
+    }, {
+        "x": [17000, 17500],
+        "y": 0.015
+    }, {
+        "x": [17500, 18000],
+        "y": 0.026
+    }, {
+        "x": [18000, 18500],
+        "y": 0.026
+    }, {
+        "x": [18500, 19000],
+        "y": 0.034
+    }, {
+        "x": [19000, 19500],
+        "y": 0.05
+    }, {
+        "x": [19500, 20000],
+        "y": 0.05
+    }, {
+        "x": [20000, 20500],
+        "y": 0.07
+    }, {
+        "x": [20500, 21000],
+        "y": 0.078
+    }, {
+        "x": [21000, 21500],
+        "y": 0.083
+    }, {
+        "x": [21500, 22000],
+        "y": 0.072
+    }, {
+        "x": [22000, 22500],
+        "y": 0.08
+    }, {
+        "x": [22500, 23000],
+        "y": 0.078
+    }, {
+        "x": [23000, 23500],
+        "y": 0.075
+    }, {
+        "x": [23500, 24000],
+        "y": 0.075
+    }, {
+        "x": [24000, 24500],
+        "y": 0.056
+    }, {
+        "x": [24500, 25000],
+        "y": 0.059
+    }, {
+        "x": [25000, 25500],
+        "y": 0.043
+    }, {
+        "x": [25500, 26000],
+        "y": 0.037
+    }, {
+        "x": [26000, 26500],
+        "y": 0.028
+    }, {
+        "x": [26500, 27000],
+        "y": 0.018
+    }, {
+        "x": [27000, 27500],
+        "y": 0.012
+    }, {
+        "x": [27500, 28000],
+        "y": 0.01
+    }, {
+        "x": [28000, 28500],
+        "y": 0.003
+    }]
+};
+
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+
+var d3$10 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-array'), require('d3-random'), require('d3-axis'), require('d3-scale'));
+
+function metabolism(parent, config) {
+
+    var input = config || baseConf$4;
+    detectSVG(parent);
+
+    var svg = d3$10.select('#' + parent.id + ' svg'),
+        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+
+    svg.attr('width', 1000).attr('height', 800);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var formatNumber = d3$10.format('.2%');
+
+    vPattern2(svg, 4, 27, '#cb8d88');
+    vPattern2(svg, 4, 27, '#e4be6f');
+    vPattern2(svg, 4, 27, '#00ab84');
+
+    var yArr = input.data.map(function (e, i) {
+        return e.y;
+    });
+
+    // define basic location Axis
+    var x = d3$10.scaleLinear().domain([d3$10.min(input.data.map(function (e, i) {
+        return e.x[0];
+    })), d3$10.max(input.data.map(function (e, i) {
+        return e.x[1];
+    }))]).range([0, width]);
+
+    var y = d3$10.scaleLinear().domain([0, d3$10.max(yArr)]).range([height, 0]);
+
+    var yAxis = d3$10.axisLeft(y).ticks(4).tickSize(4).tickFormat(function (d) {
+        return formatNumber(d);
+    });
+
+    var xAxis = d3$10.axisBottom(x).ticks(5).tickSize(4).tickFormat(function (d, i) {
+        return d;
+    });
+
+    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(30,' + (height + 30) + ')').call(customXAxis);
+
+    g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,0)').call(customYAxis);
+
+    function customXAxis(g) {
+        g.call(xAxis);
+        g.selectAll('.tick text').attr('x', 4).attr('dy', 24);
+    }
+
+    function customYAxis(g) {
+        g.call(yAxis);
+        g.selectAll('.tick text').attr('x', -24).attr('dy', 4);
+    }
+
+    var bar = g.selectAll(".bar").data(input.data).enter().append("g").attr("class", "bar").attr("transform", function (d) {
+        return "translate(" + (x(d.x[0]) - 70) + "," + y(d.y) + ")";
+    });
+
+    bar.append("rect").attr("x", 100).attr('fill', function (e, i) {
+        var color = '#cb8d88';
+
+        e.x[0] < input.gap[0] && (color = '#cb8d88') || e.x[0] < input.gap[1] && (color = '#e4be6f') || e.x[0] < input.gap[2] && (color = '#00ab84') || e.x[0] < input.gap[3] && (color = '#e4be6f');
+
+        return 'url(#vpattern-' + color + ')';
+    })
+    // .attr('stroke-width', 1)
+    .attr("width", x(14500) - x(14000) - 4).attr("height", function (d) {
+        return height - y(d.y);
+    });
+
+    // curve
+    var data = d3$10.range(80000).map(d3$10.randomNormal(22000, 2000));
+
+    var line = d3$10.line().defined(function (d) {
+        return d;
+    }).x(function (d) {
+        return x((d.x0 + d.x1) / 2);
+    }).y(function (d) {
+        return y(d.length / data.length / 2.5);
+    }).curve(d3$10.curveBasis);
+
+    var bins = d3$10.histogram().domain(x.domain()).thresholds(x.ticks(20))(data);
+
+    g.append("path").datum(bins).attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
+
+    // console.log(d3.range(0,1,0.5))
+
+
+    // from http://bl.ocks.org/mbostock/4349187
+    // Sample from a normal distribution with mean 0, stddev 1.
+    
+
+    // color bar
+    
+}
+
 // this will decrease flexible
 // for Shisan to use only
 
-var baseConf$3 = {
+var baseConf$5 = {
     top: [{
         x: -7,
         y: 5,
@@ -2795,7 +3177,11 @@ SQL.prototype = {
     Query: Query
 };
 
-var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+
+var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function EstimateAntibiotics() {
     this.type = 'EstimateAntibiotics';
@@ -2809,11 +3195,11 @@ function EstimateAntibiotics() {
 function init(parent, config) {
 
     // let input = config ? handleConfig(baseConf, config) : baseConf;
-    var input = config || baseConf$3;
+    var input = config || baseConf$5;
 
     detectSVG(parent);
 
-    var svg = d3$8.select('#' + parent.id + ' svg'),
+    var svg = d3$11.select('#' + parent.id + ' svg'),
         margin = { top: 50, right: 600, bottom: 50, left: 630 };
 
     svg.attr('width', 2700).attr('height', 1200);
@@ -2875,9 +3261,9 @@ function init(parent, config) {
     // });
 
 
-    // (input.gap[0] < -7) && (centerDivOne('salmon'));
-    // (input.gap[0] > 7) && (centerDivOne('seagreen'));
-    // (input.gap[0] <= -7) && (input.gap[1] >= 7) && (centerDivOne('orange'));
+    // (input.gap[0] < -7) && (centerDivOne('#cb8d88'));
+    // (input.gap[0] > 7) && (centerDivOne('#00ab84'));
+    // (input.gap[0] <= -7) && (input.gap[1] >= 7) && (centerDivOne('#e4be6f'));
 
     // function centerDivOne(color) {
     //     $('#centerDiv').html('').css({
@@ -2897,20 +3283,20 @@ function init(parent, config) {
 
     input.top.map(function (e, i) {
         // let color = (e.x < input.gap[0] ?
-        //     'seagreen' :
+        //     '#00ab84' :
         //     (e.x <= input.gap[1] ?
-        //         'orange' :
-        //         'salmon'));
+        //         '#e4be6f' :
+        //         '#cb8d88'));
 
         copy15('top', e.direction, e.color, e.x, e.y);
     });
 
     input.bottom.map(function (e, i) {
         // let color = (e.x < input.gap[0] ?
-        //     'seagreen' :
+        //     '#00ab84' :
         //     (e.x <= input.gap[1] ?
-        //         'orange' :
-        //         'salmon'));
+        //         '#e4be6f' :
+        //         '#cb8d88'));
 
         copy15('bottom', e.direction, e.color, e.x, e.y);
     });
@@ -3055,26 +3441,26 @@ function init(parent, config) {
     }
 
     // text title
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', 'seagreen').attr('font-size', '36px').attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', '#00ab84').attr('font-size', '36px').attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
 
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', 'seagreen').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', '#00ab84').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
 
     // text
     var centralText = [{
-        color: 'seagreen',
+        color: '#00ab84',
         text: '推荐用药',
         pos: -0.8,
-        value: input.gap[0] + 7
+        value: input.gap[0]
     }, {
-        color: 'orange',
+        color: '#e4be6f',
         text: '谨慎用药',
         pos: 0,
-        value: input.gap[1] - input.gap[0] + 1
+        value: input.gap[1]
     }, {
-        color: 'salmon',
+        color: '#cb8d88',
         text: '警惕用药',
         pos: 0.8,
-        value: 7 - input.gap[1]
+        value: input.gap[2]
     }];
 
     svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', function (d, i) {
@@ -3101,7 +3487,7 @@ function init(parent, config) {
         var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
         var text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var data = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-        var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'seagreen';
+        var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#00ab84';
 
         var gTag = svg.append('g').attr('transform', 'translate(' + x + ',' + y + ')');
 
@@ -3118,7 +3504,7 @@ function init(parent, config) {
 
         // rank tag
         var rankAlign = x < 1000 ? 600 : -350;
-        gTag.append('text').text('人群排名: ' + d3$8.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+        gTag.append('text').text('人群排名: ' + d3$11.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
         var rankRectAlign = x < 1000 ? 580 : -150;
 
@@ -3127,10 +3513,10 @@ function init(parent, config) {
 
     // for centralColorRect
     function centralColorRect() {
-        var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [7, 5, 3];
+        var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [13, 2, 0];
         var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.3;
 
-        var color = ['seagreen', 'orange', 'salmon'];
+        var color = ['#00ab84', '#e4be6f', '#cb8d88'];
 
         config.map(function (e, i) {
             e === 0 && color.slice(i, 1);
@@ -3143,7 +3529,8 @@ function init(parent, config) {
             if (i === 1) return 1065 + config[i - 1] * (31 * base);
             if (i === 2) return 1065 + (15 - config[i]) * (31 * base);
         }).attr('y', 570).attr('width', function (d, i) {
-            return d * (31 * base) - 3;
+            var width = d * (31 * base) - 3;
+            return width > 0 ? width : 0;
         }).attr('height', 40).attr('fill-opacity', 0.5).attr('fill', function (d, i) {
             // if(i===0) return color[i]
             return color[i];
@@ -3153,7 +3540,8 @@ function init(parent, config) {
         svg.append('rect').attr('width', 800).attr('x', 1000).attr('y', 610).attr('height', 4).attr('fill', '#fff');
     }
 
-    centralColorRect();
+    // centralColorRect()
+    centralColorRect(input.gap);
 }
 
 function topLeft(argument) {
@@ -3184,6 +3572,8 @@ EstimateAntibiotics.prototype = {
 
 var estimateAntibiotics = new EstimateAntibiotics();
 
+// import './basic.css'
+
 exports.estimateAntibiotics = estimateAntibiotics;
 exports.intakeSugarDistribution = intakeSugarDistribution;
 exports.intakeFiberStruct = intakeFiberStruct;
@@ -3193,6 +3583,8 @@ exports.intakeFatDeviation = intakeFatDeviation;
 exports.curveGraph = curveGraph;
 exports.linkGraph = linkGraph;
 exports.estimateFiber = estimateFiber;
+exports.amountBile = amountBile;
+exports.metabolism = metabolism;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
