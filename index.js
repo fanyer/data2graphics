@@ -1,4 +1,7 @@
-// import './basic.css'
+Object.values = x =>
+    Object.keys(x).reduce((y, z) =>
+        y.push(x[z]) && y, []);
+
 
 export * from './lib/intake-sugar-distribution'
 export * from './lib/intake-fiber-struct'
