@@ -35,12 +35,12 @@ var baseConf1 = {
             "en": "Glucomammam"
         },
         '抗性麦芽糊精': {
-            'value': 3,
+            'value': 5.4,
             "en": "Resistant malyodextrins"
         }
     },
-    'cnFontSize': 20,
-    'enFontSize': 16
+    'cnFontSize': 18,
+    'enFontSize': 12
 };
 
 var baseConf2 = {
@@ -71,17 +71,42 @@ var baseConf2 = {
             "en": "Resistant malyodextrins"
         }
     },
-    'cnFontSize': 20,
-    'enFontSize': 16
+    'cnFontSize': 18,
+    'enFontSize': 12
 };
 
 function clone2(arr) {
   return Object.assign([], arr);
 }
 
+function hex2rgba(hex) {
+    var c = void 0;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+        c = hex.substring(1).split('');
+        if (c.length == 3) {
+            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c = '0x' + c.join('');
+        return 'rgba(' + [c >> 16 & 255, c >> 8 & 255, c & 255].join(',') + ',1)';
+    }
+    throw new Error('Bad Hex');
+}
+
+
+
+
+
+// to be optimized 2017.4.20 fanyer
+function addOpacity() {
+    var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rgba(250,128,114,1)';
+    var alpha = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.5;
+
+    return str.replace(/[^,]+(?=\))/, alpha.toString());
+}
+
 var d3 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-array'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
-function intakeSugarDistribution(parrent, config1, config2) {
+function intakeSugarDistribution(parent, config1, config2) {
 
     // to extend boundary straight line  
     // under Policy  ,dirty, 2017.4.20 fanyer 
@@ -101,6 +126,11 @@ function intakeSugarDistribution(parrent, config1, config2) {
     var xArr1 = config1 || baseConf1;
 
     var xArr2 = config2 || baseConf2;
+
+    if (xArr1.cnFontSize !== xArr2.cnFontSize || xArr1.enFontSize !== xArr2.enFontSize) {
+        console.error("fontsizes in two configs aren't unanimous!");
+        return;
+    }
 
     // construct basic params
     var labels = Object.keys(xArr1.data);
@@ -137,11 +167,11 @@ function intakeSugarDistribution(parrent, config1, config2) {
     // detect svg or canvas
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute('width', '1000');
-    svg.setAttribute('height', '500');
-    parrent.append(svg);
+    svg.setAttribute('height', '666');
+    parent.append(svg);
 
-    var svg = d3.select("svg"),
-        margin = { top: 20, right: 100, bottom: 80, left: 40 },
+    svg = d3.select("#" + parent.id + " svg");
+    var margin = { top: 20, right: 100, bottom: 80, left: 40 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -153,7 +183,7 @@ function intakeSugarDistribution(parrent, config1, config2) {
 
     var y = d3.scaleLinear().domain([0, 10]).range([height, 0]);
 
-    var xAxis = d3.axisBottom(x).ticks(6).tickSize(5).tickFormat(function (d) {
+    var xAxis = d3.axisBottom(x).ticks(6).tickSize(0).tickFormat(function (d) {
         return labels[d - 1];
     });
 
@@ -170,8 +200,8 @@ function intakeSugarDistribution(parrent, config1, config2) {
     function customXAxis(g) {
         g.call(xAxis);
         g.select(".domain").remove();
-        g.selectAll(".tick text").attr("font-size", 20).attr("x", 0).attr("dy", 24);
-        g.selectAll(".tick").append('text').attr('font-size', 16).attr('class', 'en').attr('dy', function (d, i) {
+        g.selectAll(".tick text").attr("font-size", xArr1.cnFontSize).attr("x", 0).attr("dy", 24);
+        g.selectAll(".tick").append('text').attr('font-size', xArr1.enFontSize).attr('class', 'en').attr("x", 0).attr('dy', function (d, i) {
             return 54;
         }).text(function (d, i) {
             return enLabels[i];
@@ -281,16 +311,53 @@ function intakeSugarDistribution(parrent, config1, config2) {
     var y1Destiny = lineData1.pop();
     var y2Destiny = lineData2.pop();
 
+    /**
+     * y1pixel is for  标准值
+     */
     var y1pixel = parseFloat(line([y1Destiny]).match(/,(\d|\.)+\Z/gi)[0].slice(1, -1));
+
+    /**
+     * y2pixel is for  检测值
+     */
     var y2pixel = parseFloat(line([y2Destiny]).match(/,(\d|\.)+\Z/gi)[0].slice(1, -1));
 
     ['检测值', '标准值'].forEach(function (e, i) {
 
         g.append('text').attr('transform', function (d) {
-            return e === '标准值' ? 'translate(880,' + (y1pixel + 7) + ')' : 'translate(880,' + (y2pixel + 7) + ')';
-        }).attr('class', 'text' + i).text(function (d) {
+            var bias = void 0;
+            var misdistance = Math.abs(y2pixel - y1pixel);
+            // console.log(misdistance);
+            // if (y1pixel - y2pixel < 60 && y1pixel > y2pixel) {
+            //     bias = -16
+            // } else if (y1pixel - y2pixel > -60 && y1pixel < y2pixel) {
+            //     bias = 16
+            // } else {
+            //     bias = 16
+            // }
+
+            if (y1pixel < y2pixel) {
+                bias = 20;
+            } else {
+                bias = -20;
+            }
+
+            return e === '标准值' ? 'translate(880,' + (y2pixel + bias) + ')' : 'translate(880,' + (y1pixel - bias) + ')';
+        }).attr('class', 'text' + i).attr('alignment-baseline', 'middle').text(function (d) {
             return e;
         });
+    });
+
+    /**
+     * stroke color
+     * rgba(73,130,180,0.6)
+     * rgba(46,139,87,0.6)
+     */
+
+    svg.selectAll('.rightExtendLine').data(['rgba(73,130,180,0.6)', 'rgba(46,139,87,0.6)']).enter().append('rect').attr('class', 'rightExtendLine').attr('x', 900).attr('y', function (d, i) {
+        return [y1pixel, y2pixel][i] + 19.3;
+    }).attr('width', 100).attr('height', 1.5).attr('fill', function (d, i) {
+        // console.log(d)
+        return d;
     });
 }
 
@@ -1608,8 +1675,6 @@ var linkGraphConfig = {
     }, {
         "name": "水果类"
     }, {
-        "name": "人体肠道自主合成"
-    }, {
         "name": "坚果类"
     }, {
         "name": "发酵食物类"
@@ -1622,133 +1687,94 @@ var linkGraphConfig = {
     }],
     "links": [{
         "source": 0,
-        "target": 22,
-        "color": "cyan",
+        "target": 22 - 1,
         "value": 5
     }, {
-        "source": 0,
-        "target": 21,
-        "color": "cyan",
-        "value": 5
-    }, {
+
         "source": 1,
         "target": 18,
-        "color": "khaki",
         "value": 5
     }, {
+
         "source": 1,
-        "target": 21,
-        "color": "khaki",
-        "value": 5
-    }, {
-        "source": 1,
-        "target": 23,
-        "color": "khaki",
+        "target": 23 - 1,
         "value": 5
     }, {
         "source": 2,
         "target": 16,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 2,
-        "color": "steelblue",
-        "target": 20,
+        "target": 20 - 1,
+        "value": 5
+    }, {
+
+        "source": 2,
+        "target": 25 - 1,
         "value": 5
     }, {
         "source": 2,
-        "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 2,
-        "target": 25,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 2,
-        "target": 23,
-        "color": "steelblue",
+        "target": 23 - 1,
         "value": 5
     }, {
         "source": 3,
-        "color": "salmon",
-        "target": 25,
+        "target": 25 - 1,
         "value": 5
     }, {
         "source": 3,
-        "color": "salmon",
-        "target": 20,
+        "target": 20 - 1,
         "value": 5
     }, {
-        "source": 3,
-        "target": 21,
-        "color": "salmon",
-        "value": 5
-    }, {
-        "color": "orange",
+
         "source": 4,
         "target": 16,
         "value": 5
     }, {
-        "source": 4,
-        "target": 21,
-        "color": "orange",
-        "value": 5
-    }, {
+
         "source": 4,
         "target": 17,
         "value": 5
     }, {
         "source": 4,
-        "target": 22,
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 4,
-        "target": 23,
+        "target": 23 - 1,
         "value": 5
     }, {
-        "source": 5,
-        "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
+
         "source": 5,
         "target": 17,
         "value": 5
     }, {
         "source": 5,
-        "target": 24,
+        "target": 24 - 1,
         "value": 5
     }, {
         "source": 5,
-        "target": 22,
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 6,
         "target": 20,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 6,
         "target": 19,
         "value": 5
     }, {
+
         "source": 6,
-        "target": 21,
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 6,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 6,
-        "target": 24,
+        "target": 24 - 1,
         "value": 5
     }, {
         "source": 7,
         "target": 17,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 7,
@@ -1759,34 +1785,26 @@ var linkGraphConfig = {
         "target": 20,
         "value": 5
     }, {
+
         "source": 7,
-        "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 7,
-        "target": 24,
+        "target": 24 - 1,
         "value": 5
     }, {
         "source": 8,
         "target": 20,
-        "color": "steelblue",
+        "value": 5
+    }, {
+
+        "source": 8,
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 8,
-        "target": 21,
+        "target": 23 - 1,
         "value": 5
     }, {
         "source": 8,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 8,
-        "target": 23,
-        "value": 5
-    }, {
-        "source": 8,
-        "target": 24,
+        "target": 24 - 1,
         "value": 5
     }, {
         "source": 9,
@@ -1795,17 +1813,13 @@ var linkGraphConfig = {
     }, {
         "source": 9,
         "target": 19,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 9,
         "target": 20,
         "value": 5
     }, {
-        "source": 9,
-        "target": 21,
-        "value": 5
-    }, {
+
         "source": 10,
         "target": 19,
         "value": 5
@@ -1814,16 +1828,13 @@ var linkGraphConfig = {
         "target": 20,
         "value": 5
     }, {
+
         "source": 10,
-        "target": 21,
+        "target": 23 - 1,
         "value": 5
     }, {
         "source": 10,
-        "target": 23,
-        "value": 5
-    }, {
-        "source": 10,
-        "target": 26,
+        "target": 26 - 1,
         "value": 5
     }, {
         "source": 11,
@@ -1834,10 +1845,6 @@ var linkGraphConfig = {
         "target": 20,
         "value": 5
     }, {
-        "source": 11,
-        "target": 21,
-        "value": 5
-    }, {
         "source": 12,
         "target": 17,
         "value": 5
@@ -1848,42 +1855,30 @@ var linkGraphConfig = {
     }, {
         "source": 12,
         "target": 19,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 12,
         "target": 20,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 12,
-        "target": 21,
-        "color": "steelblue",
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 12,
-        "target": 22,
-        "color": "steelblue",
+        "target": 24 - 1,
         "value": 5
     }, {
         "source": 12,
-        "target": 24,
-        "color": "steelblue",
+        "target": 25 - 1,
         "value": 5
     }, {
         "source": 12,
-        "target": 25,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 12,
-        "target": 26,
-        "color": "steelblue",
+        "target": 26 - 1,
         "value": 5
     }, {
         "source": 13,
         "target": 17,
-        "color": "steelblue",
         "value": 5
     }, {
         "source": 13,
@@ -1894,10 +1889,7 @@ var linkGraphConfig = {
         "target": 20,
         "value": 5
     }, {
-        "source": 13,
-        "target": 21,
-        "value": 5
-    }, {
+
         "source": 14,
         "target": 16,
         "value": 5
@@ -1911,13 +1903,7 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 14,
-        "target": 21,
-        "color": "steelblue",
-        "value": 5
-    }, {
-        "source": 14,
-        "target": 23,
-        "color": "steelblue",
+        "target": 23 - 1,
         "value": 5
     }, {
         "source": 15,
@@ -1925,19 +1911,16 @@ var linkGraphConfig = {
         "value": 5
     }, {
         "source": 15,
-        "target": 20,
+        "target": 20 - 1,
+        "value": 5
+    }, {
+
+        "source": 15,
+        "target": 22 - 1,
         "value": 5
     }, {
         "source": 15,
-        "target": 21,
-        "value": 5
-    }, {
-        "source": 15,
-        "target": 22,
-        "value": 5
-    }, {
-        "source": 15,
-        "target": 24,
+        "target": 24 - 1,
         "value": 5
     }]
 };
@@ -2149,15 +2132,15 @@ function linkGraph(parent, config) {
 
     // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    var svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', '800');
     svg.setAttribute('id', 'curveGraph');
     svg.setAttribute('height', '1500');
 
     parent.append(svg);
 
-    var svg = d3$5.select('svg#curveGraph'),
-        width = +svg.attr('width') - margin.left - margin.right - 100,
+    svg = d3$5.select('#' + parent.id + ' svg');
+    var width = +svg.attr('width') - margin.left - margin.right - 100,
         height = +svg.attr('height') - margin.top - margin.bottom,
         g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -2177,7 +2160,7 @@ function linkGraph(parent, config) {
 
     var yL = d3$5.scaleLinear().domain([0, 15]).range([0, 1264]);
 
-    var yR = d3$5.scaleLinear().domain([0, 9]).range([364 - 70, 950 - 70]);
+    var yR = d3$5.scaleLinear().domain([0, 9]).range([364 - 0, 950 - 70]);
 
     // console.log(input.nodes)
 
@@ -2189,7 +2172,7 @@ function linkGraph(parent, config) {
             var seperation = 0;
 
             if (i > 21) {
-                seperation = 28;
+                seperation = 0;
             }
             return 'translate(' + d.x + ',' + (d.y = yR(i - 16) + seperation) + ')';
         }
@@ -2319,31 +2302,6 @@ var baseConf$2 = {
         'value': 92
     }
 };
-
-function hex2rgba(hex) {
-    var c = void 0;
-    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-        c = hex.substring(1).split('');
-        if (c.length == 3) {
-            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-        }
-        c = '0x' + c.join('');
-        return 'rgba(' + [c >> 16 & 255, c >> 8 & 255, c & 255].join(',') + ',1)';
-    }
-    throw new Error('Bad Hex');
-}
-
-
-
-
-
-// to be optimized 2017.4.20 fanyer
-function addOpacity() {
-    var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rgba(250,128,114,1)';
-    var alpha = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.5;
-
-    return str.replace(/[^,]+(?=\))/, alpha.toString());
-}
 
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
@@ -2613,6 +2571,13 @@ var baseConf$3 = {
   "cholesterol": 2
 };
 
+/**
+ * 2017.4.24  Tang's policy
+ * 胆汁酸
+ * 黄线在最下面，绿色最上面
+ * 最下面的灰线盖住绿色
+ */
+
 var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-axis'), require('d3-scale'));
 
 function amountBile(parent, config) {
@@ -2637,13 +2602,13 @@ function amountBile(parent, config) {
     // define basic location Axis
     var x = d3$8.scaleLinear().domain([0, 2]).range([0, width]);
 
-    var y = d3$8.scaleLinear().domain([0, 9]).range([0, height]);
+    var y = d3$8.scaleLinear().domain([0, 10]).range([0, height]);
 
-    var yAxis = d3$8.axisLeft(y).ticks(9).tickSize(-width).tickFormat(function (d) {
+    var yAxis = d3$8.axisLeft(y).ticks(10).tickSize(-width).tickFormat(function (d) {
         // return 10-d
     });
 
-    var xAxis = d3$8.axisBottom(x).ticks(1).tickSize(4).tickFormat(function (d, i) {
+    var xAxis = d3$8.axisBottom(x).ticks(11).tickSize(4).tickFormat(function (d, i) {
         // return d
     });
 
@@ -2667,28 +2632,37 @@ function amountBile(parent, config) {
     }
 
     // console.log(y(input.bileAcid))
+
+    g.append('line').attr('class', 'normLine').attr('stroke-width', 6).attr('x1', 0).attr('y1', function () {
+        return y(10 - input.bileAcid);
+    }).attr('x2', 810).attr('y2', function () {
+        return y(10 - input.bileAcid);
+    }).attr('stroke-dasharray', '20,8').attr('stroke', 'orange').attr('transform', function () {
+        // return 'translate(100,50)'
+    });
+
     var barWidth = 300;
 
     g.append('rect').attr('class', 'bar').attr('fill', 'url(#hpattern-#f0938f)').attr('stroke-width', 8).attr('stroke', '#f0938f').attr('width', barWidth).attr('height', y(input.cholesterol)).attr('transform', function () {
-        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(9 - input.cholesterol - input.bileAcid) + ')';
+        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(10 - input.cholesterol - input.bileAcid) + ')';
     });
 
     g.append('rect').attr('class', 'bar').attr('fill', 'url(#hpattern-#66c9b2)').attr('stroke-width', 8).attr('stroke', '#66c9b2').attr('width', barWidth).attr('height', y(input.bileAcid)).attr('transform', function () {
-        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(9 - input.bileAcid) + ')';
+        return 'translate(' + (x(1) - barWidth / 2) + ',' + y(10 - input.bileAcid) + ')';
     });
 
-    g.append('line').attr('class', 'normLine').attr('stroke-width', 6).attr('x1', 0).attr('y1', function () {
-        return y(9 - input.bileAcid);
-    }).attr('x2', 810).attr('y2', function () {
-        return y(9 - input.bileAcid);
-    }).attr('stroke-dasharray', '20,8').attr('stroke', 'orange').attr('transform', function () {
+    g.append('line').attr('class', 'axisBottom').attr('stroke-width', 8).attr('x1', 0).attr('y1', function () {
+        return 601;
+    }).attr('x2', 811).attr('y2', function () {
+        return 601;
+    }).attr('stroke', '#ccc').attr('transform', function () {
         // return 'translate(100,50)'
     });
 
     g.append('text').attr('class', 'text').attr('x', function () {
         return 0;
     }).attr('y', function () {
-        return y(9 - input.bileAcid) + 26;
+        return y(10 - input.bileAcid) + 26;
     }).style('fill', '#686868').style('font-family', 'adad').style('font-size', '26px').attr('text-anchor', 'start').text(function () {
         return '正常水平';
     });
@@ -2696,9 +2670,9 @@ function amountBile(parent, config) {
     function generateLegend(config) {
         var legend = g.append('g').attr('class', 'lengend');
 
-        legend.append('rect').attr('x', config.x).attr('y', config.y).attr('width', 30).attr('height', 30).attr('alignment-baseline', 'baseline').attr('fill', config.color);
+        legend.append('rect').attr('x', config.x).attr('y', config.y).attr('width', 30).style('font-family', 'adad').attr('height', 30).attr('alignment-baseline', 'baseline').attr('fill', config.color);
 
-        legend.append('text').attr('x', config.x + 30 + 10).attr('y', config.y + 30 - 7).attr('alignment-baseline', 'baseline').style('font-size', '24px').text(config.text);
+        legend.append('text').attr('x', config.x + 30 + 10).attr('y', config.y + 30 - 7).attr('alignment-baseline', 'baseline').style('font-family', 'adad').style('font-size', '24px').text(config.text);
     }
 
     var legendConfig1 = {
@@ -3507,7 +3481,7 @@ function init(parent, config) {
     // text title
     svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', '#00ab84').attr('font-size', '36px').attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
 
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', '#00ab84').style('font-size', '24').attr('font-family', 'Verdana').text('Evaluation of Antibiotics Intake');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', '#00ab84').style('font-size', '24').attr('font-family', 'adad').text('Evaluation of Antibiotics Intake');
 
     // text
     var centralText = [{
@@ -3529,19 +3503,19 @@ function init(parent, config) {
 
     svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', function (d, i) {
         return 'translate(' + (width / 2 + margin.left - 75 + d.pos * 270) + ',630)';
-    }).append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('fill', 'none').style('stroke', function (d, i) {
+    }).append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('font-family', 'adad').attr('fill', 'none').style('stroke', function (d, i) {
         return d.color;
     });
 
     svg.selectAll('g.centralText').append('text').text(function (d, i) {
         return d.text;
-    }).attr('x', 75).attr('y', 35).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+    }).attr('x', 75).attr('y', 35).attr('font-family', 'adad').attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
         return d.color;
     }).style('font-size', '25px');
 
     svg.selectAll('g.centralText').append('text').text(function (d, i) {
         return d.value;
-    }).attr('x', 75).attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
+    }).attr('x', 75).attr('font-family', 'adad').attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
         return d.color;
     }).style('font-size', '25px');
 
@@ -3557,14 +3531,14 @@ function init(parent, config) {
 
         gTag.append('rect').attr('width', 400).attr('height', 22).attr('rx', 15).attr('fill', 'url(#vpattern1)').attr('ry', '50%').attr('stroke', 'steelblue').attr('stroke-width', 1);
 
-        gTag.append('text').text('中间值: ' + data.median).style('fill', color).attr('stroke-width', 2).attr('x', 130).attr('dx', 20).attr('y', 35).attr('text-anchor', 'start').attr('alignment-baseline', 'hanging');
+        gTag.append('text').text('中间值: ' + data.median).style('fill', color).attr('stroke-width', 2).attr('font-family', 'adad').attr('x', 130).attr('dx', 20).attr('y', 28).attr('text-anchor', 'start').attr('alignment-baseline', 'hanging');
 
-        gTag.append('text').text('▼ ' + data.absolute).style('fill', color).attr('stroke-width', 2).attr('x', data.rank * 400 - 28).attr('dx', 20).attr('y', 0).attr('dy', -4).attr('text-anchor', 'start').attr('alignment-baseline', 'baseline');
+        gTag.append('text').text('▼ ' + data.absolute).style('fill', color).attr('stroke-width', 2).attr('x', data.rank * 400 - 28).attr('dx', 20).attr('y', 0).attr('dy', -4).attr('font-family', 'adad').attr('text-anchor', 'start').attr('alignment-baseline', 'baseline');
 
         var textAlign = x < 1000 ? 400 : -150;
-        gTag.append('text').text(text.cn).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+        gTag.append('text').text(text.cn).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('font-family', 'adad').attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
-        gTag.append('text').text(text.en).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('dy', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+        gTag.append('text').text(text.en).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('dy', 20).attr('y', 15).attr('font-family', 'adad').attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
         // rank tag
         var rankAlign = x < 1000 ? 600 : -350;
