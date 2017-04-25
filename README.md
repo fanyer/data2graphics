@@ -51,6 +51,8 @@ The `parser` interface is a data-transforming tool, turn to [parser4data](https:
 
 #### intakeSugarDistribution()
 after import this function , you can call it as below:
+
+this domain [0,10]
 ```
 intakeSugarDistribution(oDom, config1, config2)
 
@@ -132,6 +134,7 @@ It will render as below:
 
 
 #### intakeFiberStruct()
+this domain [0,1], and sum=1
 ```
 intakeFiberStruct(oDom, config)
 
@@ -151,6 +154,7 @@ It will render as below:
 
 
 ### scoreLevel()
+this domain [0,1]
 ```
 scoreLevel(oDom, config)
 
@@ -223,6 +227,8 @@ It will render as below:
 
 
 ### intakeFatProportion()
+this domain anything that can produce a proportion.
+
 ```
 intakeFatProportion(oDom, config)
 
@@ -282,6 +288,7 @@ It will render as below:
 
 
 ### curveGraph()
+this domain [-25,25]
 ```
 curveGraph(oDom, config)
 
@@ -323,6 +330,8 @@ It will render as below:
 
 
 ### linkGraph()
+this turn to [parser4data](https://pkgo.in/itg/parser4data).
+
 ```
 linkGraph(oDom, config)
 
@@ -417,91 +426,13 @@ It will render as below:
 <img src="./docs/estimate-fiber.png" width='500'>
 
 ### estimateAntibiotics.init()
+this turn to [parser4data](https://pkgo.in/itg/parser4data).
+
 ```
 //this is exported default as an obj
 import estimateAntibiotics from 'data2graphics'
 
 estimateAntibiotics.init(oDom, config)
-
-//advanced config example, and this can allow disoder in arr
-{
-  top: [{
-        x: -7,
-        y: 5,
-        color: '',
-        tag: {
-           cn: '头孢菌素类',
-           en: 'Cephalosporins'
-       },
-       data: {
-           rank: 0.2807,
-           median: 117.4241,
-           absolute: 59.31948
-       },
-        direction: 'left'
-    }, ... , {
-
-        x: 5,
-        y: 3,
-        color: '',
-        tag: {
-           cn: '青霉素',
-           en: 'Penicillins'
-       },
-       data: {
-           rank: 0.2506,
-           median: 128.4729,
-           absolute: 61.05134
-       },
-        direction: 'left'
-    }],
-    bottom: [{
-        x: -2,
-        y: 1,
-        color: '',
-        tag: {
-           cn: '青霉素',
-           en: 'Penicillins'
-       },
-       data: {
-           rank: 0.2506,
-           median: 128.4729,
-           absolute: 61.05134
-       },
-        direction: 'left'
-    }, ... , {
-        x: 7,
-        y: 2,
-        color: 'orange',
-        tag: {
-           cn: '青霉素',
-           en: 'Penicillins'
-       },
-       data: {
-           rank: 0.2506,
-           median: 128.4729,
-           absolute: 61.05134
-       },
-        direction: 'right'
-    }],
-    gap: [3, 6] //gap is the x value of central orange range's start & end and the end should be greater than the start.
-}
-
-
-
-//for simplified usage, this set default order in array, and remove x ,y , direction keys.
-{
-  color: 'orange',
-  tag: {
-     cn: '青霉素',
-     en: 'Penicillins'
- },
- data: {
-     rank: 0.2506,
-     median: 128.4729,
-     absolute: 61.05134
- }
-}
 
 ```
 Detailed Config shows [here](https://pkgo.in/itg/data2graphics/blob/master/lib/estimate-default-config.js)
@@ -518,6 +449,7 @@ It will render as below:
 
 
 ### amountBile()
+this domain [0,10]
 ```
 amountBile(oDom, config)
 
@@ -539,7 +471,212 @@ metabolism(oDom, config)
 
 //config example
 {
+ "gap":[15500,18000,22000,25000],
+    "data": [{
+        "x": [
+            14000,
+            14500
+        ],
+        "y": 0.0025,,
+        "curve":[]   //bardata that locate in this x interval
 
+    }, {
+        "x": [
+            14500,
+            15000
+        ],
+        "y": 0.003,
+        "curve":[]
+    }, {
+        "x": [
+            15000,
+            15500
+        ],
+        "y": 0.0038,
+        "curve":[]
+    }, {
+        "x": [
+            15500,
+            16000
+        ],
+        "y": 0.01,
+        "curve":[]
+    }, {
+        "x": [
+            16000,
+            16500
+        ],
+        "y": 0.018,
+        "curve":[]
+    }, {
+        "x": [
+            16500,
+            17000
+        ],
+        "y": 0.03,
+        "curve":[]
+    }, {
+        "x": [
+            17000,
+            17500
+        ],
+        "y": 0.015,
+        "curve":[]
+    }, {
+        "x": [
+            17500,
+            18000
+        ],
+        "y": 0.026,
+        "curve":[]
+    }, {
+        "x": [
+            18000,
+            18500
+        ],
+        "y": 0.026,
+        "curve":[]
+    }, {
+        "x": [
+            18500,
+            19000
+        ],
+        "y": 0.034,
+        "curve":[]
+    }, {
+        "x": [
+            19000,
+            19500
+        ],
+        "y": 0.05,
+        "curve":[]
+    }, {
+        "x": [
+            19500,
+            20000
+        ],
+        "y": 0.05,
+        "curve":[]
+    }, {
+        "x": [
+            20000,
+            20500
+        ],
+        "y": 0.07,
+        "curve":[]
+    }, {
+        "x": [
+            20500,
+            21000
+        ],
+        "y": 0.078,
+        "curve":[]
+    }, {
+        "x": [
+            21000,
+            21500
+        ],
+        "y": 0.083,
+        "curve":[]
+    }, {
+        "x": [
+            21500,
+            22000
+        ],
+        "y": 0.072,
+        "curve":[]
+    }, {
+        "x": [
+            22000,
+            22500
+        ],
+        "y": 0.08,
+        "curve":[]
+    }, {
+        "x": [
+            22500,
+            23000
+        ],
+        "y": 0.078,
+        "curve":[]
+    }, {
+        "x": [
+            23000,
+            23500
+        ],
+        "y": 0.075,
+        "curve":[]
+    }, {
+        "x": [
+            23500,
+            24000
+        ],
+        "y": 0.075,
+        "curve":[]
+    }, {
+        "x": [
+            24000,
+            24500
+        ],
+        "y": 0.056,
+        "curve":[]
+    }, {
+        "x": [
+            24500,
+            25000
+        ],
+        "y": 0.059,
+        "curve":[]
+    }, {
+        "x": [
+            25000,
+            25500
+        ],
+        "y": 0.043,
+        "curve":[]
+    }, {
+        "x": [
+            25500,
+            26000
+        ],
+        "y": 0.037,
+        "curve":[]
+    }, {
+        "x": [
+            26000,
+            26500
+        ],
+        "y": 0.028,
+        "curve":[]
+    }, {
+        "x": [
+            26500,
+            27000
+        ],
+        "y": 0.018,
+        "curve":[]
+    }, {
+        "x": [
+            27000,
+            27500
+        ],
+        "y": 0.012,
+        "curve":[]
+    }, {
+        "x": [
+            27500,
+            28000
+        ],
+        "y": 0.01,
+        "curve":[]
+    }, {
+        "x": [
+            28000,
+            28500
+        ],
+        "y": 0.003,
+        "curve":[]
+    }]
 }
 
 ```
