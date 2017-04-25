@@ -73,13 +73,13 @@ circle {
 
 .line0 {
     fill: none;
-    stroke: steelblue;
+    stroke: rgba(73,130,180,0.6);
     stroke-width: 1.5px;
 }
 
 .line1 {
     fill: none;
-    stroke: seagreen;
+    stroke: rgba(46,139,87,0.6);
     stroke-width: 1.5px;
 }
 
