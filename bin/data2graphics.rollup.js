@@ -2160,7 +2160,7 @@ function linkGraph(parent, config) {
 
     var yL = d3$5.scaleLinear().domain([0, 15]).range([0, 1264]);
 
-    var yR = d3$5.scaleLinear().domain([0, 9]).range([364 - 0, 950 - 70]);
+    var yR = d3$5.scaleLinear().domain([0, 9]).range([632 - 300, 632 + 300]);
 
     // console.log(input.nodes)
 
@@ -2170,10 +2170,11 @@ function linkGraph(parent, config) {
             return 'translate(' + d.x + ',' + (d.y = yL(i)) + ')';
         } else {
             var seperation = 0;
+            // console.log(seperation)
 
-            if (i > 21) {
-                seperation = 0;
-            }
+            // if (i > 16) {
+            //     seperation = 30
+            // }
             return 'translate(' + d.x + ',' + (d.y = yR(i - 16) + seperation) + ')';
         }
     });
@@ -2220,12 +2221,17 @@ function linkGraph(parent, config) {
 
 
     //  link
-    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').style('fill', 'none').attr('d', path).style('stroke', function (d) {
+    var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').style('fill', 'none').attr('d', path).attr('stroke-width', function (d, i) {
+        console.log(d);
+        return d.strokeWidth;
+    }).style('stroke', function (d) {
         return d.color || 'salmon';
-    }).style('stroke-width', function (d) {
-        return Math.max(1, 3);
-        // return Math.max(1, d.dy);
-    }).sort(function (a, b) {
+    })
+    // .style('stroke-width', function(d) {
+    //     return Math.max(1, 3);
+    //     // return Math.max(1, d.dy);
+    // })
+    .sort(function (a, b) {
         return b.dy - a.dy;
     });
 
