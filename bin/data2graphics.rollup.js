@@ -362,12 +362,15 @@ function intakeSugarDistribution(parent, config1, config2) {
 }
 
 var baseConf = {
-    'XXX': 0.08,
-    '胆固醇': 0.17,
-    '饱和脂肪酸': 0.2,
-    '不饱和脂肪酸': 0.1,
-    'YYY脂肪酸': 0.05,
-    '鞘脂类': 0.4
+    'text': 'adad',
+    'data': {
+        'XXX': 0.08,
+        '胆固醇': 0.17,
+        '饱和脂肪酸': 0.2,
+        '不饱和脂肪酸': 0.1,
+        'YYY脂肪酸': 0.05,
+        '鞘脂类': 0.4
+    }
 };
 
 //  seagreen   #00ab84
@@ -387,12 +390,12 @@ function intakeFiberStruct(parrent, config) {
 
     var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-    var labels = Object.keys(input);
+    var labels = Object.keys(input.data);
     labels.sort(function (a, b) {
-        return input[a] - input[b];
+        return input.data[a] - input.data[b];
     });
 
-    var data = Object.values(input);
+    var data = Object.values(input.data);
 
     // detect browser canvas api
     if (!parrent.querySelector("canvas")) {
@@ -427,7 +430,7 @@ function intakeFiberStruct(parrent, config) {
 
     context.fillStyle = '#00ab84';
     context.font = "24px adad";
-    context.fillText("膳食纤维", 0, -10);
+    context.fillText(input.text, 0, -10);
     context.restore();
 
     // circles layers
@@ -474,7 +477,6 @@ function intakeFiberStruct(parrent, config) {
         context.save();
 
         context.beginPath();
-        console.log(E.data);
 
         if (E.data < 0.75) {
             context.strokeStyle = '#00ab84';
@@ -599,8 +601,10 @@ var baseConf$1 = {
 };
 
 function bend(ctx, text, r) {
+    var onOff = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
     ctx.save();
-    if (r >= -370) {
+    if (onOff) {
         ctx.font = "10px adad";
         ctx.rotate(-0.015 * text.length / 2 - 0.02);
     } else {
@@ -608,7 +612,7 @@ function bend(ctx, text, r) {
     }
 
     for (var i = 0; i < text.length; i++) {
-        ctx.rotate(r >= -370 ? 0.018 : 0.04);
+        ctx.rotate(onOff ? 0.018 : 0.04);
         ctx.fillText(text[i], 0, r);
     }
 
@@ -830,10 +834,10 @@ function scoreLevel() {
         // if (i === 0||i===1) {
         context.rotate(pi * 2 / labels.length * i);
         // context.fillText(e, 0, -400);
-        bend(context, e, -400);
+        bend(context, e, -390, false);
 
         // context.fillText(input.data[e].en, 0, -370);
-        bend(context, input.data[e].en, -370);
+        bend(context, input.data[e].en, -370, true);
         // }
 
         context.restore();
@@ -1603,7 +1607,7 @@ function vBezeireArr(Arr, factor) {
 var curveGraphConfig = {
     'standard': {
         'min': -25,
-        '过低': -20,
+        '过低': -12,
         '偏低': -10,
         '正常': 0,
         '偏高': 10,
@@ -1981,12 +1985,17 @@ function curveGraph(parent, config) {
     function customXAxis(g) {
         g.call(xAxis);
         g.select('.domain').remove();
+        // g.selectAll('.tick').remove();
         // g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#fff');
         // text color
         g.selectAll('.tick text').attr('x', 0).attr('dy', -4);
+
         g.selectAll('.tick:nth-child(4n+1) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#cb8d88');
+
         g.selectAll('.tick:nth-child(2n) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#e4be6f');
+
         g.selectAll('.tick:nth-child(3) text').style('font-family', 'adad').style('font-size', '20px').style('fill', '#00ab84');
+
         // line color
         g.selectAll('.tick:nth-child(4n+1) line').attr('stroke', '#cb8d88').attr('stroke-width', '3');
         g.selectAll('.tick:nth-child(2n) line').attr('stroke-width', '2').attr('stroke', '#e4be6f');
@@ -1994,8 +2003,21 @@ function curveGraph(parent, config) {
 
         var text = g.selectAll('.tick text');
 
-        cloneSelection(g, text, 1);
+        // cloneSelection(g, text, 1)
+
     }
+
+    //  for shisan's self customed standard line    2017.4.26  fanyer
+
+    var gTickX = d3$5.scaleLinear().domain([-25, 25]).range([0, 260]);
+
+    var standardValue = Object.values(input.standard).slice(1, 6);
+    // console.log(standardValue);
+
+    standardValue.map(function (e, i) {
+        var gTick = d3$5.select('.tick:nth-child(' + i + ')');
+        // standardLine(gTick, i, gTickX)
+    });
 
     function customYAxis(g) {
         g.call(yAxis);
@@ -2005,17 +2027,6 @@ function curveGraph(parent, config) {
         g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#00ab84');
         g.selectAll('.tick:nth-child(1) line').attr('stroke', '#00ab84').attr('stroke-width', '1').attr('opacity', '0.6');
         g.selectAll('.tick:last-child line').attr('stroke', '#00ab84').attr('stroke-width', '1').attr('opacity', '0.6');
-    }
-
-    function cloneSelection(appendTo, toCopy, times) {
-        toCopy.each(function () {
-            for (var i = 0; i < times; i++) {
-                var clone = svg.node().appendChild(this.cloneNode(true));
-                console.log(clone);
-                d3$5.select(clone).attr("class", "clone");
-            }
-        });
-        return appendTo.selectAll('.clone');
     }
 
     var line = d3$5.line().defined(function (d) {
@@ -2222,7 +2233,6 @@ function linkGraph(parent, config) {
 
     //  link
     var link = g.append('g').selectAll('.link').data(input.links).enter().append('path').attr('class', 'link').style('fill', 'none').attr('d', path).attr('stroke-width', function (d, i) {
-        console.log(d);
         return d.strokeWidth;
     }).style('stroke', function (d) {
         return d.color || 'salmon';
@@ -2243,69 +2253,72 @@ function linkGraph(parent, config) {
 }
 
 var baseConf$2 = {
-    '维生素a': {
-        'en': '',
-        'value': 20
-    },
-    '维生素b': {
-        'en': '',
-        'value': 25
-    },
-    '维生素c': {
-        'en': '',
-        'value': 92
-    },
-    '维生素d': {
-        'en': '',
-        'value': 78
-    },
-    '维生素e': {
-        'en': '',
-        'value': 43
-    },
-    '维生素f': {
-        'en': '',
-        'value': 96
-    },
-    '维生素g': {
-        'en': '',
-        'value': 32
-    },
-    '维生素h': {
-        'en': '',
-        'value': 79
-    },
-    '维生素i': {
-        'en': '',
-        'value': 82
-    },
-    '维生素j': {
-        'en': '',
-        'value': 45
-    },
-    '维生素k': {
-        'en': '',
-        'value': 53
-    },
-    '维生素l': {
-        'en': '',
-        'value': 98
-    },
-    '维生素m': {
-        'en': '',
-        'value': 92
-    },
-    '维生素n': {
-        'en': '',
-        'value': 48
-    },
-    '维生素o': {
-        'en': '',
-        'value': 84
-    },
-    '维生素p': {
-        'en': '',
-        'value': 92
+    'text': 'dadad',
+    'data': {
+        '维生素a': {
+            'en': 'adaeda',
+            'value': 20
+        },
+        '维生素b': {
+            'en': '',
+            'value': 25
+        },
+        '维生素c': {
+            'en': '',
+            'value': 92
+        },
+        '维生素d': {
+            'en': '',
+            'value': 78
+        },
+        '维生素e': {
+            'en': '',
+            'value': 43
+        },
+        '维生素f': {
+            'en': '',
+            'value': 96
+        },
+        '维生素g': {
+            'en': '',
+            'value': 32
+        },
+        '维生素h': {
+            'en': '',
+            'value': 79
+        },
+        '维生素i': {
+            'en': '',
+            'value': 82
+        },
+        '维生素j': {
+            'en': '',
+            'value': 45
+        },
+        '维生素k': {
+            'en': '',
+            'value': 53
+        },
+        '维生素l': {
+            'en': '',
+            'value': 98
+        },
+        '维生素m': {
+            'en': '',
+            'value': 92
+        },
+        '维生素n': {
+            'en': '',
+            'value': 48
+        },
+        '维生素o': {
+            'en': '',
+            'value': 84
+        },
+        '维生素p': {
+            'en': '',
+            'value': 92
+        }
     }
 };
 
@@ -2328,8 +2341,8 @@ function estimateFiber(parent, config) {
 
     var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-    var labels = Object.keys(input);
-    var data = Object.values(input).map(function (e, i) {
+    var labels = Object.keys(input.data);
+    var data = Object.values(input.data).map(function (e, i) {
         return e.value;
     });
 
@@ -2366,7 +2379,7 @@ function estimateFiber(parent, config) {
 
     context.fillStyle = colors[2];
     context.font = "24px adad";
-    context.fillText("膳食纤维", 0, 0);
+    context.fillText(input.text, 0, 0);
     context.restore();
 
     // circles layers
@@ -2493,7 +2506,9 @@ function estimateFiber(parent, config) {
         context.save();
         // 0.03 is for delusion
         context.rotate(Math.PI * 2 / labels.length * i + Math.PI / labels.length - 0.02);
-        bend(context, e, -400);
+        bend(context, e, -410, false);
+        // console.log(input.data[e].en)
+        bend(context, input.data[e].en, -390, true);
 
         context.restore();
     });
@@ -2511,7 +2526,7 @@ var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), requ
 // for amount-bile
 function hPattern(svg) {
     var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
-    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
+    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
     var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
 
 
@@ -2589,10 +2604,15 @@ var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), requ
 function amountBile(parent, config) {
 
     var input = config || baseConf$3;
+
+    if (input.bileAcid + input.cholesterol > 10) {
+        throw new Error('sum cannot > 10');
+    }
+
     detectSVG(parent);
 
     var svg = d3$8.select('#' + parent.id + ' svg'),
-        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+        margin = { top: 80, right: 60, bottom: 150, left: 130 };
 
     svg.attr('width', 1000).attr('height', 800);
 
@@ -2602,8 +2622,8 @@ function amountBile(parent, config) {
 
     // var formatNumber = d3.format('.2%');
 
-    hPattern(svg, 50, 500, '#66c9b2');
-    hPattern(svg, 50, 500, '#f0938f');
+    hPattern(svg, 100, 900, '#66c9b2');
+    hPattern(svg, 100, 900, '#f0938f');
 
     // define basic location Axis
     var x = d3$8.scaleLinear().domain([0, 2]).range([0, width]);
@@ -2658,9 +2678,9 @@ function amountBile(parent, config) {
     });
 
     g.append('line').attr('class', 'axisBottom').attr('stroke-width', 8).attr('x1', 0).attr('y1', function () {
-        return 601;
+        return 571;
     }).attr('x2', 811).attr('y2', function () {
-        return 601;
+        return 571;
     }).attr('stroke', '#ccc').attr('transform', function () {
         // return 'translate(100,50)'
     });
@@ -2676,9 +2696,9 @@ function amountBile(parent, config) {
     function generateLegend(config) {
         var legend = g.append('g').attr('class', 'lengend');
 
-        legend.append('rect').attr('x', config.x).attr('y', config.y).attr('width', 30).style('font-family', 'adad').attr('height', 30).attr('alignment-baseline', 'baseline').attr('fill', config.color);
+        legend.append('rect').attr('x', config.x).attr('y', config.y - 70).attr('width', 30).style('font-family', 'adad').attr('height', 30).attr('alignment-baseline', 'baseline').attr('fill', config.color);
 
-        legend.append('text').attr('x', config.x + 30 + 10).attr('y', config.y + 30 - 7).attr('alignment-baseline', 'baseline').style('font-family', 'adad').style('font-size', '24px').text(config.text);
+        legend.append('text').attr('x', config.x + 30 + 10).attr('y', config.y + 30 - 7 - 70).attr('alignment-baseline', 'baseline').style('font-family', 'adad').style('font-size', '24px').text(config.text);
     }
 
     var legendConfig1 = {

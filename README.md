@@ -140,12 +140,15 @@ intakeFiberStruct(oDom, config)
 
 //config example
 {
-   'XXX': 0.08,
-   '胆固醇': 0.17,
-   '饱和脂肪酸': 0.2,
-   '不饱和脂肪酸': 0.1,
-   'YYY脂肪酸': 0.05,
-   '鞘脂类': 0.4
+    'text': 'adad',
+    'data': {
+        'XXX': 0.08,
+        '胆固醇': 0.17,
+        '饱和脂肪酸': 0.2,
+        '不饱和脂肪酸': 0.1,
+        'YYY脂肪酸': 0.05,
+        '鞘脂类': 0.4
+    }
 }
 ```
 It will render as below:
@@ -354,69 +357,72 @@ estimateFiber(oDom, config)
 
 //config example
 {
-    '维生素a': {
-        'en': '',
-        'value': 20
-    }
-    '维生素b': {
-        'en': '',
-        'value': 25
-    }
-    '维生素c': {
-        'en': '',
-        'value': 92
-    }
-    '维生素d': {
-        'en': '',
-        'value': 78
-    }
-    '维生素e': {
-        'en': '',
-        'value': 43
-    }
-    '维生素f': {
-        'en': '',
-        'value': 96
-    }
-    '维生素g': {
-        'en': '',
-        'value': 32
-    }
-    '维生素h': {
-        'en': '',
-        'value': 79
-    }
-    '维生素i': {
-        'en': '',
-        'value': 82
-    }
-    '维生素j': {
-        'en': '',
-        'value': 45
-    }
-    '维生素k': {
-        'en': '',
-        'value': 53
-    }
-    '维生素l': {
-        'en': '',
-        'value': 98
-    }
-    '维生素m': {
-        'en': '',
-        'value': 92
-    }
-    '维生素n': {
-        'en': '',
-        'value': 48
-    }
-    '维生素o': {
-        'en': '',
-        'value': 84
-    }
-    '维生素p': {
-        'en': '',
-        'value': 92
+    'text': 'dadad',
+    'data': {
+        '维生素a': {
+            'en': 'adaeda',
+            'value': 20
+        },
+        '维生素b': {
+            'en': '',
+            'value': 25
+        },
+        '维生素c': {
+            'en': '',
+            'value': 92
+        },
+        '维生素d': {
+            'en': '',
+            'value': 78
+        },
+        '维生素e': {
+            'en': '',
+            'value': 43
+        },
+        '维生素f': {
+            'en': '',
+            'value': 96
+        },
+        '维生素g': {
+            'en': '',
+            'value': 32
+        },
+        '维生素h': {
+            'en': '',
+            'value': 79
+        },
+        '维生素i': {
+            'en': '',
+            'value': 82
+        },
+        '维生素j': {
+            'en': '',
+            'value': 45
+        },
+        '维生素k': {
+            'en': '',
+            'value': 53
+        },
+        '维生素l': {
+            'en': '',
+            'value': 98
+        },
+        '维生素m': {
+            'en': '',
+            'value': 92
+        },
+        '维生素n': {
+            'en': '',
+            'value': 48
+        },
+        '维生素o': {
+            'en': '',
+            'value': 84
+        },
+        '维生素p': {
+            'en': '',
+            'value': 92
+        }
     }
 }
 
@@ -449,7 +455,7 @@ It will render as below:
 
 
 ### amountBile()
-this domain [0,10]
+this domain [0,10], and sum <10
 ```
 amountBile(oDom, config)
 
