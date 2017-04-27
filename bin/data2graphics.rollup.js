@@ -2903,28 +2903,61 @@ function metabolism(parent, config) {
         return 'url(#vpattern-' + color + ')';
     })
     // .attr('stroke-width', 1)
-    .attr("width", x(14500) - x(14000) - 4).attr("height", function (d) {
+    .attr("width", x(input.data[0].x[1]) - x(input.data[0].x[0]) - 4).attr("height", function (d) {
         return height - y(d.y);
     });
 
     // curve
-    var data = d3$10.range(80000).map(d3$10.randomNormal(22000, 2000));
+    // let data = d3.range(80000).map(d3.randomNormal(22000, 2000));
+
+    // var line = d3.line()
+    //     .defined(function(d) {
+    //         return d;
+    //     })
+    //     .x(function(d) {
+    //         return x((d.x0 + d.x1) / 2);
+    //     })
+    //     .y(function(d) {
+    //         return y(d.length / data.length / 2.5);
+    //     })
+    //     .curve(d3.curveBasis);
+
+
+    // var bins = d3.histogram()
+    //     .domain(x.domain())
+    //     .thresholds(x.ticks(20))
+    //     (data);
+
+
+    // g.append("path")
+    //     .datum(bins)
+    //     .attr("class", "line")
+    //     .attr('fill', 'none')
+    //     .attr('stroke-width', 2)
+    //     .attr("d", line);
+
+
+    var data = input.data.map(function (e, i) {
+        return {
+            x: (e.x[1] + e.x[0]) / 2,
+            y: e.y
+        };
+    });
+
+    console.log(data);
 
     var line = d3$10.line().defined(function (d) {
         return d;
     }).x(function (d) {
-        return x((d.x0 + d.x1) / 2);
+        return x(d.x);
     }).y(function (d) {
-        return y(d.length / data.length / 2.5);
+        return y(d.y);
     }).curve(d3$10.curveBasis);
 
-    var bins = d3$10.histogram().domain(x.domain()).thresholds(x.ticks(20))(data);
+    g.append("path").datum(data).attr('transform', 'translate(30,0)').attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
 
-    g.append("path").datum(bins).attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
-
+    // bottom color rect bar
     var bottomRectGap = [[input.data[0].x[0], input.gap[0]], [input.gap[0], input.gap[1]], [input.gap[1], input.gap[2]], [input.gap[2], input.gap[3]], [input.gap[3], input.data[input.data.length - 1].x[1]]];
-
-    console.log(bottomRectGap);
 
     g.selectAll('rect.bottomRect').data(bottomRectGap).enter().append('rect').attr('transform', 'translate(30,0)').attr('x', function (d, i) {
         return x(d[0]);
@@ -2933,7 +2966,14 @@ function metabolism(parent, config) {
     }).attr('width', function (d, i) {
         return x(d[1]) - x(d[0]);
     }).attr('height', 20).attr('fill', function (d, i) {
-        return 'seagreen';
+        var color = '#cb8d88';
+
+        i === 0 && (color = '#cb8d88');
+        i === 1 && (color = '#e4be6f');
+        i === 2 && (color = '#00ab84');
+        i === 3 && (color = '#e4be6f');
+
+        return color;
     });
 
     // console.log(d3.range(0,1,0.5))
