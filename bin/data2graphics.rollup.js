@@ -364,12 +364,30 @@ function intakeSugarDistribution(parent, config1, config2) {
 var baseConf = {
     'text': 'adad',
     'data': {
-        'XXX': 0.08,
-        '胆固醇': 0.17,
-        '饱和脂肪酸': 0.2,
-        '不饱和脂肪酸': 0.1,
-        'YYY脂肪酸': 0.05,
-        '鞘脂类': 0.4
+        'XXX': {
+            'value': 0.08,
+            'color': 'steelblue'
+        },
+        '胆固醇': {
+            'value': 0.17,
+            'color': 'steelblue'
+        },
+        '饱和脂肪酸': {
+            'value': 0.2,
+            'color': 'steelblue'
+        },
+        '不饱和脂肪酸': {
+            'value': 0.1,
+            'color': 'steelblue'
+        },
+        'YYY脂肪酸': {
+            'value': 0.05,
+            'color': 'steelblue'
+        },
+        '鞘脂类': {
+            'value': 0.4,
+            'color': 'steelblue'
+        }
     }
 };
 
@@ -2425,9 +2443,9 @@ function estimateFiber(parent, config) {
 
     function switchStrokeColor(a) {
 
-        if (a < 75) {
+        if (a < 50) {
             return '#00ab84';
-        } else if (a > 90) {
+        } else if (a > 75) {
             return '#cb8d88';
         } else {
             return '#e4be6f';
@@ -3637,10 +3655,33 @@ EstimateAntibiotics.prototype = {
 var estimateAntibiotics = new EstimateAntibiotics();
 
 Object.values = function (x) {
-    return Object.keys(x).reduce(function (y, z) {
-        return y.push(x[z]) && y;
-    }, []);
+  return Object.keys(x).reduce(function (y, z) {
+    return y.push(x[z]) && y;
+  }, []);
 };
+
+if (typeof Object.assign != 'function') {
+  Object.assign = function (target) {
+    'use strict';
+
+    if (target == null) {
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    target = Object(target);
+    for (var index = 1; index < arguments.length; index++) {
+      var source = arguments[index];
+      if (source != null) {
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+    }
+    return target;
+  };
+}
 
 exports.estimateAntibiotics = estimateAntibiotics;
 exports.intakeSugarDistribution = intakeSugarDistribution;
