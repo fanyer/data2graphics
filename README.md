@@ -142,12 +142,30 @@ intakeFiberStruct(oDom, config)
 {
     'text': 'adad',
     'data': {
-        'XXX': 0.08,
-        '胆固醇': 0.17,
-        '饱和脂肪酸': 0.2,
-        '不饱和脂肪酸': 0.1,
-        'YYY脂肪酸': 0.05,
-        '鞘脂类': 0.4
+        '哒哒哒': {
+            'value': 0.08,
+            'color': 'seagreen'
+        },
+        '胆固醇': {
+            'value': 0.17,
+            'color': 'steelblue'
+        },
+        '饱和脂肪酸': {
+            'value': 0.2,
+            'color': 'salmon'
+        },
+        '不饱和脂肪酸': {
+            'value': 0.1,
+            'color': 'steelblue'
+        },
+        '谁谁脂肪酸': {
+            'value': 0.05,
+            'color': 'steelblue'
+        },
+        '鞘脂类': {
+            'value': 0.4,
+            'color': 'steelblue'
+        }
     }
 }
 ```

@@ -364,9 +364,9 @@ function intakeSugarDistribution(parent, config1, config2) {
 var baseConf = {
     'text': 'adad',
     'data': {
-        'XXX': {
+        '哒哒哒': {
             'value': 0.08,
-            'color': 'steelblue'
+            'color': 'seagreen'
         },
         '胆固醇': {
             'value': 0.17,
@@ -374,13 +374,13 @@ var baseConf = {
         },
         '饱和脂肪酸': {
             'value': 0.2,
-            'color': 'steelblue'
+            'color': 'salmon'
         },
         '不饱和脂肪酸': {
             'value': 0.1,
             'color': 'steelblue'
         },
-        'YYY脂肪酸': {
+        '谁谁脂肪酸': {
             'value': 0.05,
             'color': 'steelblue'
         },
@@ -406,14 +406,25 @@ function intakeFiberStruct(parrent, config) {
         min = 110,
         d = (max - min) / 4;
 
-    var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
-
     var labels = Object.keys(input.data);
     labels.sort(function (a, b) {
-        return input.data[a] - input.data[b];
+        return input.data[a].value - input.data[b].value;
     });
 
-    var data = Object.values(input.data);
+    var data = Object.values(input.data).map(function (e, i) {
+        return e;
+    });
+    data.sort(function (a, b) {
+        return a.value - b.value;
+    });
+
+    var values = data.map(function (e, i) {
+        return e.value;
+    });
+    // console.log(data)
+    var colors = data.map(function (e, i) {
+        return e.color;
+    });
 
     // detect browser canvas api
     if (!parrent.querySelector("canvas")) {
@@ -483,10 +494,10 @@ function intakeFiberStruct(parrent, config) {
     // draw arcs
     context.save();
 
-    var arcs = d3$1.pie()(data);
+    var arcs = d3$1.pie()(values);
 
     arcs.sort(function (a, b) {
-        return a.value - b.value;
+        return a - b;
     });
 
     var arc = d3$1.arc().innerRadius(min).context(context);
@@ -496,13 +507,14 @@ function intakeFiberStruct(parrent, config) {
 
         context.beginPath();
 
-        if (E.data < 0.75) {
-            context.strokeStyle = '#00ab84';
-        } else if (E.data > 0.9) {
-            context.strokeStyle = 'salmon';
-        } else {
-            context.strokeStyle = 'orange';
-        }
+        // if (E.data < 0.75) {
+        //     context.strokeStyle = '#00ab84'
+        // } else if (E.data > 0.9) {
+        //     context.strokeStyle = 'salmon'
+        // } else {
+        //     context.strokeStyle = 'orange'
+        // }
+        context.strokeStyle = colors[I];
 
         d3$1.range(min, min + 210 - 0 * 30, 10).map(function (e, i) {
             arc.outerRadius(e)(E);
@@ -549,8 +561,16 @@ function intakeFiberStruct(parrent, config) {
         line(lengendsXY);
         context.stroke();
 
-        context.direction = lengendsXY[1][0] > 0 ? 'ltr' : 'rtl';
-        context.fillText(labels[i], lengendsXY[1][0], lengendsXY[1][1]);
+        // context.direction = lengendsXY[1][0] > 0 ? 'ltr' : 'rtl'
+        var text = labels[i];
+
+        if (lengendsXY[1][0] >= 0) {
+            context.fillText(text, lengendsXY[1][0], lengendsXY[1][1]);
+        } else {
+            console.log(text, text.length);
+            // console.log(lengendsXY[1][0])
+            context.fillText(text, lengendsXY[1][0] - text.length * 24, lengendsXY[1][1]);
+        }
     });
 
     context.restore();
@@ -2943,8 +2963,6 @@ function metabolism(parent, config) {
             y: e.y
         };
     });
-
-    console.log(data);
 
     var line = d3$10.line().defined(function (d) {
         return d;
