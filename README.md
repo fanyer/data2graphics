@@ -514,7 +514,7 @@ lineRect3(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/line-rect3.png" width='600'>
+<img src="./docs/line-rect3.png" width='80'>
 
 ### lineRect5()
 this domain [0,1]
@@ -532,7 +532,7 @@ lineRect3(oDom, config)
 ```
 It will render as below:
 
-<img src="./docs/line-rect5.png" width='600'>
+<img src="./docs/line-rect5.png" width='80'>
 
 ### metabolism()      
 -------for the Professional
@@ -545,6 +545,21 @@ metabolism(oDom, config)
 {
     "gap":[15500,18000,22000,25000],
     "axisFontSize":24,
+    'indicator': {
+        'value': 16000,
+        'text': {
+            'cn': '检测值',
+            'en': 'adad',
+            'color':'salmon'
+        }
+    },
+    'average': {
+        'value': 22000,
+        'text': {
+            'cn': '均值',
+            'en': 'adad'
+        }
+    },
     "data": [{
         "x": [
             14000,
