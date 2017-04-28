@@ -1674,14 +1674,13 @@ function vBezeireArr(Arr, factor) {
 var curveGraphConfig = {
     'standard': {
         'min': -25,
-        '过低': -20,
-        '偏低': -10,
-        '正常': 0,
-        '偏高': 10,
-        '过高': 20,
+        '过低': [-20, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6],
+        '偏低': [-12, -10, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6],
+        '正常': [0, 8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6],
+        '偏高': [5, 0, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6],
+        '过高': [20, 4, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6],
         'max': 25
     },
-
     'data': {
         '维生素A': 16,
         '维生素B1': 19,
@@ -2012,13 +2011,13 @@ function curveGraph(parent, config) {
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', '500');
-    svg.setAttribute('height', '1500');
+    svg.setAttribute('height', '1700');
     parent.append(svg);
 
     var margin = {
-        top: 50,
+        top: 150,
         right: 40,
-        bottom: 50,
+        bottom: 150,
         left: 200
     };
 
@@ -2030,6 +2029,17 @@ function curveGraph(parent, config) {
     var formatNumber = d3$5.format('.2f');
 
     var filter = svg.append("defs").append("filter").attr("id", "blur").append("feGaussianBlur").attr("stdDeviation", 1);
+
+    // value mapping
+    var pointCurve = d3$5.scaleLinear().domain([-25, 25]).range([0.5, 5.5]);
+
+    var line = d3$5.line().defined(function (d) {
+        return d;
+    }).x(function (d) {
+        return x(d.x);
+    }).y(function (d) {
+        return y(d.y);
+    }).curve(d3$5.curveBasis);
 
     // define basic location Axis
     var x = d3$5.scaleLinear().domain([1 - 0.5, 5 + 0.5]).range([0, width]);
@@ -2079,20 +2089,48 @@ function curveGraph(parent, config) {
 
         var colors = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
         var texts = Object.keys(input.standard).slice(1, 6);
+
+        var startArr = [-20, -10, 0, 10, 20];
+
         colors.map(function (e, i) {
-            standardLine(g, e, standardValues[i], texts[i]);
+
+            // 5 standad curve
+            var lineData = [];
+
+            standardValues[i].map(function (e, i) {
+                lineData.push({
+                    x: pointCurve(e),
+                    y: i
+                });
+            });
+
+            lineData.unshift({
+                x: pointCurve(startArr[i]),
+                y: -1
+            });
+
+            lineData.push({
+                x: pointCurve(startArr[i]),
+                y: 16
+            });
+            // standardLine(g, e, standardValues[i], texts[i])
+            generalStandardLine(g, vBezeireArr(lineData, 1 / 4), e, texts[i], startArr[i]);
         });
     }
 
-    function standardLine(g, color, pos, text) {
-        console.log(gTickX(pos));
-        var tickX = g.append('g').attr('class', 'tickX').attr('transform', 'translate(' + gTickX(pos) + ',0)').attr('opacity', 1);
+    function generalStandardLine(g, arr) {
+        var color = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'seagreen';
+        var text = arguments[3];
+        var pos = arguments[4];
 
-        tickX.append('line').attr('stroke', color).attr('stroke-width', 2).attr('x1', 0.5).attr('x2', 0.5).attr('y2', 1400);
+        // console.log(line)
+        var gStandard = g.append('g').attr('class', 'gStandard');
 
-        tickX.append('text').attr('fill', color).attr('x', 0).attr('y', -3).attr('dy', -4).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
+        gStandard.selectAll('.generalStandardLine').data(arr).enter().append('path').attr("class", "generalStandardLine").style("stroke", color).attr("stroke-width", 3).attr("fill", "none").attr('d', line);
 
-        tickX.append('text').attr('fill', color).attr('x', 0).attr('y', 1400).attr('dy', 24).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
+        gStandard.append('text').attr('fill', color).attr('x', gTickX(pos)).attr('y', -50).attr('dy', -4).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
+
+        gStandard.append('text').attr('fill', color).attr('x', gTickX(pos)).attr('y', 1450).attr('dy', 24).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
     }
 
     function customYAxis(g) {
@@ -2105,17 +2143,6 @@ function curveGraph(parent, config) {
         g.selectAll('.tick:last-child line').attr('stroke', '#00ab84').attr('stroke-width', '1').attr('opacity', '0.6');
     }
 
-    var line = d3$5.line().defined(function (d) {
-        return d;
-    }).x(function (d) {
-        return x(d.x);
-    }).y(function (d) {
-        return y(d.y);
-    }).curve(d3$5.curveBasis);
-
-    // value mapping
-    var pointCurve = d3$5.scaleLinear().domain([-25, 25]).range([0.5, 5.5]);
-
     var lineData = [];
 
     data.map(function (e, i) {
@@ -2127,12 +2154,12 @@ function curveGraph(parent, config) {
 
     lineData.unshift({
         x: pointCurve(data[0]),
-        y: -0.5
+        y: -1
     });
 
     lineData.push({
         x: pointCurve(data[15]),
-        y: 15.5
+        y: 16
     });
 
     var lineDataBezeire = vBezeireArr(lineData, 1 / 4);
@@ -3144,8 +3171,8 @@ var lineRect3Config = [0.22, 0.5];
 
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
-var vLineRect5Config = [0.2, 0.6, 0.6, 0.9];
-var vLineRect3Config = [0.2, 0.6, 0.6, 0.9];
+var vLineRect5Config = [0.2, 0.3, 0.6, 0.9];
+var vLineRect3Config = [0.6, 0.9];
 
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
