@@ -290,6 +290,12 @@ It will render as below:
 
 <img src="./docs/intake-fat-proportion.png" width='500'>
 
+When text exists
+
+It will render as below:
+
+<img src="./docs/intake-fat-proportion4.png" width='500'>
+
 
 ### intakeFatDeviation()
 ```
