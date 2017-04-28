@@ -533,6 +533,23 @@ lineRect3(oDom, config)
 It will render as below:
 
 <img src="./docs/line-rect5.png" width='80'>
+### vLineRect5()
+this domain [0,1]
+```
+vLineRect5(oDom, config)
+
+//config example
+ [
+    0.1,
+    0.3,
+    0.5,
+    0.9
+]
+
+```
+It will render as below:
+
+<img src="./docs/v-line-rect5.png" width='500'>
 
 ### metabolism()      
 -------for the Professional

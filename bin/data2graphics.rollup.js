@@ -2594,6 +2594,7 @@ function estimateFiber(parent, config) {
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
 /*salmon   #cb8d88*/
+var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
 var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
@@ -2663,6 +2664,25 @@ function vPattern3(svg) {
     ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
+        return color;
+    });
+
+    return ptn;
+}
+
+// for vLineRect
+function vPattern4(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
+    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
+    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = colors5[0];
+
+        i < inter[0] && (color = colors5[0]) || i < inter[1] && (color = colors5[1]) || i < inter[2] && (color = colors5[2]) || i < inter[3] && (color = colors5[3]);
+
         return color;
     });
 
@@ -2926,7 +2946,7 @@ var baseConf$4 = {
 /*orange   #e4be6f*/
 /*salmon   #cb8d88*/
 
-var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+var colors5$1 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
 var d3$10 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-array'), require('d3-random'), require('d3-axis'), require('d3-scale'));
 
@@ -3078,35 +3098,35 @@ function metabolism(parent, config) {
         return color;
     });
     // average
-    legend('average', input.average, g, 40);
+    legend('average', input.average, g, 40, true, 'steelblue');
 
     // indicators
-    // 
     if (x(input.indicator.value) - x(input.average.value) < 0) {
         legend('indicator', input.indicator, g, 0, false);
     } else {
-        legend('indicator', input.indicator, g, 0);
+        legend('indicator', input.indicator, g, 0, true);
     }
 
     function legend(type, obj, g) {
         var bias = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
         var onOff = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+        var meanColor = arguments[5];
 
         var oLegend = g.append('g').attr('transform', 'translate(' + (30 + x(obj.value)) + ',0)');
 
         var color = '#cb8d88';
 
-        obj.value < input.gap[0] && (color = colors5[0]) || obj.value < input.gap[1] && (color = colors5[1]) || obj.value < input.gap[2] && (color = colors5[2]) || obj.value < input.gap[3] && (color = colors5[3]) || obj.value < input.gap[4] && (color = colors5[4]);
+        obj.value < input.gap[0] && (color = colors5$1[0]) || obj.value < input.gap[1] && (color = colors5$1[1]) || obj.value < input.gap[2] && (color = colors5$1[2]) || obj.value < input.gap[3] && (color = colors5$1[3]) || obj.value < input.gap[4] && (color = colors5$1[4]);
 
         oLegend.append('rect').attr('x', 0).attr('y', 0 - bias).attr('width', 3).attr('height', 600 + bias).attr('fill', function () {
-            return color;
+            return meanColor ? meanColor : color;
         });
         oLegend.append('text').attr('text-anchor', function () {
             return onOff ? 'start' : 'end';
         }).attr('x', function () {
             return onOff ? 4 : -4;
         }).attr('y', 0 - bias).attr('font-family', 'adad').attr('font-size', 24).style('fill', function () {
-            return color;
+            return meanColor ? meanColor : color;
         }).text(obj.text.cn);
     }
 
@@ -3118,9 +3138,11 @@ function metabolism(parent, config) {
     
 }
 
-var lineRect3Config = [0.1, 0.8];
+var lineRect3Config = [0.22, 0.5];
 
-var lineRect5Config = [0.2, 0.3, 0.5, 0.9];
+var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
+
+var vLineRect5Config = [0.2, 0.4, 0.6, 0.9];
 
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
@@ -3130,7 +3152,7 @@ var lineRect5Config = [0.2, 0.3, 0.5, 0.9];
 
 var colors3 = ['#cb8d88', '#e4be6f', '#00ab84'];
 // const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
-var colors5$1 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+var colors5$2 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
 var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
 
@@ -3184,7 +3206,7 @@ function lineRect5(parent, config) {
         return toValue(e);
     });
 
-    var input2 = colors5$1.map(function (e, i) {
+    var input2 = colors5$2.map(function (e, i) {
         if (i === 4) {
             return 1 - input[i - 1];
         } else if (i === 0) {
@@ -3230,6 +3252,32 @@ function lineRect5(parent, config) {
 
     singleRect(svg, '#00ab84', y(2), heightFn(input2[2]));
     svg.attr('height', sum(accumulate, 5));
+}
+
+function vLineRect5(parent, config) {
+
+    var input = config || vLineRect5Config;
+
+    var input2 = input.map(function (e, i) {
+        return e * 100;
+    });
+
+    detectSVG(parent);
+
+    var svg = d3$11.select('#' + parent.id + ' svg'),
+        margin = { top: 10, right: 10, bottom: 10, left: 10 };
+
+    svg.attr('width', 500);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var formatNumber = d3$11.format('.2%');
+
+    vPattern4(svg, input2);
+
+    g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5)');
 }
 
 function singleRect(svg, color, y, height) {
@@ -3997,6 +4045,7 @@ exports.amountBile = amountBile;
 exports.metabolism = metabolism;
 exports.lineRect3 = lineRect3;
 exports.lineRect5 = lineRect5;
+exports.vLineRect5 = vLineRect5;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
