@@ -504,9 +504,12 @@ It will render as below:
 ```
 metabolism(oDom, config)
 
+//if axisFontSize doesn't exist, default is 22
+
 //config example
 {
- "gap":[15500,18000,22000,25000],
+    "gap":[15500,18000,22000,25000],
+    "axisFontSize":24,
     "data": [{
         "x": [
             14000,

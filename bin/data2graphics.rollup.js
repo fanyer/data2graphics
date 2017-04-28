@@ -2939,12 +2939,22 @@ function metabolism(parent, config) {
 
     function customXAxis(g) {
         g.call(xAxis);
-        g.selectAll('.tick text').attr('x', 4).attr('dy', 24).attr('font-size', 22);
+        g.selectAll('.tick text').attr('font-family', 'adad').attr('x', 4).attr('dy', 24).attr('font-size', function () {
+            if (input.axisFontSize) {
+                return input.axisFontSize;
+            }
+            return 22;
+        });
     }
 
     function customYAxis(g) {
         g.call(yAxis);
-        g.selectAll('.tick text').attr('x', -24).attr('dy', 4).attr('font-size', 22);
+        g.selectAll('.tick text').attr('font-family', 'adad').attr('x', -24).attr('dy', 4).attr('font-size', function () {
+            if (input.axisFontSize) {
+                return input.axisFontSize;
+            }
+            return 22;
+        });
     }
 
     var bar = g.selectAll(".bar").data(input.data).enter().append("g").attr("class", "bar").attr("transform", function (d) {
