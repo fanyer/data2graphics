@@ -909,7 +909,9 @@ function scoreLevel() {
 
 var intakeFatProportionConfig = {
     'sature': 42,
-    'unsature': 58
+    'unsature': 58,
+    'text': 'adad'
+
 };
 
 var intakeFatDeviationConfig = {
@@ -1180,7 +1182,7 @@ function intakeFatProportion(parrent, config) {
 
     var input = config || intakeFatProportionConfig;
 
-    var data = Object.values(input);
+    var data = Object.values(input.data);
 
     var vsTmp = data[1] / data[0];
     // let vs = (vsTmp >= 1 ? vsTmp : 1 / vsTmp);
@@ -1487,7 +1489,11 @@ function intakeFatProportion(parrent, config) {
 
     context.fillStyle = 'black';
     context.font = '144px adad';
-    context.fillText(data[0] + ':' + data[1], 0, 0);
+    if (input.text) {
+        context.fillText(input.text, 0, 0);
+    } else {
+        context.fillText(data[0] + ':' + data[1], 0, 0);
+    }
     context.restore();
 }
 
@@ -2072,8 +2078,7 @@ function curveGraph(parent, config) {
         // cloneSelection(g, text, 1)
 
         var colors = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
-        var texts = ['过低', '偏低', '正常', '偏高', '过高'];
-
+        var texts = Object.keys(input.standard).slice(1, 6);
         colors.map(function (e, i) {
             standardLine(g, e, standardValues[i], texts[i]);
         });
@@ -2446,9 +2451,9 @@ function estimateFiber(parent, config) {
     context.textBaseline = "hanging";
     context.textAlign = "center";
 
-    context.fillStyle = colors[2];
+    context.fillStyle = "#00ab84";
     context.font = "24px adad";
-    context.fillText(input.text, 0, 0);
+    context.fillText(input.text, 0, -10);
     context.restore();
 
     // circles layers

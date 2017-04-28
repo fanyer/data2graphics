@@ -255,9 +255,14 @@ intakeFatProportion(oDom, config)
 
 //config example
 {
-  'sature': 42,
-  'unsature': 58
+    'data': {
+        'sature': 42,
+        'unsature': 58
+    },
+    'text': 'adad'
 }
+
+//if text exists, it'll render text, otherwise it'll render the proportion.
 
 ```
 
