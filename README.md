@@ -519,7 +519,7 @@ It will render as below:
 ### lineRect5()
 this domain [0,1]
 ```
-lineRect3(oDom, config)
+lineRect5(oDom, config)
 
 //config example
  [
@@ -550,6 +550,22 @@ vLineRect5(oDom, config)
 It will render as below:
 
 <img src="./docs/v-line-rect5.png" width='500'>
+
+### vLineRect3()
+this domain [0,1]
+```
+vLineRect3(oDom, config)
+
+//config example
+ [
+    0.2,
+    0.9
+]
+
+```
+It will render as below:
+
+<img src="./docs/v-line-rect3.png" width='500'>
 
 ### metabolism()      
 -------for the Professional

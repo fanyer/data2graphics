@@ -2838,7 +2838,7 @@ var baseConf$4 = {
     // "mean": 0,
     "gap": [15500, 18000, 22000, 25000],
     'indicator': {
-        'value': 22100,
+        'value': 21900,
         'text': {
             'cn': '检测值',
             'en': 'adad'
@@ -3100,6 +3100,8 @@ function metabolism(parent, config) {
     // average
     legend('average', input.average, g, 40, true, 'steelblue');
 
+    // let three=[]
+
     // indicators
     if (x(input.indicator.value) - x(input.average.value) < 0) {
         legend('indicator', input.indicator, g, 0, false);
@@ -3142,7 +3144,8 @@ var lineRect3Config = [0.22, 0.5];
 
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
-var vLineRect5Config = [0.2, 0.4, 0.6, 0.9];
+var vLineRect5Config = [0.2, 0.6, 0.6, 0.9];
+var vLineRect3Config = [0.2, 0.6, 0.6, 0.9];
 
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
@@ -3278,6 +3281,12 @@ function vLineRect5(parent, config) {
     vPattern4(svg, input2);
 
     g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5)');
+}
+
+function vLineRect3(parent, config) {
+    var input = config || vLineRect3Config;
+
+    vLineRect5(parent, [0, 0].concat(toConsumableArray(input)));
 }
 
 function singleRect(svg, color, y, height) {
@@ -4046,6 +4055,7 @@ exports.metabolism = metabolism;
 exports.lineRect3 = lineRect3;
 exports.lineRect5 = lineRect5;
 exports.vLineRect5 = vLineRect5;
+exports.vLineRect3 = vLineRect3;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
