@@ -381,6 +381,7 @@ It will render as below:
 
 
 ### estimateFiber()
+this domain [0,100]
 ```
 estimateFiber(oDom, config)
 
@@ -498,6 +499,40 @@ amountBile(oDom, config)
 It will render as below:
 
 <img src="./docs/amount-bile.png" width='600'>
+
+### lineRect3()
+this domain [0,1]
+```
+lineRect3(oDom, config)
+
+//config example
+ [
+    0.5,
+    0.8
+]
+
+```
+It will render as below:
+
+<img src="./docs/line-rect3.png" width='600'>
+
+### lineRect5()
+this domain [0,1]
+```
+lineRect3(oDom, config)
+
+//config example
+ [
+    0.1,
+    0.3,
+    0.5,
+    0.9
+]
+
+```
+It will render as below:
+
+<img src="./docs/line-rect5.png" width='600'>
 
 ### metabolism()      
 -------for the Professional

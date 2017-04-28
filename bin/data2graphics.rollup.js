@@ -2642,7 +2642,26 @@ function vPattern2(svg) {
     ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 2);
 
     ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
-        return d * width + 1;
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        return color;
+    });
+
+    return ptn;
+}
+
+//for the lineRect
+function vPattern3(svg) {
+    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 40;
+    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 27;
+    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-' + color).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1');
+
+    ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 1);
+
+    ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
+        return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
         return color;
     });
@@ -2798,6 +2817,21 @@ var baseConf$4 = {
     // "deviation": 1,
     // "mean": 0,
     "gap": [15500, 18000, 22000, 25000],
+    'indicator': {
+        'value': 16000,
+        'text': {
+            'cn': '检测值',
+            'en': 'adad'
+        }
+    },
+    'average': {
+        'value': 22000,
+        'text': {
+            'cn': '均值',
+            'en': 'adad'
+        }
+    },
+    "axisFontSize": 24,
     "data": [{
         "x": [14000, 14500],
         "y": 0.0025
@@ -2891,6 +2925,8 @@ var baseConf$4 = {
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
 /*salmon   #cb8d88*/
+
+var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
 var d3$10 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-array'), require('d3-random'), require('d3-axis'), require('d3-scale'));
 
@@ -3042,8 +3078,31 @@ function metabolism(parent, config) {
         return color;
     });
 
-    // console.log(d3.range(0,1,0.5))
+    // indicators
+    legend('indicator', input.indicator, g);
+    // average
+    legend('average', input.average, g);
 
+    function legend(type, obj, g) {
+        var oLegend = g.append('g').attr('transform', 'translate(' + (30 + x(obj.value)) + ',0)');
+
+        var color = '#cb8d88';
+
+        obj.value < input.gap[1] && (color = colors5[1]) || obj.value < input.gap[2] && (color = colors5[2]) || obj.value < input.gap[3] && (color = colors5[3]) || obj.value < input.gap[4] && (color = colors5[4]);
+
+        oLegend.append('rect').attr('x', 0).attr('y', 0).attr('width', 3).attr('height', 600).attr('fill', function () {
+            return color;
+        });
+        oLegend.append('text').attr('text-anchor', function () {
+            if (obj.value < input.gap[2]) {
+                return 'start';
+            } else {
+                return 'start';
+            }
+        }).attr('x', 4).attr('y', 0).attr('font-family', 'adad').attr('font-size', 24).style('fill', function () {
+            return color;
+        }).text(obj.text.cn);
+    }
 
     // from http://bl.ocks.org/mbostock/4349187
     // Sample from a normal distribution with mean 0, stddev 1.
@@ -3051,6 +3110,128 @@ function metabolism(parent, config) {
 
     // color bar
     
+}
+
+var lineRect3Config = [0.5, 0.8];
+
+var lineRect5Config = [0.1, 0.3, 0.5, 0.9];
+
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+
+// color in this file should be hex
+
+var colors3 = ['#cb8d88', '#e4be6f', '#00ab84'];
+// const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
+var colors5$1 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+
+var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
+
+function lineRect3(parent, config) {
+
+    var input = config || lineRect3Config;
+
+    input = [input[0], input[1] - input[0], 1 - input[1]];
+
+    detectSVG(parent);
+
+    var svg = d3$11.select('#' + parent.id + ' svg'),
+        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+
+    svg.attr('width', 50);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var formatNumber = d3$11.format('.2%');
+
+    vPattern3(svg, 10, 50, '#cb8d88');
+    vPattern3(svg, 10, 50, '#e4be6f');
+    vPattern3(svg, 10, 50, '#00ab84');
+
+    var accumulate = input.map(function (e, i) {
+        return toValue(e) * 400;
+    });
+
+    // console.log(sum(accumulate,3))
+    // console.log(accumulate)
+
+    colors3.map(function (e, i) {
+        var y = sum(accumulate, 2 - i);
+        var height = toValue(input[2 - i]) * 400;
+        singleRect(svg, e, y, height);
+    });
+
+    svg.attr('height', sum(accumulate, 3));
+}
+
+function lineRect5(parent, config) {
+    var input = config || lineRect5Config;
+
+    var input2 = colors5$1.map(function (e, i) {
+        if (i === 4) {
+            return 1 - input[i - 1];
+        } else if (i === 0) {
+            return input[i];
+        } else {
+            return input[i] - input[i - 1];
+        }
+    });
+
+    detectSVG(parent);
+
+    var svg = d3$11.select('#' + parent.id + ' svg'),
+        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+
+    svg.attr('width', 50);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var formatNumber = d3$11.format('.2%');
+
+    vPattern3(svg, 10, 50, '#cb8d88');
+    vPattern3(svg, 10, 50, '#e4be6f');
+    vPattern3(svg, 10, 50, '#00ab84');
+
+    var accumulate = input2.map(function (e, i) {
+        return toValue(e) * 400;
+    });
+
+    var heightFn = function heightFn(a) {
+        return toValue(a) * 400;
+    };
+    var y = function y(i) {
+        return sum(accumulate, i);
+    };
+
+    singleRect(svg, '#cb8d88', y(0), heightFn(input2[0]));
+    singleRect(svg, '#e4be6f', y(1), heightFn(input2[1]));
+
+    singleRect(svg, '#cb8d88', y(4), heightFn(input2[4]));
+    singleRect(svg, '#e4be6f', y(3), heightFn(input2[3]));
+
+    singleRect(svg, '#00ab84', y(2), heightFn(input2[2]));
+    svg.attr('height', sum(accumulate, 5));
+}
+
+function singleRect(svg, color, y, height) {
+    svg.append('rect').attr('fill', function () {
+        return 'url(#vpattern-' + color + ')';
+    }).attr('x', 0).attr('y', y).attr('width', 50).attr('height', height).attr('stroke', color);
+}
+
+function toValue(a) {
+    return a * 0.96 + 0.02;
+}
+
+function sum(arr, i) {
+    return arr.slice(0, i).reduce(function (accumulate, current) {
+        return accumulate + current;
+    }, 0);
 }
 
 // this will decrease flexible
@@ -3369,7 +3550,7 @@ SQL.prototype = {
 /*orange   #e4be6f*/
 /*salmon   #cb8d88*/
 
-var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
+var d3$12 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-scale'));
 
 function EstimateAntibiotics() {
     this.type = 'EstimateAntibiotics';
@@ -3387,7 +3568,7 @@ function init(parent, config) {
 
     detectSVG(parent);
 
-    var svg = d3$11.select('#' + parent.id + ' svg'),
+    var svg = d3$12.select('#' + parent.id + ' svg'),
         margin = { top: 50, right: 600, bottom: 50, left: 630 };
 
     svg.attr('width', 2700).attr('height', 1200);
@@ -3692,7 +3873,7 @@ function init(parent, config) {
 
         // rank tag
         var rankAlign = x < 1000 ? 600 : -350;
-        gTag.append('text').text('人群排名: ' + d3$11.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
+        gTag.append('text').text('人群排名: ' + d3$12.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
 
         var rankRectAlign = x < 1000 ? 580 : -150;
 
@@ -3800,6 +3981,8 @@ exports.linkGraph = linkGraph;
 exports.estimateFiber = estimateFiber;
 exports.amountBile = amountBile;
 exports.metabolism = metabolism;
+exports.lineRect3 = lineRect3;
+exports.lineRect5 = lineRect5;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
