@@ -2818,7 +2818,7 @@ var baseConf$4 = {
     // "mean": 0,
     "gap": [15500, 18000, 22000, 25000],
     'indicator': {
-        'value': 16000,
+        'value': 18500,
         'text': {
             'cn': '检测值',
             'en': 'adad'
@@ -2936,7 +2936,7 @@ function metabolism(parent, config) {
     detectSVG(parent);
 
     var svg = d3$10.select('#' + parent.id + ' svg'),
-        margin = { top: 50, right: 60, bottom: 150, left: 130 };
+        margin = { top: 100, right: 60, bottom: 150, left: 130 };
 
     svg.attr('width', 1000).attr('height', 800);
 
@@ -2971,9 +2971,9 @@ function metabolism(parent, config) {
         return d;
     });
 
-    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(30,' + (height + 70) + ')').call(customXAxis);
+    g.append('g').attr('class', 'axis axis--x').attr('transform', 'translate(30,' + (height + 110) + ')').call(customXAxis);
 
-    g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,0)').call(customYAxis);
+    g.append('g').attr('class', 'axis axis--y').attr('transform', 'translate(0,50)').call(customYAxis);
 
     function customXAxis(g) {
         g.call(xAxis);
@@ -2996,7 +2996,7 @@ function metabolism(parent, config) {
     }
 
     var bar = g.selectAll(".bar").data(input.data).enter().append("g").attr("class", "bar").attr("transform", function (d) {
-        return "translate(" + (x(d.x[0]) - 70) + "," + y(d.y) + ")";
+        return "translate(" + (x(d.x[0]) - 70) + "," + (y(d.y) + 50) + ")";
     });
 
     bar.append("rect").attr("x", 100).attr('fill', function (e, i) {
@@ -3056,7 +3056,7 @@ function metabolism(parent, config) {
         return y(d.y);
     }).curve(d3$10.curveBasis);
 
-    g.append("path").datum(data).attr('transform', 'translate(30,0)').attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
+    g.append("path").datum(data).attr('transform', 'translate(30,50)').attr("class", "line").attr('fill', 'none').attr('stroke-width', 2).attr("d", line);
 
     // bottom color rect bar
     var bottomRectGap = [[input.data[0].x[0], input.gap[0]], [input.gap[0], input.gap[1]], [input.gap[1], input.gap[2]], [input.gap[2], input.gap[3]], [input.gap[3], input.data[input.data.length - 1].x[1]]];
@@ -3077,29 +3077,36 @@ function metabolism(parent, config) {
 
         return color;
     });
+    // average
+    legend('average', input.average, g, 40);
 
     // indicators
-    legend('indicator', input.indicator, g);
-    // average
-    legend('average', input.average, g);
+    // 
+    console.log(x(input.indicator.value) - x(input.average.value));
+    if (x(input.indicator.value) - x(input.average.value) < -10) {
+        legend('indicator', input.indicator, g, 0, false);
+    } else {
+        legend('indicator', input.indicator, g, 0);
+    }
 
     function legend(type, obj, g) {
+        var bias = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+        var onOff = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+
         var oLegend = g.append('g').attr('transform', 'translate(' + (30 + x(obj.value)) + ',0)');
 
         var color = '#cb8d88';
 
-        obj.value < input.gap[1] && (color = colors5[1]) || obj.value < input.gap[2] && (color = colors5[2]) || obj.value < input.gap[3] && (color = colors5[3]) || obj.value < input.gap[4] && (color = colors5[4]);
+        obj.value < input.gap[0] && (color = colors5[0]) || obj.value < input.gap[1] && (color = colors5[1]) || obj.value < input.gap[2] && (color = colors5[2]) || obj.value < input.gap[3] && (color = colors5[3]) || obj.value < input.gap[4] && (color = colors5[4]);
 
-        oLegend.append('rect').attr('x', 0).attr('y', 0).attr('width', 3).attr('height', 600).attr('fill', function () {
+        oLegend.append('rect').attr('x', 0).attr('y', 0 - bias).attr('width', 3).attr('height', 600 + bias).attr('fill', function () {
             return color;
         });
         oLegend.append('text').attr('text-anchor', function () {
-            if (obj.value < input.gap[2]) {
-                return 'start';
-            } else {
-                return 'start';
-            }
-        }).attr('x', 4).attr('y', 0).attr('font-family', 'adad').attr('font-size', 24).style('fill', function () {
+            return onOff ? 'start' : 'end';
+        }).attr('x', function () {
+            return onOff ? 4 : -4;
+        }).attr('y', 0 - bias).attr('font-family', 'adad').attr('font-size', 24).style('fill', function () {
             return color;
         }).text(obj.text.cn);
     }
@@ -3112,7 +3119,7 @@ function metabolism(parent, config) {
     
 }
 
-var lineRect3Config = [0.5, 0.8];
+var lineRect3Config = [0, 0.99];
 
 var lineRect5Config = [0.1, 0.3, 0.5, 0.9];
 
