@@ -684,7 +684,6 @@ function scoreLevel() {
 
     var max = 350;
     var min = 150;
-    var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
     var labels = Object.keys(input.data);
     var values = Object.values(input.data).map(function (e, i) {
@@ -730,19 +729,26 @@ function scoreLevel() {
 
     // circles layers
     context.save();
+    var colors = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
     // context.rotate(-Math.PI / 10)
 
-    var radius = [];
-    radius.push(d3$2.range(150, 200, 10));
-    radius.push(d3$2.range(200, 250 + 10, 10));
-    radius.push(d3$2.range(250, 300 + 10, 10));
-    radius.push(d3$2.range(300, 350 + 10, 10));
+    var radiusLayer = [];
+    var d = 4.2;
+    radiusLayer.push(d3$2.range(150, 150 + 4 * d, d));
+    radiusLayer.push(d3$2.range(150 + 5 * d, 150 + 5 * d + 7 * d, d));
+    radiusLayer.push(d3$2.range(150 + 13 * d, 150 + 13 * d + 21 * d, d));
+    radiusLayer.push(d3$2.range(150 + 35 * d, 150 + 35 * d + 7 * d, d));
+    radiusLayer.push(d3$2.range(150 + 43 * d, 150 + 43 * d + 5 * d, d));
+
+    var radiusLayerSolid = [150, 150 + 4 * d, 150 + 12 * d, 150 + 34 * d, 150 + 42 * d, 150 + 48 * d];
 
     context.globalAlpha = 0.3;
-    radius.forEach(function (e, i) {
+    radiusLayer.forEach(function (e, i) {
         context.strokeStyle = colors[i];
-        radius[i].forEach(function (e2, i2) {
-            i2 > 4 || i2 < 1 ? context.setLineDash([10, 0]) : context.setLineDash([2, 4]);
+        radiusLayer[i].forEach(function (e2, i2) {
+            // i2 > 4 || i2 < 1 ?
+            // context.setLineDash([10, 0]) :
+            context.setLineDash([4, 4]);
 
             var arc = d3$2.arc().outerRadius(e2).innerRadius(0).startAngle(0)
             // .padAngel(1)
@@ -753,6 +759,23 @@ function scoreLevel() {
 
             context.stroke();
         });
+    });
+
+    context.globalAlpha = 1;
+
+    radiusLayerSolid.forEach(function (e, i) {
+        context.strokeStyle = colors[i];
+
+        context.setLineDash([10, 0]);
+
+        var arc = d3$2.arc().outerRadius(e).innerRadius(0).startAngle(0)
+        // .padAngel(1)
+        .endAngle(Math.PI * 2).context(context);
+
+        context.beginPath();
+        arc();
+
+        context.stroke();
     });
     // context.rotate(Math.PI/7)
     context.restore();
@@ -1645,7 +1668,7 @@ function vBezeireArr(Arr, factor) {
 var curveGraphConfig = {
     'standard': {
         'min': -25,
-        '过低': -12,
+        '过低': -20,
         '偏低': -10,
         '正常': 0,
         '偏高': 10,
@@ -1977,6 +2000,8 @@ function curveGraph(parent, config) {
     var labels = Object.keys(input.data);
     var data = Object.values(input.data);
 
+    var standardValues = Object.values(input.standard).slice(1, 6);
+
     // detect svg or canvas
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(svgNS, 'svg');
@@ -2014,16 +2039,21 @@ function curveGraph(parent, config) {
         return labels[i];
     });
 
+    var gTickX = d3$5.scaleLinear().domain([-25, 25]).range([0, 260]);
+
     g.append('g').attr('class', 'axis axis--x')
     // .attr('transform', 'translate(0,0)')
     .call(customXAxis);
 
     g.append('g').attr('class', 'axis axis--y').call(customYAxis);
 
+    //  for shisan's self customed standard line    2017.4.26  fanyer
+
+
     function customXAxis(g) {
         g.call(xAxis);
         g.select('.domain').remove();
-        // g.selectAll('.tick').remove();
+        g.selectAll('.tick').remove();
         // g.selectAll('.tick:not(:first-of-type) line').attr('stroke', '#fff');
         // text color
         g.selectAll('.tick text').attr('x', 0).attr('dy', -4);
@@ -2039,23 +2069,24 @@ function curveGraph(parent, config) {
         g.selectAll('.tick:nth-child(2n) line').attr('stroke-width', '2').attr('stroke', '#e4be6f');
         g.selectAll('.tick:nth-child(3) line').attr('stroke-width', '3').attr('stroke', '#00ab84');
 
-        var text = g.selectAll('.tick text');
-
         // cloneSelection(g, text, 1)
 
+        var colors = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+        var texts = ['过低', '偏低', '正常', '偏高', '过高'];
+
+        colors.map(function (e, i) {
+            standardLine(g, e, standardValues[i], texts[i]);
+        });
     }
 
-    //  for shisan's self customed standard line    2017.4.26  fanyer
+    function standardLine(g, color, pos, text) {
+        console.log(gTickX(pos));
+        var tickX = g.append('g').attr('class', 'tickX').attr('transform', 'translate(' + gTickX(pos) + ',0)').attr('opacity', 1);
 
-    var gTickX = d3$5.scaleLinear().domain([-25, 25]).range([0, 260]);
+        tickX.append('line').attr('stroke', color).attr('stroke-width', 2).attr('x1', 0.5).attr('x2', 0.5).attr('y2', 1400);
 
-    var standardValue = Object.values(input.standard).slice(1, 6);
-    // console.log(standardValue);
-
-    standardValue.map(function (e, i) {
-        var gTick = d3$5.select('.tick:nth-child(' + i + ')');
-        // standardLine(gTick, i, gTickX)
-    });
+        tickX.append('text').attr('fill', color).attr('x', 0).attr('y', -3).attr('dy', -4).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
+    }
 
     function customYAxis(g) {
         g.call(yAxis);
@@ -2564,7 +2595,7 @@ var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), requ
 // for amount-bile
 function hPattern(svg) {
     var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
-    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
     var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
 
 
@@ -2903,12 +2934,12 @@ function metabolism(parent, config) {
 
     function customXAxis(g) {
         g.call(xAxis);
-        g.selectAll('.tick text').attr('x', 4).attr('dy', 24);
+        g.selectAll('.tick text').attr('x', 4).attr('dy', 24).attr('font-size', 22);
     }
 
     function customYAxis(g) {
         g.call(yAxis);
-        g.selectAll('.tick text').attr('x', -24).attr('dy', 4);
+        g.selectAll('.tick text').attr('x', -24).attr('dy', 4).attr('font-size', 22);
     }
 
     var bar = g.selectAll(".bar").data(input.data).enter().append("g").attr("class", "bar").attr("transform", function (d) {
