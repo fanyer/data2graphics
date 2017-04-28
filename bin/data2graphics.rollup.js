@@ -3082,7 +3082,6 @@ function metabolism(parent, config) {
 
     // indicators
     // 
-    console.log(x(input.indicator.value) - x(input.average.value));
     if (x(input.indicator.value) - x(input.average.value) < 0) {
         legend('indicator', input.indicator, g, 0, false);
     } else {
@@ -3119,9 +3118,9 @@ function metabolism(parent, config) {
     
 }
 
-var lineRect3Config = [0, 0.99];
+var lineRect3Config = [0.1, 0.8];
 
-var lineRect5Config = [0.1, 0.3, 0.5, 0.9];
+var lineRect5Config = [0.2, 0.3, 0.5, 0.9];
 
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
@@ -3138,6 +3137,10 @@ var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), req
 function lineRect3(parent, config) {
 
     var input = config || lineRect3Config;
+
+    input = input.map(function (e, i) {
+        return toValue(e);
+    });
 
     input = [input[0], input[1] - input[0], 1 - input[1]];
 
@@ -3159,7 +3162,7 @@ function lineRect3(parent, config) {
     vPattern3(svg, 10, 50, '#00ab84');
 
     var accumulate = input.map(function (e, i) {
-        return toValue(e) * 400;
+        return e * 400;
     });
 
     // console.log(sum(accumulate,3))
@@ -3167,7 +3170,7 @@ function lineRect3(parent, config) {
 
     colors3.map(function (e, i) {
         var y = sum(accumulate, 2 - i);
-        var height = toValue(input[2 - i]) * 400;
+        var height = input[2 - i] * 400;
         singleRect(svg, e, y, height);
     });
 
@@ -3176,6 +3179,10 @@ function lineRect3(parent, config) {
 
 function lineRect5(parent, config) {
     var input = config || lineRect5Config;
+
+    input = input.map(function (e, i) {
+        return toValue(e);
+    });
 
     var input2 = colors5$1.map(function (e, i) {
         if (i === 4) {
@@ -3205,11 +3212,11 @@ function lineRect5(parent, config) {
     vPattern3(svg, 10, 50, '#00ab84');
 
     var accumulate = input2.map(function (e, i) {
-        return toValue(e) * 400;
+        return e * 400;
     });
 
     var heightFn = function heightFn(a) {
-        return toValue(a) * 400;
+        return a * 400;
     };
     var y = function y(i) {
         return sum(accumulate, i);
