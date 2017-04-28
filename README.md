@@ -549,8 +549,7 @@ metabolism(oDom, config)
         'value': 16000,
         'text': {
             'cn': '检测值',
-            'en': 'adad',
-            'color':'salmon'
+            'en': 'adad'
         }
     },
     'average': {
