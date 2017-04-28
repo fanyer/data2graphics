@@ -2818,7 +2818,7 @@ var baseConf$4 = {
     // "mean": 0,
     "gap": [15500, 18000, 22000, 25000],
     'indicator': {
-        'value': 18500,
+        'value': 22100,
         'text': {
             'cn': '检测值',
             'en': 'adad'
@@ -3083,7 +3083,7 @@ function metabolism(parent, config) {
     // indicators
     // 
     console.log(x(input.indicator.value) - x(input.average.value));
-    if (x(input.indicator.value) - x(input.average.value) < -10) {
+    if (x(input.indicator.value) - x(input.average.value) < 0) {
         legend('indicator', input.indicator, g, 0, false);
     } else {
         legend('indicator', input.indicator, g, 0);
