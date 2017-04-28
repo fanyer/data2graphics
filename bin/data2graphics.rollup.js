@@ -2091,6 +2091,8 @@ function curveGraph(parent, config) {
         tickX.append('line').attr('stroke', color).attr('stroke-width', 2).attr('x1', 0.5).attr('x2', 0.5).attr('y2', 1400);
 
         tickX.append('text').attr('fill', color).attr('x', 0).attr('y', -3).attr('dy', -4).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
+
+        tickX.append('text').attr('fill', color).attr('x', 0).attr('y', 1400).attr('dy', 24).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
     }
 
     function customYAxis(g) {
