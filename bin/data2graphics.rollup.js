@@ -2618,11 +2618,6 @@ function estimateFiber(parent, config) {
     context.restore();
 }
 
-/*seagreen   #00ab84*/
-/*orange   #e4be6f*/
-/*salmon   #cb8d88*/
-var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
-
 var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 
@@ -2679,43 +2674,10 @@ function vPattern2(svg) {
 }
 
 //for the lineRect
-function vPattern3(svg) {
-    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 40;
-    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 27;
-    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
 
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-' + color).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1');
-
-    ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 1);
-
-    ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
-        return d * width;
-    }).attr('y', 0).attr('fill', function (d, i) {
-        return color;
-    });
-
-    return ptn;
-}
 
 // for vLineRect
-function vPattern4(svg) {
-    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
-    var id = arguments[2];
-    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 100;
-    var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
 
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
-        return d * width;
-    }).attr('y', 0).attr('fill', function (d, i) {
-        var color = colors5[0];
-
-        i < inter[0] && (color = colors5[0]) || i < inter[1] && (color = colors5[1]) || i < inter[2] && (color = colors5[2]) || i < inter[3] && (color = colors5[3]);
-
-        return color;
-    });
-
-    return ptn;
-}
 
 
 
@@ -2728,6 +2690,16 @@ function detectSVG(parent, id) {
     parent.append(svg);
 
     return svg;
+}
+
+function detectCanvas(parent) {
+    // detect browser canvas api
+    if (!parent.querySelector('canvas')) {
+        var canvas = document.createElement('canvas');
+        parent.appendChild(canvas);
+    }
+
+    return canvas;
 }
 
 var baseConf$3 = {
@@ -3187,67 +3159,14 @@ function metabolism(parent, config) {
     
 }
 
-var lineRect3Config = [0.22, 0.5];
+var lineRect3Config = [0.22, 0.7];
 
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
-var vLineRect5Config = [0.2, 0.3, 0.6, 0.9];
-var vLineRect3Config = [0.6, 0.9];
-
-/*seagreen   #00ab84*/
-/*orange   #e4be6f*/
-/*salmon   #cb8d88*/
-
-// color in this file should be hex
-
-var colors3 = ['#cb8d88', '#e4be6f', '#00ab84'];
 // const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
 var colors5$2 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
 var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
-
-function lineRect3(parent, config) {
-
-    var input = config || lineRect3Config;
-
-    input = input.map(function (e, i) {
-        return toValue(e);
-    });
-
-    input = [input[0], input[1] - input[0], 1 - input[1]];
-
-    detectSVG(parent);
-
-    var svg = d3$11.select('#' + parent.id + ' svg'),
-        margin = { top: 50, right: 60, bottom: 150, left: 130 };
-
-    svg.attr('width', 50);
-
-    var width = svg.attr('width') - margin.left - margin.right,
-        height = svg.attr('height') - margin.top - margin.bottom,
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    var formatNumber = d3$11.format('.2%');
-
-    vPattern3(svg, 10, 50, '#cb8d88');
-    vPattern3(svg, 10, 50, '#e4be6f');
-    vPattern3(svg, 10, 50, '#00ab84');
-
-    var accumulate = input.map(function (e, i) {
-        return e * 400;
-    });
-
-    // console.log(sum(accumulate,3))
-    // console.log(accumulate)
-
-    colors3.map(function (e, i) {
-        var y = sum(accumulate, 2 - i);
-        var height = input[2 - i] * 400;
-        singleRect(svg, e, y, height);
-    });
-
-    svg.attr('height', sum(accumulate, 3));
-}
 
 function lineRect5(parent, config) {
     var input = config || lineRect5Config;
@@ -3266,92 +3185,109 @@ function lineRect5(parent, config) {
         }
     });
 
-    detectSVG(parent);
-
-    var svg = d3$11.select('#' + parent.id + ' svg'),
-        margin = { top: 50, right: 60, bottom: 150, left: 130 };
-
-    svg.attr('width', 50);
-
-    var width = svg.attr('width') - margin.left - margin.right,
-        height = svg.attr('height') - margin.top - margin.bottom,
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    var formatNumber = d3$11.format('.2%');
-
-    vPattern3(svg, 10, 50, '#cb8d88');
-    vPattern3(svg, 10, 50, '#e4be6f');
-    vPattern3(svg, 10, 50, '#00ab84');
-
-    var accumulate = input2.map(function (e, i) {
+    input = input.map(function (e, i) {
         return e * 400;
     });
 
-    var heightFn = function heightFn(a) {
-        return a * 400;
-    };
-    var y = function y(i) {
-        return sum(accumulate, i);
-    };
+    input2 = input2.map(function (e, i) {
+        return e * 400;
+    });
 
-    singleRect(svg, '#cb8d88', y(0), heightFn(input2[0]));
-    singleRect(svg, '#e4be6f', y(1), heightFn(input2[1]));
+    var canvas = detectCanvas(parent);
 
-    singleRect(svg, '#cb8d88', y(4), heightFn(input2[4]));
-    singleRect(svg, '#e4be6f', y(3), heightFn(input2[3]));
+    var context = canvas.getContext('2d');
+    canvas.width = 50;
+    canvas.height = 400;
 
-    singleRect(svg, '#00ab84', y(2), heightFn(input2[2]));
-    svg.attr('height', sum(accumulate, 5));
+    var width = canvas.width,
+        height = canvas.height;
+
+    // context.translate(200, height / 2 )
+    // context.translate(width / 2, height / 2 )
+
+    // console.log(width)
+    // console.log(height)
+
+    context.save();
+
+    context.save();
+
+    // colors5.map((e, i) => {
+
+    //     context.save()
+    //     context.beginPath()
+    //     context.translate(0, [0,...input][i])
+
+    //     individualRect(context, e, input2[i])
+
+    //     context.restore()
+    // })
+
+    // console.log(input)
+    // console.log(input2)
+
+    curveIndiviadualRect(context, 0, input, input2);
+    curveIndiviadualRect(context, 1, input, input2);
+    curveIndiviadualRect(context, 4, input, input2);
+    curveIndiviadualRect(context, 3, input, input2);
+    curveIndiviadualRect(context, 2, input, input2);
+
+    context.restore();
+}
+
+function lineRect3(parent, config) {
+    var input = config || lineRect3Config;
+
+    input = [0, 0].concat(toConsumableArray(input));
+
+    lineRect5(parent, input);
 }
 
 function vLineRect5(parent, config) {
-
-    var input = config || vLineRect5Config;
-
-    var input2 = input.map(function (e, i) {
-        return e * 100;
-    });
-
-    detectSVG(parent);
-
-    console.log(input2);
-
-    var svg = d3$11.select('#' + parent.id + ' svg'),
-        margin = { top: 10, right: 10, bottom: 10, left: 10 };
-
-    svg.attr('width', 500);
-
-    var width = svg.attr('width') - margin.left - margin.right,
-        height = svg.attr('height') - margin.top - margin.bottom,
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    var formatNumber = d3$11.format('.2%');
-
-    vPattern4(svg, input2, parent.id);
-
-    g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+    var canvas = detectCanvas(parent);
+    var context = canvas.getContext('2d');
 }
 
 function vLineRect3(parent, config) {
-    var input = config || vLineRect3Config;
+    var input = config || lineRect5Config;
 
-    vLineRect5(parent, [0, 0].concat(toConsumableArray(input)));
+    input = [0, 0].concat(toConsumableArray(input));
+
+    vLineRect5(parent, input);
 }
 
-function singleRect(svg, color, y, height) {
-    svg.append('rect').attr('fill', function () {
-        return 'url(#vpattern-' + color + ')';
-    }).attr('x', 0).attr('y', y).attr('width', 50).attr('height', height).attr('stroke', color);
+function curveIndiviadualRect(context, i, input, input2) {
+    context.save();
+    context.beginPath();
+    context.translate(0, [0].concat(toConsumableArray(input))[i]);
+
+    individualRect(context, colors5$2[i], input2[i]);
+
+    context.restore();
+}
+
+function individualRect(context, color, height) {
+
+    d3$11.range(5, 50, 5).map(function (e, i) {
+
+        singleRect(context, color, e, 0, 5, height);
+    });
+}
+
+function singleRect(context, color, x, y, width, height) {
+    context.save();
+    context.strokeStyle = color;
+    context.lineWidth = 2;
+
+    context.beginPath();
+    context.strokeRect(x, y, width, height);
+
+    context.restore();
 }
 
 function toValue(a) {
+    if (a === 0) return 0;
     return a * 0.96 + 0.02;
-}
-
-function sum(arr, i) {
-    return arr.slice(0, i).reduce(function (accumulate, current) {
-        return accumulate + current;
-    }, 0);
 }
 
 // this will decrease flexible
@@ -4101,8 +4037,8 @@ exports.linkGraph = linkGraph;
 exports.estimateFiber = estimateFiber;
 exports.amountBile = amountBile;
 exports.metabolism = metabolism;
-exports.lineRect3 = lineRect3;
 exports.lineRect5 = lineRect5;
+exports.lineRect3 = lineRect3;
 exports.vLineRect5 = vLineRect5;
 exports.vLineRect3 = vLineRect3;
 
