@@ -3163,6 +3163,8 @@ var lineRect3Config = [0.22, 0.7];
 
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
+var vLineRect5Config = [0.2, 0.3, 0.6, 0.9];
+
 // const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
 var colors5$2 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 
@@ -3244,8 +3246,26 @@ function lineRect3(parent, config) {
 }
 
 function vLineRect5(parent, config) {
+    var input = config || vLineRect5Config;
+
     var canvas = detectCanvas(parent);
     var context = canvas.getContext('2d');
+
+    canvas.width = 500;
+    canvas.height = 40;
+
+    var width = canvas.width,
+        height = canvas.height;
+
+    // context.translate(200, height / 2 )
+    // context.translate(width / 2, height / 2 )
+
+    // console.log(width)
+    // console.log(height)
+
+    context.save();
+
+    roundedRect(context, 2, 2, 400, 30, 15, 'steelblue', 'salmon');
 }
 
 function vLineRect3(parent, config) {
@@ -3288,6 +3308,26 @@ function singleRect(context, color, x, y, width, height) {
 function toValue(a) {
     if (a === 0) return 0;
     return a * 0.96 + 0.02;
+}
+
+// A utility function to draw a rectangle with rounded corners.
+function roundedRect(ctx, x, y, width, height, radius, strokeColor, fillColor) {
+    ctx.save();
+    ctx.strokeStyle = strokeColor;
+    ctx.fillStyle = fillColor;
+    ctx.beginPath();
+    ctx.moveTo(x, y + radius);
+    ctx.lineTo(x, y + height - radius);
+    ctx.arcTo(x, y + height, x + radius, y + height, radius);
+    ctx.lineTo(x + width - radius, y + height);
+    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+    ctx.lineTo(x + width, y + radius);
+    ctx.arcTo(x + width, y, x + width - radius, y, radius);
+    ctx.lineTo(x + radius, y);
+    ctx.arcTo(x, y, x, y + radius, radius);
+    ctx.stroke();
+    ctx.fill('evenodd');
+    ctx.restore();
 }
 
 // this will decrease flexible
