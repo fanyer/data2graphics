@@ -2126,7 +2126,7 @@ function curveGraph(parent, config) {
         // console.log(line)
         var gStandard = g.append('g').attr('class', 'gStandard');
 
-        gStandard.selectAll('.generalStandardLine').data(arr).enter().append('path').attr("class", "generalStandardLine").style("stroke", color).attr("stroke-width", 3).attr("fill", "none").attr('d', line);
+        gStandard.selectAll('.generalStandardLine').data(arr).enter().append('path').attr("class", "generalStandardLine").style("stroke", addOpacity(hex2rgba(color), 0.5)).attr("stroke-width", 2).attr("fill", "none").attr('d', line);
 
         gStandard.append('text').attr('fill', color).attr('x', gTickX(pos)).attr('y', -50).attr('dy', -4).attr('font-family', 'adad').attr('font-size', '20px').style('fill', color).text(text);
 
@@ -2700,10 +2700,11 @@ function vPattern3(svg) {
 // for vLineRect
 function vPattern4(svg) {
     var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
-    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
-    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
+    var id = arguments[2];
+    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 100;
+    var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
 
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
         var color = colors5[0];
@@ -2827,13 +2828,22 @@ function amountBile(parent, config) {
         // return 'translate(100,50)'
     });
 
-    g.append('text').attr('class', 'text').attr('x', function () {
-        return 0;
-    }).attr('y', function () {
-        return y(10 - input.bileAcid) + 26;
-    }).style('fill', '#686868').style('font-family', 'adad').style('font-size', '26px').attr('text-anchor', 'start').text(function () {
-        return '正常水平';
-    });
+    // g.append('text')
+    //     .attr('class', 'text')
+    //     .attr('x', () => {
+    //         return 0
+    //     })
+    //     .attr('y', () => {
+    //         return y(10 - input.bileAcid) + 26
+    //     })
+    //     .style('fill', '#686868')
+    //     .style('font-family', 'adad')
+    //     .style('font-size', '26px')
+    //     .attr('text-anchor', 'start')
+    //     .text(() => {
+    //         return '正常水平'
+    //     })
+
 
     function generateLegend(config) {
         var legend = g.append('g').attr('class', 'lengend');
@@ -2875,6 +2885,13 @@ var baseConf$4 = {
         'value': 22000,
         'text': {
             'cn': '均值',
+            'en': 'adad'
+        }
+    },
+    'median': {
+        'value': 21000,
+        'text': {
+            'cn': '中位数',
             'en': 'adad'
         }
     },
@@ -2980,10 +2997,13 @@ var d3$10 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), req
 function metabolism(parent, config) {
 
     var input = config || baseConf$4;
-    detectSVG(parent);
+    // detectSVG(parent);
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-    var svg = d3$10.select('#' + parent.id + ' svg'),
-        margin = { top: 100, right: 60, bottom: 150, left: 130 };
+    parent.append(svg);
+
+    svg = d3$10.select('#' + parent.id + ' svg');
+    var margin = { top: 100, right: 60, bottom: 150, left: 130 };
 
     svg.attr('width', 1000).attr('height', 800);
 
@@ -3294,6 +3314,8 @@ function vLineRect5(parent, config) {
 
     detectSVG(parent);
 
+    console.log(input2);
+
     var svg = d3$11.select('#' + parent.id + ' svg'),
         margin = { top: 10, right: 10, bottom: 10, left: 10 };
 
@@ -3305,9 +3327,9 @@ function vLineRect5(parent, config) {
 
     var formatNumber = d3$11.format('.2%');
 
-    vPattern4(svg, input2);
+    vPattern4(svg, input2, parent.id);
 
-    g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5)');
+    g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
 }
 
 function vLineRect3(parent, config) {
@@ -3664,7 +3686,7 @@ function init(parent, config) {
     // let input = config ? handleConfig(baseConf, config) : baseConf;
     var input = config || baseConf$5;
 
-    detectSVG(parent);
+    detectSVG(parent, 'Antibiotics');
 
     var svg = d3$12.select('#' + parent.id + ' svg'),
         margin = { top: 50, right: 600, bottom: 50, left: 630 };
