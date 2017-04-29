@@ -3365,10 +3365,11 @@ function vLineRect5(parent, config) {
 
     g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
 
-    html2canvas(parent).then(function (canvas) {
-        parent.innerHTML = '';
-        parent.appendChild(canvas);
-    });
+    // html2canvas(parent).then(function(canvas) {
+    //     parent.innerHTML=''
+    //     parent.appendChild(canvas);
+    // })
+
 }
 
 function vLineRect3(parent, config) {
@@ -4055,7 +4056,10 @@ function init(parent, config) {
     // centralColorRect()
     centralColorRect(input.gap);
 
-    console.log('Done');
+    html2canvas(parent).then(function (canvas) {
+        parent.innerHTML = '';
+        parent.appendChild(canvas);
+    });
 }
 
 function topLeft(argument) {
