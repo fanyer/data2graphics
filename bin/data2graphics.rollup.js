@@ -4056,10 +4056,10 @@ function init(parent, config) {
     // centralColorRect()
     centralColorRect(input.gap);
 
-    html2canvas(parent).then(function (canvas) {
-        parent.innerHTML = '';
-        parent.appendChild(canvas);
-    });
+    //  html2canvas(parent).then(function(canvas) {
+    //     parent.innerHTML=''
+    //     parent.appendChild(canvas);
+    // })
 }
 
 function topLeft(argument) {
