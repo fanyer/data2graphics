@@ -3345,7 +3345,7 @@ function vLineRect5(parent, config) {
     var input = config || vLineRect5Config;
 
     var input2 = input.map(function (e, i) {
-        return e * 20;
+        return e * 70;
     });
 
     detectSVG(parent);
@@ -3364,6 +3364,8 @@ function vLineRect5(parent, config) {
     vPattern4(svg, input2, parent.id);
 
     g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+
+    console.log(input2);
 
     // html2canvas(parent).then(function(canvas) {
     //     parent.innerHTML=''
