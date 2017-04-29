@@ -2618,6 +2618,11 @@ function estimateFiber(parent, config) {
     context.restore();
 }
 
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+
 var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
 
 
@@ -2677,7 +2682,24 @@ function vPattern2(svg) {
 
 
 // for vLineRect
+function vPattern4(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
+    var id = arguments[2];
+    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 100;
+    var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
 
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = colors5[0];
+
+        i < inter[0] && (color = colors5[0]) || i < inter[1] && (color = colors5[1]) || i < inter[2] && (color = colors5[2]) || i < inter[3] && (color = colors5[3]);
+
+        return color;
+    });
+
+    return ptn;
+}
 
 
 
@@ -3164,6 +3186,7 @@ var lineRect3Config = [0.22, 0.7];
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
 var vLineRect5Config = [0.2, 0.3, 0.6, 0.9];
+var vLineRect3Config = [0.6, 0.9];
 
 // const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
 var colors5$2 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
@@ -3245,36 +3268,40 @@ function lineRect3(parent, config) {
     lineRect5(parent, input);
 }
 
-function vLineRect5(parent, config) {
-    var input = config || vLineRect5Config;
+// export function vLineRect5(parent, config) {
+//     let input = config || vLineRect5Config;
 
-    var canvas = detectCanvas(parent);
-    var context = canvas.getContext('2d');
+//     let canvas = detectCanvas(parent)
+//     let context = canvas.getContext('2d');
 
-    canvas.width = 500;
-    canvas.height = 40;
+//     canvas.width = 500;
+//     canvas.height = 40;
 
-    var width = canvas.width,
-        height = canvas.height;
+//     let width = canvas.width,
+//         height = canvas.height
 
-    // context.translate(200, height / 2 )
-    // context.translate(width / 2, height / 2 )
+//     // context.translate(200, height / 2 )
+//     // context.translate(width / 2, height / 2 )
 
-    // console.log(width)
-    // console.log(height)
+//     // console.log(width)
+//     // console.log(height)
 
-    context.save();
+//     context.save()
 
-    roundedRect(context, 2, 2, 400, 30, 15, 'steelblue', 'salmon');
-}
+//     roundedRect(context, 2, 2, 400, 30, 15, 'steelblue', 'salmon');
 
-function vLineRect3(parent, config) {
-    var input = config || lineRect5Config;
+// }
 
-    input = [0, 0].concat(toConsumableArray(input));
+// export function vLineRect3(parent, config) {
+//     let input = config || lineRect5Config;
 
-    vLineRect5(parent, input);
-}
+//     input = [0, 0, ...input]
+
+
+//     vLineRect5(parent, input)
+
+
+// }
 
 function curveIndiviadualRect(context, i, input, input2) {
     context.save();
@@ -3294,40 +3321,49 @@ function individualRect(context, color, height) {
     });
 }
 
-function singleRect(context, color, x, y, width, height) {
-    context.save();
-    context.strokeStyle = color;
-    context.lineWidth = 2;
-
-    context.beginPath();
-    context.strokeRect(x, y, width, height);
-
-    context.restore();
-}
-
 function toValue(a) {
     if (a === 0) return 0;
     return a * 0.96 + 0.02;
 }
 
-// A utility function to draw a rectangle with rounded corners.
-function roundedRect(ctx, x, y, width, height, radius, strokeColor, fillColor) {
-    ctx.save();
-    ctx.strokeStyle = strokeColor;
-    ctx.fillStyle = fillColor;
-    ctx.beginPath();
-    ctx.moveTo(x, y + radius);
-    ctx.lineTo(x, y + height - radius);
-    ctx.arcTo(x, y + height, x + radius, y + height, radius);
-    ctx.lineTo(x + width - radius, y + height);
-    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-    ctx.lineTo(x + width, y + radius);
-    ctx.arcTo(x + width, y, x + width - radius, y, radius);
-    ctx.lineTo(x + radius, y);
-    ctx.arcTo(x, y, x, y + radius, radius);
-    ctx.stroke();
-    ctx.fill('evenodd');
-    ctx.restore();
+//  v   svg
+
+function vLineRect5(parent, config) {
+
+    var input = config || vLineRect5Config;
+
+    var input2 = input.map(function (e, i) {
+        return e * 100;
+    });
+
+    detectSVG(parent);
+
+    var svg = d3$11.select('#' + parent.id + ' svg'),
+        margin = { top: 10, right: 10, bottom: 10, left: 10 };
+
+    svg.attr('width', 500);
+
+    var width = svg.attr('width') - margin.left - margin.right,
+        height = svg.attr('height') - margin.top - margin.bottom,
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var formatNumber = d3$11.format('.2%');
+
+    vPattern4(svg, input2, parent.id);
+
+    g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+}
+
+function vLineRect3(parent, config) {
+    var input = config || vLineRect3Config;
+
+    vLineRect5(parent, [0, 0].concat(toConsumableArray(input)));
+}
+
+function singleRect(svg, color, y, height) {
+    svg.append('rect').attr('fill', function () {
+        return 'url(#vpattern-' + color + ')';
+    }).attr('x', 0).attr('y', y).attr('width', 50).attr('height', height).attr('stroke', color);
 }
 
 // this will decrease flexible
