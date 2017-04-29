@@ -4,12 +4,13 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
-	(factory((global.data2grahics = global.data2grahics || {}),global.D3));
-}(this, (function (exports,D3) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('html2canvas')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'd3', 'html2canvas'], factory) :
+	(factory((global.data2grahics = global.data2grahics || {}),global.D3,global.html2canvas));
+}(this, (function (exports,D3,html2canvas) { 'use strict';
 
 D3 = 'default' in D3 ? D3['default'] : D3;
+html2canvas = 'default' in html2canvas ? html2canvas['default'] : html2canvas;
 
 var baseConf1 = {
     "type": "检测值",
@@ -3185,7 +3186,7 @@ var lineRect3Config = [0.22, 0.7];
 
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
 
-var vLineRect5Config = [0.2, 0.3, 0.6, 0.9];
+var vLineRect5Config = [0.2, 0.3, 0.4, 0.9];
 var vLineRect3Config = [0.6, 0.9];
 
 // const colors3 = ['#00ab84', '#e4be6f', '#cb8d88']
@@ -3363,6 +3364,11 @@ function vLineRect5(parent, config) {
     vPattern4(svg, input2, parent.id);
 
     g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+
+    html2canvas(parent).then(function (canvas) {
+        parent.innerHTML = '';
+        parent.appendChild(canvas);
+    });
 }
 
 function vLineRect3(parent, config) {
