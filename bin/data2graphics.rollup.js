@@ -2685,10 +2685,10 @@ function vPattern2(svg) {
 function vPattern4(svg) {
     var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
     var id = arguments[2];
-    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 100;
+    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 70;
     var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
 
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 2).attr('height', 30).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
         var color = colors5[0];
@@ -2709,7 +2709,7 @@ function detectSVG(parent, id) {
 
     id && (svg.id = id);
 
-    parent.append(svg);
+    parent.appendChild(svg);
 
     return svg;
 }
@@ -3344,7 +3344,7 @@ function vLineRect5(parent, config) {
     var input = config || vLineRect5Config;
 
     var input2 = input.map(function (e, i) {
-        return e * 100;
+        return e * 20;
     });
 
     detectSVG(parent);
@@ -4048,6 +4048,8 @@ function init(parent, config) {
 
     // centralColorRect()
     centralColorRect(input.gap);
+
+    console.log('Done');
 }
 
 function topLeft(argument) {
