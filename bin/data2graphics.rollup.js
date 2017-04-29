@@ -1672,6 +1672,112 @@ function vBezeireArr(Arr, factor) {
 
 //  for polar coordinate system
 
+/*seagreen   #00ab84*/
+/*orange   #e4be6f*/
+/*salmon   #cb8d88*/
+var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
+
+var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
+
+
+
+// for amount-bile
+function hPattern(svg) {
+    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
+    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
+    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
+
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'hpattern-' + color).attr('x', '0').attr('y', '0').attr('width', 1).attr('height', 1).selectAll('rect').data(d3$7.range(0, 1, 1 / percent)).enter().append('rect').attr('y', function (d, i) {
+        return d * height;
+    }).attr('x', 0).attr('width', 800).attr('height', 5).attr('fill', color);
+
+    return ptn;
+}
+
+// for estimate-antibotics
+function vPattern1(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [30, 35];
+    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
+    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$7.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = '#e4be6f';
+        i < inter[0] && (color = '#00ab84');
+        i > inter[1] && (color = '#cb8d88');
+        return color;
+    });
+
+    return ptn;
+}
+
+//for the professional
+function vPattern2(svg) {
+    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 40;
+    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 27;
+    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-' + color).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1');
+
+    ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 2);
+
+    ptn.selectAll('rect').data(d3$7.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        return color;
+    });
+
+    return ptn;
+}
+
+//for the lineRect
+
+
+// for vLineRect
+function vPattern4(svg) {
+    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
+    var id = arguments[2];
+    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 70;
+    var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
+
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$7.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 2).attr('height', 30).attr('x', function (d, i) {
+        return d * width;
+    }).attr('y', 0).attr('fill', function (d, i) {
+        var color = colors5[0];
+
+        i < inter[0] && (color = colors5[0]) || i < inter[1] && (color = colors5[1]) || i < inter[2] && (color = colors5[2]) || i < inter[3] && (color = colors5[3]);
+
+        return color;
+    });
+
+    return ptn;
+}
+
+
+
+// pure w3c svg namespace
+function detectSVG(parent, id) {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+    id && (svg.id = id);
+
+    parent.appendChild(svg);
+
+    return svg;
+}
+
+function detectCanvas(parent) {
+    // detect browser canvas api
+    if (!parent.querySelector('canvas')) {
+        var canvas = document.createElement('canvas');
+        parent.appendChild(canvas);
+    }
+
+    return canvas;
+}
+
 var curveGraphConfig = {
     'standard': {
         'min': -25,
@@ -2009,11 +2115,10 @@ function curveGraph(parent, config) {
     var standardValues = Object.values(input.standard).slice(1, 6);
 
     // detect svg or canvas
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(svgNS, 'svg');
+    var svg = detectSVG(parent, 'svg-' + parent.id);
+
     svg.setAttribute('width', '500');
     svg.setAttribute('height', '1700');
-    parent.append(svg);
 
     var margin = {
         top: 150,
@@ -2223,13 +2328,6 @@ function curveGraph(parent, config) {
 
 function linkGraph(parent, config) {
 
-    var margin = {
-        top: 20,
-        right: 100,
-        bottom: 20,
-        left: 100
-    };
-
     var input = config || linkGraphConfig;
 
     var margin = {
@@ -2239,20 +2337,16 @@ function linkGraph(parent, config) {
         left: 100
     };
 
-    var formatNumber = d3$5.format(',.0f'),
-        format = function format(d) {
+    var format = function format(d) {
         return formatNumber(d) + ' TWh';
     },
         color = d3$5.scaleOrdinal(d3$5.schemeCategory20);
 
     // detect svg or canvas
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('width', '800');
-    svg.setAttribute('id', 'curveGraph');
-    svg.setAttribute('height', '1500');
+    var svg = detectSVG(parent, 'svg-' + parent.id);
 
-    parent.append(svg);
+    svg.setAttribute('width', '800');
+    svg.setAttribute('height', '1500');
 
     svg = d3$5.select('#' + parent.id + ' svg');
     var width = +svg.attr('width') - margin.left - margin.right - 100,
@@ -2433,7 +2527,7 @@ var baseConf$2 = {
 // color in this file should be hex
 
 
-var d3$7 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
+var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
 
 function estimateFiber(parent, config) {
 
@@ -2491,10 +2585,10 @@ function estimateFiber(parent, config) {
     context.strokeStyle = '#00ab84';
     context.setLineDash([4, 5]);
 
-    var radius = d3$7.range(min, min + 4 * d + 30, 20);
+    var radius = d3$8.range(min, min + 4 * d + 30, 20);
 
     radius.forEach(function (e, i) {
-        var arc = d3$7.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
+        var arc = d3$8.arc().outerRadius(e).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context);
 
         context.beginPath();
         arc();
@@ -2510,14 +2604,14 @@ function estimateFiber(parent, config) {
     context.setLineDash([4, 0]);
 
     context.beginPath();
-    d3$7.arc().outerRadius(min - 10).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
+    d3$8.arc().outerRadius(min - 10).innerRadius(0).startAngle(0).endAngle(Math.PI * 2).context(context)();
 
     context.stroke();
     context.restore();
 
     // draw arcs
     context.save();
-    var arcs = d3$7.pie()(Array.from({ length: 16 }, function (e) {
+    var arcs = d3$8.pie()(Array.from({ length: 16 }, function (e) {
         return 1;
     }));
 
@@ -2525,7 +2619,7 @@ function estimateFiber(parent, config) {
         return a.startAngle - b.startAngle;
     });
 
-    var arc = d3$7.arc().context(context);
+    var arc = d3$8.arc().context(context);
 
     function switchStrokeColor(a) {
 
@@ -2538,7 +2632,7 @@ function estimateFiber(parent, config) {
         }
     }
 
-    var rHeight = d3$7.scaleLinear().domain([0, 100]).range([min, min + 250]);
+    var rHeight = d3$8.scaleLinear().domain([0, 100]).range([min, min + 250]);
 
     function InMax(a) {
         // switch (a) {
@@ -2563,7 +2657,7 @@ function estimateFiber(parent, config) {
 
         var inMax = InMax(data[I]);
 
-        d3$7.range(min, inMax, 6).sort(function (a, b) {
+        d3$8.range(min, inMax, 6).sort(function (a, b) {
             return b - a;
         }).map(function (e, i, arr) {
 
@@ -2619,112 +2713,6 @@ function estimateFiber(parent, config) {
     context.restore();
 }
 
-/*seagreen   #00ab84*/
-/*orange   #e4be6f*/
-/*salmon   #cb8d88*/
-var colors5 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
-
-var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-array'), require('d3-sankey'), require('d3-selection'), require('d3-request'), require('d3-axis'), require('d3-color'), require('d3-scale'));
-
-
-
-// for amount-bile
-function hPattern(svg) {
-    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
-    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
-    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
-
-
-    var ptn = svg.append('defs').append('pattern').attr('id', 'hpattern-' + color).attr('x', '0').attr('y', '0').attr('width', 1).attr('height', 1).selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('y', function (d, i) {
-        return d * height;
-    }).attr('x', 0).attr('width', 800).attr('height', 5).attr('fill', color);
-
-    return ptn;
-}
-
-// for estimate-antibotics
-function vPattern1(svg) {
-    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [30, 35];
-    var percent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
-    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 400;
-
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern1').attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 1).attr('height', 30).attr('x', function (d, i) {
-        return d * width;
-    }).attr('y', 0).attr('fill', function (d, i) {
-        var color = '#e4be6f';
-        i < inter[0] && (color = '#00ab84');
-        i > inter[1] && (color = '#cb8d88');
-        return color;
-    });
-
-    return ptn;
-}
-
-//for the professional
-function vPattern2(svg) {
-    var percent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 40;
-    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 27;
-    var color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'steelblue';
-
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-' + color).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1');
-
-    ptn.append('rect').attr('width', width).attr('fill', color).attr('height', 2);
-
-    ptn.selectAll('rect').data(d3$9.range(0, 1, 1 / percent).concat(0)).enter().append('rect').attr('width', 1).attr('height', 1000).attr('x', function (d, i) {
-        return d * width;
-    }).attr('y', 0).attr('fill', function (d, i) {
-        return color;
-    });
-
-    return ptn;
-}
-
-//for the lineRect
-
-
-// for vLineRect
-function vPattern4(svg) {
-    var inter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [10, 20, 30, 35];
-    var id = arguments[2];
-    var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 70;
-    var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 400;
-
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$9.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 2).attr('height', 30).attr('x', function (d, i) {
-        return d * width;
-    }).attr('y', 0).attr('fill', function (d, i) {
-        var color = colors5[0];
-
-        i < inter[0] && (color = colors5[0]) || i < inter[1] && (color = colors5[1]) || i < inter[2] && (color = colors5[2]) || i < inter[3] && (color = colors5[3]);
-
-        return color;
-    });
-
-    return ptn;
-}
-
-
-
-// pure w3c svg namespace
-function detectSVG(parent, id) {
-    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-    id && (svg.id = id);
-
-    parent.appendChild(svg);
-
-    return svg;
-}
-
-function detectCanvas(parent) {
-    // detect browser canvas api
-    if (!parent.querySelector('canvas')) {
-        var canvas = document.createElement('canvas');
-        parent.appendChild(canvas);
-    }
-
-    return canvas;
-}
-
 var baseConf$3 = {
   "bileAcid": 6,
   "cholesterol": 2
@@ -2737,7 +2725,7 @@ var baseConf$3 = {
  * 最下面的灰线盖住绿色
  */
 
-var d3$8 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-axis'), require('d3-scale'));
+var d3$9 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-color'), require('d3-axis'), require('d3-scale'));
 
 function amountBile(parent, config) {
 
@@ -2749,7 +2737,7 @@ function amountBile(parent, config) {
 
     detectSVG(parent);
 
-    var svg = d3$8.select('#' + parent.id + ' svg'),
+    var svg = d3$9.select('#' + parent.id + ' svg'),
         margin = { top: 80, right: 60, bottom: 150, left: 130 };
 
     svg.attr('width', 1000).attr('height', 800);
@@ -2764,15 +2752,15 @@ function amountBile(parent, config) {
     hPattern(svg, 100, 900, '#f0938f');
 
     // define basic location Axis
-    var x = d3$8.scaleLinear().domain([0, 2]).range([0, width]);
+    var x = d3$9.scaleLinear().domain([0, 2]).range([0, width]);
 
-    var y = d3$8.scaleLinear().domain([0, 10]).range([0, height]);
+    var y = d3$9.scaleLinear().domain([0, 10]).range([0, height]);
 
-    var yAxis = d3$8.axisLeft(y).ticks(10).tickSize(-width).tickFormat(function (d) {
+    var yAxis = d3$9.axisLeft(y).ticks(10).tickSize(-width).tickFormat(function (d) {
         // return 10-d
     });
 
-    var xAxis = d3$8.axisBottom(x).ticks(11).tickSize(4).tickFormat(function (d, i) {
+    var xAxis = d3$9.axisBottom(x).ticks(11).tickSize(4).tickFormat(function (d, i) {
         // return d
     });
 
@@ -3123,7 +3111,9 @@ function metabolism(parent, config) {
     // bottom color rect bar
     var bottomRectGap = [[input.data[0].x[0], input.gap[0]], [input.gap[0], input.gap[1]], [input.gap[1], input.gap[2]], [input.gap[2], input.gap[3]], [input.gap[3], input.data[input.data.length - 1].x[1]]];
 
-    g.selectAll('rect.bottomRect').data(bottomRectGap).enter().append('rect').attr('transform', 'translate(30,0)').attr('x', function (d, i) {
+    var bandWidth = x(input.data[0].x[1]) - x(input.data[0].x[0]);
+
+    g.selectAll('rect.bottomRect').data(bottomRectGap).enter().append('rect').attr('transform', 'translate(' + (30 + bandWidth / 2) + ',0)').attr('x', function (d, i) {
         return x(d[0]);
     }).attr('y', function (d, i) {
         return 620;
@@ -3156,7 +3146,8 @@ function metabolism(parent, config) {
         var onOff = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
         var meanColor = arguments[5];
 
-        var oLegend = g.append('g').attr('transform', 'translate(' + (30 + x(obj.value)) + ',0)');
+
+        var oLegend = g.append('g').attr('transform', 'translate(' + (30 + x(obj.value) + 0 / 2) + ',0)');
 
         var color = '#cb8d88';
 
@@ -3364,8 +3355,6 @@ function vLineRect5(parent, config) {
     vPattern4(svg, input2, parent.id);
 
     g.append('rect').attr('x', 0).attr('y', 0).attr('width', 400).attr('height', 30).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
-
-    console.log(input2);
 
     // html2canvas(parent).then(function(canvas) {
     //     parent.innerHTML=''
@@ -3692,6 +3681,8 @@ SQL.prototype = {
     Query: Query
 };
 
+// import html2canvas from 'html2canvas'
+
 /*seagreen   #00ab84*/
 /*orange   #e4be6f*/
 /*salmon   #cb8d88*/
@@ -3956,7 +3947,11 @@ function init(parent, config) {
     }
 
     // text title
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', '#00ab84').attr('font-size', '36px').attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
+    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', function () {
+        return '#00ab84';
+    }).attr('font-size', '36px').attr('stroke-width', 0.5)
+    // .attr('stroke','#00ab84' )
+    .attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
 
     svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', '#00ab84').style('font-size', '24').attr('font-family', 'adad').text('Evaluation of Antibiotics Intake');
 
@@ -4058,10 +4053,26 @@ function init(parent, config) {
     // centralColorRect()
     centralColorRect(input.gap);
 
-    //  html2canvas(parent).then(function(canvas) {
-    //     parent.innerHTML=''
-    //     parent.appendChild(canvas);
+    var oSvg = document.querySelector('#' + parent.id + ' svg');
+    // html2canvas(oSvg, {
+    //     onrendered: function(canvas) {
+    //         parent.append(canvas)
+    //     }
     // })
+
+
+    // html2canvas(oSvg).then(function(canvas) {
+    //        // parent.style.width=2700;
+    //        // oSvg.style.display='none'
+
+
+    //        // parent.removeChild(oSvg);
+    //        // parent.innerHTML = ''
+    //        parent.appendChild(canvas);
+    //    })
+
+    // console.log(html2canvas)
+
 }
 
 function topLeft(argument) {
