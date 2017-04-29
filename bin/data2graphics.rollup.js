@@ -3321,6 +3321,17 @@ function individualRect(context, color, height) {
     });
 }
 
+function singleRect(context, color, x, y, width, height) {
+    context.save();
+    context.strokeStyle = color;
+    context.lineWidth = 2;
+
+    context.beginPath();
+    context.strokeRect(x, y, width, height);
+
+    context.restore();
+}
+
 function toValue(a) {
     if (a === 0) return 0;
     return a * 0.96 + 0.02;
@@ -3358,12 +3369,6 @@ function vLineRect3(parent, config) {
     var input = config || vLineRect3Config;
 
     vLineRect5(parent, [0, 0].concat(toConsumableArray(input)));
-}
-
-function singleRect(svg, color, y, height) {
-    svg.append('rect').attr('fill', function () {
-        return 'url(#vpattern-' + color + ')';
-    }).attr('x', 0).attr('y', y).attr('width', 50).attr('height', height).attr('stroke', color);
 }
 
 // this will decrease flexible
