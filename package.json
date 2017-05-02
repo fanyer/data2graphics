@@ -13,14 +13,16 @@
   "license": "MIT",
   "devDependencies": {
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-preset-es2017": "^6.24.1",
+    "canvg": "git+ssh://git@pkgo.in:fanyer/canvg.git",
     "npmlog": "^4.0.2",
+    "rgbcolor": "git+ssh://git@https://github.com:piyushsoni/rgbcolor.js.git",
     "rollup": "^0.41.4",
     "rollup-plugin-babel": "^2.7.1",
-    "webpack-dev-server": "^2.4.1",
-    "canvg":"git+ssh://git@pkgo.in:fanyer/canvg.git",
-    "rgbcolor":"git+ssh://git@https://github.com:piyushsoni/rgbcolor.js.git"
+    "rollup-plugin-cleanup": "^1.0.0",
+    "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
     "babel-core": "^6.22.1",
