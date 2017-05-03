@@ -4,13 +4,12 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('html2canvas')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'd3', 'html2canvas'], factory) :
-	(factory((global.data2grahics = global.data2grahics || {}),global.D3,global.html2canvas));
-}(this, (function (exports,D3,html2canvas) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'd3'], factory) :
+	(factory((global.data2grahics = global.data2grahics || {}),global.D3));
+}(this, (function (exports,D3) { 'use strict';
 
 D3 = 'default' in D3 ? D3['default'] : D3;
-html2canvas = 'default' in html2canvas ? html2canvas['default'] : html2canvas;
 
 var baseConf1 = {
     "type": "检测值",
@@ -146,7 +145,7 @@ function intakeSugarDistribution(parent, config1, config2) {
     }).curve(d3.curveBasis);
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute('width', '1000');
-    svg.setAttribute('height', '666');
+    svg.setAttribute('height', '500');
     parent.append(svg);
     svg = d3.select("#" + parent.id + " svg");
     var margin = { top: 20, right: 100, bottom: 80, left: 40 },
@@ -2631,12 +2630,12 @@ function init(parent, config) {
             curveTag(2200, 542 - dy * 50, key, data, color);
         } else if (direction === 'left' && postion === 'bottom') {
             var x = -width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX;
-            var y = maskHeight - 390 + dy * 50 + 350;
+            var y = maskHeight - 390 + dy * 50 + 360;
             gChild.attr('transform', 'translate(' + x + ',' + y + ')');
             curveTag(50, 615 + dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'bottom') {
             var _x7 = width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX;
-            var _y = maskHeight - 390 + dy * 50 + 350;
+            var _y = maskHeight - 390 + dy * 50 + 360;
             gChild.attr('transform', 'translate(' + _x7 + ',' + _y + ')');
             curveTag(2200, 615 + dy * 50, key, data, color);
         }
