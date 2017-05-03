@@ -6,11 +6,11 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('html2canvas')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'd3', 'html2canvas'], factory) :
-	(factory((global.data2grahics = global.data2grahics || {}),global.D3,global.html2canvas$1));
-}(this, (function (exports,D3,html2canvas$1) { 'use strict';
+	(factory((global.data2grahics = global.data2grahics || {}),global.D3,global.html2canvas));
+}(this, (function (exports,D3,html2canvas) { 'use strict';
 
 D3 = 'default' in D3 ? D3['default'] : D3;
-html2canvas$1 = 'default' in html2canvas$1 ? html2canvas$1['default'] : html2canvas$1;
+html2canvas = 'default' in html2canvas ? html2canvas['default'] : html2canvas;
 
 var baseConf1 = {
     "type": "检测值",
@@ -2070,7 +2070,7 @@ var d3$10 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), req
 function metabolism(parent, config) {
     var input = config || baseConf$4;
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    parent.append(svg);
+    parent.appendChild(svg);
     svg = d3$10.select('#' + parent.id + ' svg');
     var margin = { top: 100, right: 60, bottom: 150, left: 130 };
     svg.attr('width', 1000).attr('height', 800);
@@ -2609,7 +2609,11 @@ function init(parent, config) {
         var Container = postion === 'top' ? gTop : gBottom;
         var gChild = Container.attr('clip-path', 'url(#clip-' + num + ')').append('g').attr('class', 'pathContainer');
         gChild.selectAll('.basicCurve').data(arr).enter().append('path').attr('d', function (d, i) {
-            return 'M0 ' + (margin.top + d.offset) + 'L ' + (width - r) * dir + ' ' + (margin.top + d.offset) + 'A ' + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 1 : 0) + '' + (width - d.offset) * dir + ' ' + (margin.top + r) + '\n                    L ' + (width - d.offset) * dir + ' ' + height;
+            if (num === 0) {
+                return 'M0 ' + (margin.top + d.offset) + 'L ' + (width - r) * dir + ' ' + (margin.top + d.offset) + 'A ' + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 1 : 0) + '' + (width - d.offset) * dir + ' ' + (margin.top + r) + '\n                         L ' + (width - d.offset) * dir + ' ' + height;
+            } else {
+                return 'M0 ' + (margin.top - d.offset) + 'L ' + (width - r) * dir + ' ' + (margin.top - d.offset) + 'A ' + (r - d.offset) + ' ' + (r - d.offset) + ' 0 0 ' + (dir === 1 ? 0 : 1) + '' + (width - d.offset) * dir + ' ' + (margin.top - r) + '\n                         L ' + (width - d.offset) * dir + ' ' + (height - 2000);
+            }
         }).style('stroke', color).style('stroke-opacity', 0.5).attr('class', 'basicCurve').attr('stroke-width', function (d) {
             return d.strokeWidth;
         }).attr('fill', 'none');
@@ -2624,14 +2628,12 @@ function init(parent, config) {
             gChild.attr('transform', 'translate(' + (width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX) + ',' + (maskHeight - 140 - dy * 50) + ')');
         } else if (direction === 'left' && postion === 'bottom') {
             var x = -width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX;
-            var y = maskHeight - 390 + dy * 50 - 540;
-            gChild.style('transform-origin', '0 500px');
-            gChild.style('transform', 'translate(' + x + 'px,' + y + 'px) scaleY(-1)');
+            var y = maskHeight - 390 + dy * 50 + 350;
+            gChild.attr('transform', 'translate(' + x + ',' + y + ')');
         } else if (direction === 'right' && postion === 'bottom') {
             var _x7 = width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX;
-            var _y = maskHeight - 390 + dy * 50 - 540;
-            gChild.style('transform-origin', '0 500px');
-            gChild.style('transform', 'translate(' + _x7 + 'px,' + _y + 'px) scaleY(-1)');
+            var _y = maskHeight - 390 + dy * 50 + 350;
+            gChild.attr('transform', 'translate(' + _x7 + ',' + _y + ')');
         }
         return gChild;
     }
@@ -2709,10 +2711,6 @@ function init(parent, config) {
     }
     centralColorRect(input.gap);
     var oSvg = document.querySelector('#' + parent.id + ' svg');
-    html2canvas(oSvg).then(function (canvas) {
-        parent.removeChild(oSvg);
-        parent.appendChild(canvas);
-    });
 }
 function topLeft(argument) {
 }
