@@ -5,4 +5,7 @@ pdf
 docs/*.zip
 bundle.js
 parser/cpp/build
+tmp
 bin/parser4data.rollup.js
+rollup.config.js
+webpack.config.js
