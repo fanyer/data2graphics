@@ -146,7 +146,7 @@ function intakeSugarDistribution(parent, config1, config2) {
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute('width', '1000');
     svg.setAttribute('height', '500');
-    parent.append(svg);
+    parent.appendChild(svg);
     svg = d3.select("#" + parent.id + " svg");
     var margin = { top: 20, right: 100, bottom: 80, left: 40 },
         width = +svg.attr("width") - margin.left - margin.right,
@@ -260,7 +260,7 @@ function intakeSugarDistribution(parent, config1, config2) {
                 bias = -20;
             }
             return e === '标准值' ? 'translate(880,' + (y2pixel + bias) + ')' : 'translate(880,' + (y1pixel - bias) + ')';
-        }).attr('class', 'text' + i).attr('alignment-baseline', 'middle').text(function (d) {
+        }).attr('class', 'text' + i).attr('alignment-baseline', 'middle').attr('font-size', xArr1.cnFontSize).text(function (d) {
             return e;
         });
     });
