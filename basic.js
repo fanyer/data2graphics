@@ -1,17 +1,233 @@
 // import './basic.css'
-// import {intakeFatProportion} from './lib/intake-fat-distribution'
+import { intakeSugarDistribution } from './lib/intake-sugar-distribution'
+import { intakeFiberStruct } from './lib/intake-fiber-struct'
+import { estimateFiber } from './lib/estimate-fiber'
+import { intakeFatProportion } from './lib/intake-fat-distribution'
 import { metabolism } from './lib/metabolism'
-import { curveGraph } from './lib/guide-goodness'
+import { curveGraph, linkGraph } from './lib/guide-goodness'
 import { scoreLevel } from './lib/score-level'
 import { sankey } from './lib/sankey'
+import { amountBile } from './lib/amount-bile'
+import { lineRect3, lineRect5, vLineRect5, vLineRect3 } from './lib/line-rect3'
+import { pie } from './lib/pie'
+import { boomPie } from './lib/boom-pie'
+import { parse as parse2 } from './parser/js/estimate-antibiotics.parser'
+import { parse } from './parser/js/link-graph.parser'
 import estimateAntibiotics from './lib/estimate-antibiotics'
+import rawConfig from './mock-data/antibiotics.raw'
+import rawLinkConfig from './mock-data/link.raw'
+import rawMetaConfig from './mock-data/metabolism.raw.js'
+import 'babel-polyfill'
+
+// import canvg from "canvg";
+
+
+// import html2canvas from 'html2canvas'
+
+
+// console.log(rawMetaConfig)
+
+Object.values = x =>
+    Object.keys(x).reduce((y, z) =>
+        y.push(x[z]) && y, []);
+
+
+
+
+
 
 var oDiv1 = document.querySelector('#div1');
+var oDiv2 = document.querySelector('#div2');
+var oDiv3 = document.querySelector('#div3');
 
 
 
+// intakeSugarDistribution(oDiv2)
+// intakeFiberStruct(oDiv1, {
+//     'text': 'aaaa',
+//    'data': {
+//         '哒哒哒': {
+//             'value': 0.08,
+//             'color': 'seagreen'
+//         },
+//         '胆固醇': {
+//             'value': 0.17,
+//             'color': 'steelblue'
+//         },
+//         '饱和脂肪酸': {
+//             'value': 0.2,
+//             'color': 'salmon'
+//         },
+//         '不饱和脂肪酸': {
+//             'value': 0.1,
+//             'color': 'steelblue'
+//         },
+//         '谁谁脂肪酸': {
+//             'value': 0.05,
+//             'color': 'steelblue'
+//         },
+//         '鞘脂类': {
+//             'value': 0.4,
+//             'color': 'steelblue'
+//         }
+//     }
+// });
+// intakeFatProportion(oDiv2,{
+//      'data': {
+//         'sature': 42,
+//         'unsature': 58
+//     }
+//     ,'text': 'adad'
+// })
 
-var config = {
+let config3 = {
+    text: 'dadad阿达达',
+    data: {
+        '维生素a': {
+            'en': 'adaeda',
+            'value': 20
+        },
+        '维生素b': {
+            'en': '',
+            'value': 25
+        },
+        '维生素c': {
+            'en': '',
+            'value': 92
+        },
+        '维生素d': {
+            'en': '',
+            'value': 78
+        },
+        '维生素e': {
+            'en': '',
+            'value': 43
+        },
+        '维生素f': {
+            'en': '',
+            'value': 96
+        },
+        '维生素g': {
+            'en': '',
+            'value': 32
+        },
+        '维生素h': {
+            'en': '',
+            'value': 79
+        },
+        '维生素i': {
+            'en': '',
+            'value': 82
+        },
+        '维生素j': {
+            'en': '',
+            'value': 45
+        },
+        '维生素k': {
+            'en': '',
+            'value': 53
+        },
+        '维生素l': {
+            'en': '',
+            'value': 98
+        },
+        '维生素m': {
+            'en': '',
+            'value': 92
+        },
+        '维生素n': {
+            'en': '',
+            'value': 48
+        },
+        '维生素o': {
+            'en': '',
+            'value': 84
+        },
+        '维生素p': {
+            'en': '',
+            'value': 92
+        }
+    }
+}
+
+//shiasn's input
+let config4 = {
+        '维生素a': {
+            'en': '',
+            'value': 20
+        },
+        '维生素b': {
+            'en': '',
+            'value': 25
+        },
+        '维生素c': {
+            'en': '',
+            'value': 92
+        },
+        '维生素d': {
+            'en': '',
+            'value': 78
+        },
+        '维生素e': {
+            'en': '',
+            'value': 43
+        },
+        '维生素f': {
+            'en': '',
+            'value': 96
+        },
+        '维生素g': {
+            'en': '',
+            'value': 32
+        },
+        '维生素h': {
+            'en': '',
+            'value': 79
+        },
+        '维生素i': {
+            'en': '',
+            'value': 82
+        },
+        '维生素j': {
+            'en': '',
+            'value': 45
+        },
+        '维生素k': {
+            'en': '',
+            'value': 53
+        },
+        '维生素l': {
+            'en': '',
+            'value': 98
+        },
+        '维生素m': {
+            'en': '',
+            'value': 92
+        },
+        '维生素n': {
+            'en': '',
+            'value': 48
+        },
+        '维生素o': {
+            'en': '',
+            'value': 84
+        },
+        '维生素p': {
+            'en': '',
+            'value': 92
+        }
+    }
+    // estimateFiber(oDiv3, config3);
+    // pie(oDiv1, {
+    //     'sature': 1,
+    //     'adad': 2,
+    //     'nini': 5,
+    //     'unsature': 3
+    // })
+
+
+
+let config = {
     top: [{
         x: -7,
         y: 5,
@@ -65,6 +281,7 @@ var config = {
         data: {
             rank: 0.0012,
             median: 0,
+
             absolute: 0
         },
         direction: 'right'
@@ -225,66 +442,159 @@ var config = {
         direction: 'right'
     }],
     gap: [5, 7] //gap is the x value of central orange range's start & end, and start must lower than end
-}
+};
 
+let config2 = {
+    "score": 46.7,
+    "data": {
+        "低聚果糖": {
+            "value": 0.4,
+            "en": "Fructo-oligosaccharide"
+        },
+        "低聚异麦芽糖": {
+            "value": 0.6,
+            "en": "Isomalto-oligosaccharide"
+        },
+        "\u03B2-葡聚糖": {
+            "value": 0.3,
+            "en": "\u03B2-glucan"
+        },
 
+        "氨糖": {
+            "value": 0.5,
+            "en": "Glucosamine"
+        },
+        "饱和脂肪酸": {
+            "value": 0.3,
+            "en": "Saturated fat"
+        },
+        "不饱和脂肪酸": {
+            "value": 0.8,
+            "en": "Unsaturated fat"
+        },
+        "鞘脂类": {
+            "value": 0.77,
+            "en": "Sphingolipid"
+        },
+        "胆汁酸": {
+            "value": 0.12,
+            "en": "Bile acid"
+        },
+        "胆红素": {
+            "value": 0.34,
+            "en": "Bilirubin"
+        },
+        "胆固醇": {
+            "value": 0.96,
+            "en": "Cholestreol"
+        },
+        "淀粉": {
+            "value": 0.43,
+            "en": "Starch"
+        },
+        "膳食纤维": {
+            "value": 0.213,
+            "en": "Dietary fiber"
+        }
+    }
+};
 
-estimateAntibiotics.init(oDiv1,config)
-// metabolism(oDiv1)
-// scoreLevel(oDiv1, {
-//         "score": 46.7,
-//         "data": {
-//             "低聚果糖": {
-//                 "value": 0.4,
-//                 "en": "Fructo-oligosaccharide"
-//             },
-//             "低聚异麦芽糖": {
-//                 "value": 0.6,
-//                 "en": "Isomalto-oligosaccharide"
-//             },
-//             "\u03B2-葡聚糖": {
-//                 "value": 0.3,
-//                 "en": "\u03B2-glucan"
-//             },
-          
-//             "氨糖": {
-//                 "value": 0.5,
-//                 "en": "Glucosamine"
-//             },
-//             "饱和脂肪酸": {
-//                 "value": 0.3,
-//                 "en": "Saturated fat"
-//             },
-//             "不饱和脂肪酸": {
-//                 "value": 0.8,
-//                 "en": "Unsaturated fat"
-//             },
-//             "鞘脂类": {
-//                 "value": 0.77,
-//                 "en": "Sphingolipid"
-//             },
-//             "胆汁酸": {
-//                 "value": 0.12,
-//                 "en": "Bile acid"
-//             },
-//             "胆红素": {
-//                 "value": 0.34,
-//                 "en": "Bilirubin"
-//             },
-//             "胆固醇": {
-//                 "value": 0.96,
-//                 "en": "Cholestreol"
-//             },
-//             "淀粉": {
-//                 "value": 0.43,
-//                 "en": "Starch"
-//             },
-//             "膳食纤维": {
-//                 "value": 0.213,
-//                 "en": "Dietary fiber"
-//             }
-//         }
+// estimateAntibiotics.init(oDiv1)
+// estimateAntibiotics.init(oDiv1, parse2(rawConfig))
+
+boomPie(oDiv1)
+
+// oDiv1.style.transform='scale(0.5)'
+// console.log(oDiv1.style.transform)
+// metabolism(oDiv3)
+// metabolism(oDiv1, rawMetaConfig)
+// scoreLevel(oDiv2, config2)
+// curveGraph(oDiv1)
+
+// linkGraph(oDiv3,parse(rawLinkConfig))
+// linkGraph(oDiv3)
+// amountBile(oDiv3, {
+//         "bileAcid": 9.4,
+//         "cholesterol": 0.4
 //     })
-    // curveGraph(oDiv1)
+// console.log(parse(rawConfig))
 
-// sankey(oDiv1)
+// lineRect5(oDiv3)
+// lineRect3(oDiv3)
+// lineRect5(oDiv2,[0.1,0.2,0.3,0.6])
+// lineRect3(oDiv3)
+// vLineRect5(oDiv2,[0.0392, 0.1649, 0.8371999999999999, 0.9608])
+// vLineRect5(oDiv1,[0.1,0.2,0.3,0.4])
+// vLineRect5(oDiv3)
+// vLineRect3(oDiv3)
+// vLineRect5(oDiv2,[0.1,0.2,0.3,0.8])
+// lineRect3(oDiv3)
+
+// console.log(html2canvas)
+
+// html2canvas(document.body).then(function(canvas) {
+//     document.body.appendChild(canvas);
+// });
+// 
+// 
+
+// var pdf = new jsPDF('p', 'pt', 'letter');
+// var canvas = pdf.canvas;
+
+// console.log(pdf.canvas)
+
+// canvas.width = 27000;
+// canvas.height = 700;
+
+// console.log(1212)
+
+// html2canvas(document.body, {
+//     canvas: canvas,
+//     onrendered: function(canvas) {
+//         var iframe = document.createElement('iframe');
+//         iframe.setAttribute('style', 'position:fixed;right:0; top:0; bottom:0; height:100%; width:500px');
+//         document.body.appendChild(iframe);
+//         // iframe.src = pdf.output('datauristring');
+
+//         //var div = document.createElement('pre');
+//         //div.innerText=pdf.output();
+//         //document.body.appendChild(div);
+//     }
+// });
+
+
+
+
+
+
+// var makePdf = function() {
+//     var pdf = new jsPDF('p', 'pt', 'a2');
+//     // console.log(pdf)
+//     var c = pdf.canvas;
+//     c.width = 1000;
+//     c.height = 700;
+//     var ctx = c.getContext('2d');
+//     ctx.ignoreClearRect = true;
+//     ctx.fillStyle = '#ffffff';
+//     ctx.globalAlpha = 0.5;
+//     ctx.fillRect(0, 0, 1000, 700);
+//     //load a svg snippet in the canvas with id = 'drawingArea'
+//     // console.log(document.querySelector('#svg-div3').outerHTML);
+//     // console.log( canvg(c, document.getElementById('#svg1'))
+//     canvg(c, document.querySelector('#div2 canvas').outerHTML, {
+//         ignoreMouse: true,
+//         ignoreAnimation: true,
+//         ignoreDimensions: true
+//     });
+
+//     pdf.addPage()
+//     pdf.setDrawColor()
+//     return pdf;
+// }
+
+// var iframe = document.createElement('iframe');
+// iframe.setAttribute('style', 'position:fixed;right:0; top:0; bottom:0; height:100%; width:800px');
+// document.body.appendChild(iframe);
+
+// iframe.setAttribute('src', makePdf().output('dataurlstring'));
+// document.getElementById('source').innerText = makePdf().output();
