@@ -539,12 +539,16 @@ this domain [0,1]
 vLineRect5(oDom, config)
 
 //config example
- [
-    0.1,
-    0.3,
-    0.5,
-    0.9
-]
+ {
+    'width':600,
+    'height':80,
+    'data': [
+        0.2,
+        0.3,
+        0.4,
+        0.9
+    ]
+ }
 
 ```
 It will render as below:
@@ -557,10 +561,14 @@ this domain [0,1]
 vLineRect3(oDom, config)
 
 //config example
- [
-    0.2,
-    0.9
-]
+ {
+    'width':600,
+    'height':50,
+    'data': [
+        0.2,
+        0.9
+    ]
+}
 
 ```
 It will render as below:

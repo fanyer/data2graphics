@@ -1156,7 +1156,7 @@ function vPattern4(svg) {
     var id = arguments[2];
     var percent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 70;
     var width = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 600;
-    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$7.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 2).attr('height', 30).attr('x', function (d, i) {
+    var ptn = svg.append('defs').append('pattern').attr('id', 'vpattern-vLineRect5-' + id).attr('x', '0').attr('y', '0').attr('width', '1').attr('height', '1').selectAll('rect').data(d3$7.range(0, 1, 1 / percent)).enter().append('rect').attr('width', 2).attr('height', 300).attr('x', function (d, i) {
         return d * width;
     }).attr('y', 0).attr('fill', function (d, i) {
         var color = colors5[0];
@@ -2186,8 +2186,16 @@ function metabolism(parent, config) {
 
 var lineRect3Config = [0.22, 0.7];
 var lineRect5Config = [0.03, 0.15, 0.85, 0.97];
-var vLineRect5Config = [0.2, 0.3, 0.4, 0.9];
-var vLineRect3Config = [0.6, 0.9];
+var vLineRect5Config = {
+    'width': 600,
+    'height': 80,
+    'data': [0.2, 0.3, 0.4, 0.9]
+};
+var vLineRect3Config = {
+    'width': 300,
+    'height': 80,
+    'data': [0.2, 0.6]
+};
 
 var colors5$2 = ['#cb8d88', '#e4be6f', '#00ab84', '#e4be6f', '#cb8d88'];
 var d3$11 = Object.assign({}, D3, require('d3-shape'), require('d3-format'), require('d3-selection'), require('d3-request'), require('d3-drag'), require('d3-array'), require('d3-color'), require('d3-scale'));
@@ -2257,24 +2265,28 @@ function toValue(a) {
 }
 function vLineRect5(parent, config) {
     var input = config || vLineRect5Config;
-    var input2 = input.map(function (e, i) {
+    var input2 = input.data.map(function (e, i) {
         return e * 70;
     });
     detectSVG(parent);
     var svg = d3$11.select('#' + parent.id + ' svg'),
         margin = { top: 10, right: 10, bottom: 10, left: 10 };
-    svg.attr('width', 500);
-    svg.attr('height', 50);
+    svg.attr('width', input.width);
+    svg.attr('height', input.height);
     var width = svg.attr('width') - margin.left - margin.right,
         height = svg.attr('height') - margin.top - margin.bottom,
         g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     var formatNumber = d3$11.format('.2%');
-    vPattern4(svg, input2, parent.id, 70, 600);
-    g.append('rect').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', 15).attr('ry', 15).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+    vPattern4(svg, input2, parent.id, 70, input.width);
+    g.append('rect').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', input.height / 2).attr('ry', input.height / 2).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
 }
 function vLineRect3(parent, config) {
     var input = config || vLineRect3Config;
-    vLineRect5(parent, [0, 0].concat(toConsumableArray(input)));
+    vLineRect5(parent, {
+        'width': input.width,
+        'height': input.height,
+        'data': [0, 0].concat(toConsumableArray(input.data))
+    });
 }
 
 var baseConf$5 = {
