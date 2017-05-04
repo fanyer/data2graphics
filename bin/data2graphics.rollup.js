@@ -2636,20 +2636,16 @@ function init(parent, config) {
         var allY = 0;
         if (direction === 'left' && postion === 'top') {
             gChild.attr('transform', 'translate(' + (-width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX) + ',' + (maskHeight - 140 - dy * 50) + ')');
-            curveTag(50, 542 - dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'top') {
             gChild.attr('transform', 'translate(' + (width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX) + ',' + (maskHeight - 140 - dy * 50) + ')');
-            curveTag(2200, 542 - dy * 50, key, data, color);
         } else if (direction === 'left' && postion === 'bottom') {
             var x = -width / 2 + 40 / 2 + dx * (31 * base) - 100 + allX;
             var y = maskHeight - 390 + dy * 50 + 360;
             gChild.attr('transform', 'translate(' + x + ',' + y + ')');
-            curveTag(50, 615 + dy * 50, key, data, color);
         } else if (direction === 'right' && postion === 'bottom') {
             var _x7 = width + width / 2 - 40 / 2 + dx * (31 * base) - 97 + allX;
             var _y = maskHeight - 390 + dy * 50 + 360;
             gChild.attr('transform', 'translate(' + _x7 + ',' + _y + ')');
-            curveTag(2200, 615 + dy * 50, key, data, color);
         }
         return gChild;
     }
@@ -2687,11 +2683,6 @@ function init(parent, config) {
             strokeWidth: base
         }], pos, direction, color, dx, dy);
     }
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '41%').style('fill', function () {
-        return '#00ab84';
-    }).attr('font-size', '36px').attr('stroke-width', 0.5)
-    .attr('font-weight', '400').attr('font-family', 'adad').text('抗生素抗性基因综合评价');
-    svg.append('text').attr('text-anchor', 'middle').attr('x', '50.6%').attr('y', '44%').style('fill', '#00ab84').style('font-size', '24').attr('font-family', 'adad').text('Evaluation of Antibiotics Intake');
     var centralText = [{
         color: '#00ab84',
         text: '推荐用药',
@@ -2708,39 +2699,6 @@ function init(parent, config) {
         pos: 0.8,
         value: input.gap[2]
     }];
-    svg.selectAll('.centralText').data(centralText).enter().append('g').attr('class', 'centralText').attr('transform', function (d, i) {
-        return 'translate(' + (width / 2 + margin.left - 75 + d.pos * 270) + ',630)';
-    }).append('rect').attr('width', 150).attr('height', 50).attr('opacity', 0.6).attr('rx', 25).attr('stroke-width', 3).attr('font-family', 'adad').attr('fill', 'none').style('stroke', function (d, i) {
-        return d.color;
-    });
-    svg.selectAll('g.centralText').append('text').text(function (d, i) {
-        return d.text;
-    }).attr('x', 75).attr('y', 35).attr('font-family', 'adad').attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
-        return d.color;
-    }).style('font-size', '25px');
-    svg.selectAll('g.centralText').append('text').text(function (d, i) {
-        return d.value;
-    }).attr('x', 75).attr('font-family', 'adad').attr('y', 80).attr('text-anchor', 'middle').attr('stroke-width', 0.5).style('fill', function (d, i) {
-        return d.color;
-    }).style('font-size', '25px');
-    function curveTag() {
-        var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 200;
-        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
-        var text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-        var data = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-        var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#00ab84';
-        var gTag = svg.append('g').attr('transform', 'translate(' + x + ',' + y + ')');
-        gTag.append('rect').attr('width', 400).attr('height', 22).attr('rx', 15).attr('fill', 'url(#vpattern1)').attr('ry', '50%').attr('stroke', 'steelblue').attr('stroke-width', 1);
-        gTag.append('text').text('中间值: ' + data.median).style('fill', color).attr('stroke-width', 2).attr('font-family', 'adad').attr('x', 130).attr('dx', 20).attr('y', 28).attr('text-anchor', 'start').attr('alignment-baseline', 'hanging');
-        gTag.append('text').text('▼ ' + data.absolute).style('fill', color).attr('stroke-width', 2).attr('x', data.rank * 400 - 28).attr('dx', 20).attr('y', 0).attr('dy', -4).attr('font-family', 'adad').attr('text-anchor', 'start').attr('alignment-baseline', 'baseline');
-        var textAlign = x < 1000 ? 400 : -150;
-        gTag.append('text').text(text.cn).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('font-family', 'adad').attr('dx', 20).attr('y', 15).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
-        gTag.append('text').text(text.en).style('fill', color).attr('stroke-width', 2).attr('x', textAlign).attr('dx', 20).attr('dy', 20).attr('y', 15).attr('font-family', 'adad').attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
-        var rankAlign = x < 1000 ? 600 : -350;
-        gTag.append('text').text('人群排名: ' + d3$12.format('.2%')(data.rank)).style('fill', color).attr('stroke-width', 2).attr('x', rankAlign).attr('dx', 20).attr('y', 20).attr('text-anchor', 'start').attr('alignment-baseline', 'middle');
-        var rankRectAlign = x < 1000 ? 580 : -150;
-        gTag.append('rect').style('fill', color).attr('x', rankRectAlign).attr('y', -4).attr('width', 3).attr('height', 39);
-    }
     function centralColorRect() {
         var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [13, 2, 0];
         var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.3;
