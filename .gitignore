@@ -1,5 +1,4 @@
 node_modules
-aaa.js
 npm-debug.log
 pdf
 docs/*.zip
@@ -9,3 +8,7 @@ tmp
 bin/parser4data.rollup.js
 rollup.config.js
 webpack.config.js
+index.css
+index.js
+index.html
+basic.css
