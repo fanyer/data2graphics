@@ -1485,6 +1485,7 @@ function curveGraph(parent, config) {
     var labels = Object.keys(input.data);
     var data = Object.values(input.data);
     var standardValues = Object.values(input.standard).slice(1, 6);
+    var canvas = detectCanvas(parent);
     var svg = detectSVG(parent, 'svg-' + parent.id);
     svg.setAttribute('width', '500');
     svg.setAttribute('height', '1700');
@@ -1624,6 +1625,9 @@ function curveGraph(parent, config) {
         ripple(g, 'left', rippleLeft);
         ripple(g, 'right', rippleRight);
     });
+    var oSvg = document.querySelector('#' + parent.id + ' svg');
+    canvg(canvas, document.querySelector('#' + parent.id + ' svg').outerHTML);
+    parent.removeChild(oSvg);
 }
 function linkGraph(parent, config) {
     var input = config || linkGraphConfig;
@@ -1637,6 +1641,7 @@ function linkGraph(parent, config) {
         return formatNumber(d) + ' TWh';
     },
         color = d3$5.scaleOrdinal(d3$5.schemeCategory20);
+    var canvas = detectCanvas(parent);
     var svg = detectSVG(parent, 'svg-' + parent.id);
     svg.setAttribute('width', '800');
     svg.setAttribute('height', '1500');
@@ -1681,7 +1686,11 @@ function linkGraph(parent, config) {
     link.append('title').text(function (d) {
         return d.source.name + ' → ' + d.target.name + '\n' + format(d.value);
     });
-    
+    var oSvg = document.querySelector('#' + parent.id + ' svg');
+    var context = canvas.getContext('2d');
+    context.globalAlpha = 0.4;
+    canvg(canvas, document.querySelector('#' + parent.id + ' svg').outerHTML);
+    parent.removeChild(oSvg);
 }
 
 var baseConf$2 = {
@@ -2269,6 +2278,7 @@ function vLineRect5(parent, config) {
         return e * 70;
     });
     detectSVG(parent);
+    var canvas = detectCanvas(parent);
     var svg = d3$11.select('#' + parent.id + ' svg'),
         margin = { top: 10, right: 10, bottom: 10, left: 10 };
     svg.attr('width', input.width);
@@ -2278,7 +2288,9 @@ function vLineRect5(parent, config) {
         g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     var formatNumber = d3$11.format('.2%');
     vPattern4(svg, input2, parent.id, 70, input.width);
-    g.append('rect').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', input.height / 2).attr('ry', input.height / 2).attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+    g.append('rect').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).attr('stroke-width', 4).attr('stroke', '#ccc').attr('rx', input.height / 2).attr('ry', input.height / 2)
+    .attr('fill', 'url(#vpattern-vLineRect5-' + parent.id + ')');
+    canvg(canvas, document.querySelector('#' + parent.id + ' svg').outerHTML);
 }
 function vLineRect3(parent, config) {
     var input = config || vLineRect3Config;
@@ -2513,7 +2525,7 @@ var _alias = [/@/g, "_e.", /AND/gi, "&&", /OR/gi, "||", /<>/g, "!=", /NOT/gi, "!
 var _rQuote = /""/g;
 var _rQuoteTemp = /!~/g;
 var _complite = function _complite(code) {
-    return eval("0," + code);
+    return (0, eval)("0," + code);
 };
 var _interpret = function _interpret(exp) {
     exp = exp.replace(_rQuote, "!~");
