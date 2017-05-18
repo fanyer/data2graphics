@@ -491,8 +491,11 @@ amountBile(oDom, config)
 
 //config example
 {
-  "bileAcid":6,
-  "cholesterol":2
+    "normal":7,
+    "data":{
+        "bileAcid": 9.4,
+        "cholesterol": 0.4
+    }
 }
 
 ```
