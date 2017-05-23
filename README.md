@@ -815,6 +815,17 @@ It will render as below:
 
 <img src="./docs/metabolism.png" width='1000'>
 
+### boomPie()
+this domain [0,1]
+
+```
+
+```
+
+It will render as below:
+
+<img src="./docs/boom-pie.png" width='1000'>
+
 
 ## How to join development?
 You'd better have experience in tools and knowledges as below:
