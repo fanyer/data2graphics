@@ -9,11 +9,14 @@
         src: url("/lib/fonts/NotoSans-Regular.ttf");
     }
     
-    p {  
+    p {
         font-family: adad;
-
         /*opacity: 0;*/
         /*display: none;*/
+    }
+    
+    body {
+        position: relative;
     }
     </style>
     <link rel="stylesheet" href="./basic.css" />
@@ -24,6 +27,42 @@
     <div id="div1"></div>
     <div id="div2"></div>
     <div id="div3"></div>
+    <div id="div4"></div>
+    <div id="div5"></div>
+    <div id="div6"></div>
+    <div id="div7"></div>
+    <div id="div8"></div>
+    <div id="div9"></div>
+    <div id="div10"></div>
+    <script type="text/javascript">
+    // if (typeof Object.assign != 'function') {
+    Object.assign = function(target) {
+        'use strict';
+        if (target == null) {
+            throw new TypeError('Cannot convert undefined or null to object');
+        }
+
+        target = Object(target);
+        for (var index = 1; index < arguments.length; index++) {
+            var source = arguments[index];
+            if (source != null) {
+                for (var key in source) {
+                    if (Object.prototype.hasOwnProperty.call(source, key)) {
+                        target[key] = source[key];
+                    }
+                }
+            }
+        }
+        return target;
+    };
+    // }
+    </script>
+   <!--  <script src='//localhost:3000/libs/canvg_context2d/canvg.js'></script>
+    <script src='//localhost:3000/libs/canvg_context2d/libs/rgbcolor.js'></script>
+    <script src='//localhost:3000/libs/canvg_context2d/libs/StackBlur.js'></script>
+    <script src='//localhost:3000/dist/jspdf.debug.js'></script>
+    <script src='//localhost:3000/lib/html2pdf.js'></script>
+    <script src='//localhost:3000/libs/html2pdf.js'></script> -->
     <script type="text/javascript" src='./bundle.js'></script>
 </body>
 

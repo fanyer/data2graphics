@@ -3,7 +3,7 @@
   /*salmon   #cb8d88*/
 
 canvas {
-    font-family: 'adad';
+    /*font-family: 'adad';*/
     /*fill:none;*/
 }
 
@@ -44,15 +44,15 @@ circle {
     text-shadow: 0 1px 0 #fff;
 }
 
-.link {
+/*.link {
     fill: none;
     stroke: #000;
     stroke-opacity: .2;
-}
+}*/
 
-.link:hover {
+/*.link:hover {
     stroke-opacity: .5;
-}
+}*/
 
 
 /*histogram*/
@@ -72,33 +72,33 @@ circle {
 
 /*level-score*/
 
-.line0 {
+/*.line0 {
     fill: none;
     stroke: rgba(73,130,180,0.6);
     stroke-width: 1.5px;
-}
+}*/
 
-.line1 {
+/*.line1 {
     fill: none;
     stroke: rgba(46,139,87,0.6);
     stroke-width: 1.5px;
 }
-
+*/
 .line3 {
     fill: none;
     stroke: salmon;
     stroke-width: 1.5px;
 }
 
-.dot {
+/*.dot {
     fill: white;
     stroke: steelblue;
     stroke-width: 1.5px;
-}
-
+}*/
+/*
 path {
     stroke: steelblue;
-}
+}*/
 
 text {
     /*font-family: Verdan

@@ -1,3 +1,20 @@
+/*   author:fanyer
+ *   mail: iofanyer@gmail.com
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+ 
+ 
 // import './basic.css'
 import { intakeSugarDistribution } from './lib/intake-sugar-distribution'
 import { intakeFiberStruct } from './lib/intake-fiber-struct'
@@ -6,13 +23,12 @@ import { intakeFatProportion } from './lib/intake-fat-distribution'
 import { metabolism } from './lib/metabolism'
 import { curveGraph, linkGraph } from './lib/guide-goodness'
 import { scoreLevel } from './lib/score-level'
-import { sankey } from './lib/sankey'
 import { amountBile } from './lib/amount-bile'
 import { lineRect3, lineRect5, vLineRect5, vLineRect3 } from './lib/line-rect3'
 import { pie } from './lib/pie'
 import { boomPie } from './lib/boom-pie'
-import { parse as parse2 } from './parser/js/estimate-antibiotics.parser'
-import { parse } from './parser/js/link-graph.parser'
+import {antibioticsParse} from 'parser4data'
+import {linkParse} from 'parser4data'
 import estimateAntibiotics from './lib/estimate-antibiotics'
 import rawConfig from './mock-data/antibiotics.raw'
 import rawLinkConfig from './mock-data/link.raw'
@@ -25,7 +41,8 @@ import 'babel-polyfill'
 // import html2canvas from 'html2canvas'
 
 
-// console.log(rawMetaConfig)
+// console.log(rawLinkConfig)
+// console.log(linkParse(rawLinkConfig))
 
 Object.values = x =>
     Object.keys(x).reduce((y, z) =>
@@ -39,10 +56,34 @@ Object.values = x =>
 var oDiv1 = document.querySelector('#div1');
 var oDiv2 = document.querySelector('#div2');
 var oDiv3 = document.querySelector('#div3');
+var oDiv4 = document.querySelector('#div4');
+var oDiv5 = document.querySelector('#div5');
+var oDiv6 = document.querySelector('#div6');
+var oDiv7 = document.querySelector('#div7');
+var oDiv8 = document.querySelector('#div8');
+var oDiv9 = document.querySelector('#div9');
+var oDiv10 = document.querySelector('#div10');
 
 
 
-// intakeSugarDistribution(oDiv2)
+intakeSugarDistribution(oDiv1);
+intakeFiberStruct(oDiv2);
+estimateFiber(oDiv3);
+intakeFatProportion(oDiv4);
+metabolism(oDiv5);
+curveGraph(oDiv6);
+linkGraph(oDiv7,linkParse(rawLinkConfig));
+scoreLevel(oDiv8);
+amountBile(oDiv9);
+boomPie(oDiv10);
+
+
+
+
+
+
+// intakeSugarDistribution(oDiv1)
+
 // intakeFiberStruct(oDiv1, {
 //     'text': 'aaaa',
 //    'data': {
@@ -74,10 +115,9 @@ var oDiv3 = document.querySelector('#div3');
 // });
 // intakeFatProportion(oDiv2,{
 //      'data': {
-//         'sature': 42,
-//         'unsature': 58
+//         'sature': 78,
+//         'unsature': 22
 //     }
-//     ,'text': 'adad'
 // })
 
 let config3 = {
@@ -502,7 +542,7 @@ let config2 = {
 // estimateAntibiotics.init(oDiv1)
 // estimateAntibiotics.init(oDiv1, parse2(rawConfig))
 
-boomPie(oDiv1)
+// boomPie(oDiv1)
 
 // oDiv1.style.transform='scale(0.5)'
 // console.log(oDiv1.style.transform)
@@ -511,12 +551,14 @@ boomPie(oDiv1)
 // scoreLevel(oDiv2, config2)
 // curveGraph(oDiv1)
 
-// linkGraph(oDiv3,parse(rawLinkConfig))
+// linkGraph(oDiv3,linkParse(rawLinkConfig))
 // linkGraph(oDiv3)
 // amountBile(oDiv3, {
-//         "bileAcid": 9.4,
-//         "cholesterol": 0.4
-//     })
+	// "normal":7,
+	// "data":{
+ //        "bileAcid": 9.4,
+ //        "cholesterol": 0.4
+ //    }})
 // console.log(parse(rawConfig))
 
 // lineRect5(oDiv3)
@@ -581,7 +623,7 @@ boomPie(oDiv1)
 //     //load a svg snippet in the canvas with id = 'drawingArea'
 //     // console.log(document.querySelector('#svg-div3').outerHTML);
 //     // console.log( canvg(c, document.getElementById('#svg1'))
-//     canvg(c, document.querySelector('#div2 canvas').outerHTML, {
+//     canvg(c, document.querySelector('#div3 svg').outerHTML, {
 //         ignoreMouse: true,
 //         ignoreAnimation: true,
 //         ignoreDimensions: true
@@ -597,4 +639,4 @@ boomPie(oDiv1)
 // document.body.appendChild(iframe);
 
 // iframe.setAttribute('src', makePdf().output('dataurlstring'));
-// document.getElementById('source').innerText = makePdf().output();
+// // document.getElementById('#div3').innerText = makePdf().output();
