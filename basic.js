@@ -23,7 +23,7 @@ import { intakeFatProportion } from './lib/intake-fat-distribution'
 import { metabolism } from './lib/metabolism'
 import { curveGraph, linkGraph } from './lib/guide-goodness'
 import { scoreLevel } from './lib/score-level'
-import { amountBile } from './lib/amount-bile'
+import { amountHistogram } from './lib/amount-histogram'
 import { lineRect3, lineRect5, vLineRect5, vLineRect3 } from './lib/line-rect3'
 import { pie } from './lib/pie'
 import { boomPie } from './lib/boom-pie'
@@ -74,7 +74,7 @@ metabolism(oDiv5);
 curveGraph(oDiv6);
 linkGraph(oDiv7,linkParse(rawLinkConfig));
 scoreLevel(oDiv8);
-amountBile(oDiv9);
+amountHistogram(oDiv9);
 boomPie(oDiv10);
 
 
@@ -553,7 +553,7 @@ let config2 = {
 
 // linkGraph(oDiv3,linkParse(rawLinkConfig))
 // linkGraph(oDiv3)
-// amountBile(oDiv3, {
+// amountHistogram(oDiv3, {
 	// "normal":7,
 	// "data":{
  //        "bileAcid": 9.4,
