@@ -2,24 +2,17 @@
 
 this library outputs graphics with interfaces as below
 * parser
-* intakeSugarDistribution
-* intakeFiberStruct
-* scoreLevel
-* intakeFatDsitribution
-  * intakeFatProportion
-  * intakeFatDeviation
-* guideGoodness
-  * curveGraph
-  * linkGraph
-* estimateFiber
-* estimateAntibiotics
+* trendCompare
+* pieSpiral
+* arcLine
+* proportion
+* deviation
+* curveGraph
+* linkGraph
+* pieStruct
+* subwayRoutes
   * init
-  * topLeft
-  * topRight
-  * bottomRight
-  * bottomLeft
-  * index
-* amountBile
+* amountHistogram
 * metabolism(for the Professional)
 
 
@@ -46,43 +39,43 @@ this library outputs graphics with interfaces as below
 ****
 
 #### parser
-The `parser` interface is a data-transforming tool, turn to [parser4data](https://pkgo.in/itg/parser4data).
+The `parser` interface is a data-transforming tool, turn to [parser4data](https://github.com/fanyer/parser4data).
 
 
-#### intakeSugarDistribution()
+#### trendCompare()
 after import this function , you can call it as below:
 
 this domain [0,10]
 ```
-intakeSugarDistribution(oDom, config1, config2)
+trendCompare(oDom, config1, config2)
 
 //oDom is a dom object
 
-//config1 example
+//config example
 {
-    "type": "检测值",
+    "type": "textdemo",
     "data": {
-        '膳食纤维': {
+        'aaa': {
             'value': 5,
             'en': 'Dietary fiber'
         },
-        '低聚果糖': {
+        'bbb': {
             'en': 'Fructo-oligosaccharide',
             'value': 6.5
         },
-        '低聚异麦芽糖': {
+        'ccc': {
             "en": "Isomalto-oligosaccharide",
             'value': 4
         },
-        'ß-葡萄糖': {
+        'ddd': {
             'value': 2.5,
             "en": "𝜷-glucan"
         },
-        '葡甘露聚糖': {
+        'eee': {
             'value': 4,
             "en": "Glucomammam"
         },
-        '抗性麦芽糊精': {
+        'fff': {
             'value': 3,
             "en": "Resistant malyodextrins"
         }
@@ -90,38 +83,6 @@ intakeSugarDistribution(oDom, config1, config2)
     'cnFontSize': 20,
     'enFontSize': 16
 }
-//config2 example
-{
-    'type': '标准值',
-    'data': {
-        '膳食纤维': {
-            'value': 3.5,
-            'en': 'Dietary fiber'
-        },
-        '低聚果糖': {
-            'en': 'Fructo-oligosaccharide',
-            'value': 2.2
-        },
-        '低聚异麦芽糖': {
-            "en": "Isomalto-oligosaccharide",
-            'value': 3.2
-        },
-        'ß-葡萄糖': {
-            'value': 6.2,
-            "en": "𝜷-glucan"
-        },
-        '葡甘露聚糖': {
-            'value': 2.7,
-            "en": "Glucomammam"
-        },
-        '抗性麦芽糊精': {
-            'value': 5.2,
-            "en": "Resistant malyodextrins"
-        }
-    },
-    'cnFontSize': 20,
-    'enFontSize': 16
- }
 
 ```
 This one is draw in colors with not deterministic.
@@ -133,36 +94,36 @@ It will render as below:
 <img src="./docs/intake-sugar-distribution.png"  width='500'>
 
 
-#### intakeFiberStruct()
+#### pieSpiral()
 this domain [0,1], and sum=1
 ```
-intakeFiberStruct(oDom, config)
+pieSpiral(oDom, config)
 
 //config example
 {
     'text': 'adad',
     'data': {
-        '哒哒哒': {
+        'aaa': {
             'value': 0.08,
             'color': 'seagreen'
         },
-        '胆固醇': {
+        'bbb': {
             'value': 0.17,
             'color': 'steelblue'
         },
-        '饱和脂肪酸': {
+        'ccc': {
             'value': 0.2,
             'color': 'salmon'
         },
-        '不饱和脂肪酸': {
+        'ddd': {
             'value': 0.1,
             'color': 'steelblue'
         },
-        '谁谁脂肪酸': {
+        'eee': {
             'value': 0.05,
             'color': 'steelblue'
         },
-        '鞘脂类': {
+        'fff': {
             'value': 0.4,
             'color': 'steelblue'
         }
@@ -174,67 +135,67 @@ It will render as below:
 <img src="./docs/intake-fiber-struct.png" width='500'>
 
 
-### scoreLevel()
+### arcLine()
 this domain [0,1]
 ```
-scoreLevel(oDom, config)
+arcLine(oDom, config)
 
 //config example
  "score": 46.7,
     "data": {
-        "低聚果糖": {
+        "aaa": {
             "value": 0.4,
             "en": "Fructo-oligosaccharide"
         },
-        "低聚异麦芽糖": {
+        "bbb": {
             "value": 0.6,
             "en": "Isomalto-oligosaccharide"
         },
-        "𝜷-葡聚糖": {
+        "ccc": {
             "value": 0.3,
             "en": "𝜷-glucan"
         },
-        "葡甘露聚糖": {
+        "ddd": {
             "value": 0.2,
             "en": "Glucomammam"
         },
-        "抗性麦芽糊精": {
+        "eee": {
             "value": 0.9,
             "en": "Resistant malyodextrins"
         },
-        "氨糖": {
+        "fff": {
             "value": 0.5,
             "en": "Glucosamine"
         },
-        "饱和脂肪酸": {
+        "ggg": {
             "value": 0.3,
             "en": "Saturated fat"
         },
-        "不饱和脂肪酸": {
+        "hhh": {
             "value": 0.8,
             "en": "Unsaturated fat"
         },
-        "鞘脂类": {
+        "iii": {
             "value": 0.77,
             "en": "Sphingolipid"
         },
-        "胆汁酸": {
+        "jjj": {
             "value": 0.12,
             "en": "Bile acid"
         },
-        "胆红素": {
+        "lll": {
             "value": 0.34,
             "en": "Bilirubin"
         },
-        "胆固醇": {
+        "mmm": {
             "value": 0.96,
             "en": "Cholestreol"
         },
-        "淀粉": {
+        "nnn": {
             "value": 0.43,
             "en": "Starch"
         },
-        "膳食纤维": {
+        "ooo": {
             "value": 0.213,
             "en": "Dietary fiber"
         }
@@ -247,11 +208,11 @@ It will render as below:
 <img src="./docs/score-level.png" width='500'>
 
 
-### intakeFatProportion()
+### proportion()
 this domain anything that can produce a proportion.
 
 ```
-intakeFatProportion(oDom, config)
+proportion(oDom, config)
 
 //config example
 {
@@ -297,18 +258,18 @@ It will render as below:
 <img src="./docs/intake-fat-proportion4.png" width='500'>
 
 
-### intakeFatDeviation()
+### deviation()
 ```
-intakeFatDeviation(oDom, config)
+deviation(oDom, config)
 
 //config example
 {
-  '标准值':0.5,
+  'standard':0.5,
   'data':{
-    '饱和脂肪酸': 0.8739,
-    '不饱和脂肪酸': 0.1498,
-    '鞘脂类': 0.3483,
-    '胆固醇': 0.5705
+    'aaa': 0.8739,
+    'bbb': 0.1498,
+    'ccc': 0.3483,
+    'ddd': 0.5705
   }
 }
 
@@ -336,22 +297,22 @@ curveGraph(oDom, config)
         'max': 25
    },
    'data': {
-       '维生素A': 16,
-       '维生素B1': 19,
-       '维生素B2': -14,
-       '维生素B3': -5,
-       '维生素B5': -8,
-       '维生素B6': -13,
-       '维生素B7': 6,
-       '维生素B9': -20,
-       '维生素B12': 9,
-       '维生素C': -16,
-       '胡萝卜素': -18,
-       '维生素E': -7,
-       '牛磺酸': 2,
-       '辅酶Q': -7,
-       '异黄酮': -21,
-       '维生素K': -7
+       'aaa': 16,
+       'bbb': 19,
+       'ccc': -14,
+       'ddd': -5,
+       'eee': -8,
+       'fff': -13,
+       'ggg': 6,
+       'hhh': -20,
+       'iii': 9,
+       'jjj': -16,
+       'lll': -18,
+       'mmm': -7,
+       'nnn': 2,
+       'ooo': -7,
+       'ppp': -21,
+       'qqq': -7
    }
 }
 
@@ -380,79 +341,40 @@ It will render as below:
 <img src="./docs/link-graph.png" width='400'>
 
 
-### estimateFiber()
+### pieStruct()
 this domain [0,100]
 ```
-estimateFiber(oDom, config)
+pieStruct(oDom, config)
 
 //config example
 {
     'text': 'dadad',
     'data': {
-        '维生素a': {
+        'aaa': {
             'en': 'adaeda',
             'value': 20
         },
-        '维生素b': {
+        'bbb': {
             'en': '',
             'value': 25
         },
-        '维生素c': {
+        'ccc': {
             'en': '',
             'value': 92
         },
-        '维生素d': {
+        'ddd': {
             'en': '',
             'value': 78
         },
-        '维生素e': {
+        'eee': {
             'en': '',
             'value': 43
         },
-        '维生素f': {
+        'fff': {
             'en': '',
             'value': 96
-        },
-        '维生素g': {
-            'en': '',
-            'value': 32
-        },
-        '维生素h': {
-            'en': '',
-            'value': 79
-        },
-        '维生素i': {
-            'en': '',
-            'value': 82
-        },
-        '维生素j': {
-            'en': '',
-            'value': 45
-        },
-        '维生素k': {
-            'en': '',
-            'value': 53
-        },
-        '维生素l': {
-            'en': '',
-            'value': 98
-        },
-        '维生素m': {
-            'en': '',
-            'value': 92
-        },
-        '维生素n': {
-            'en': '',
-            'value': 48
-        },
-        '维生素o': {
-            'en': '',
-            'value': 84
-        },
-        '维生素p': {
-            'en': '',
-            'value': 92
         }
+       
     }
 }
 
@@ -461,14 +383,14 @@ It will render as below:
 
 <img src="./docs/estimate-fiber.png" width='500'>
 
-### estimateAntibiotics.init()
+### subwayRoutes.init()
 this turn to [parser4data](https://pkgo.in/itg/parser4data).
 
 ```
 //this is exported default as an obj
-import estimateAntibiotics from 'data2graphics'
+import subwayRoutes from 'data2graphics'
 
-estimateAntibiotics.init(oDom, config)
+subwayRoutes.init(oDom, config)
 
 ```
 Detailed Config shows [here](https://pkgo.in/itg/data2graphics/blob/master/lib/estimate-default-config.js)
@@ -484,17 +406,17 @@ It will render as below:
 <!-- <img src="./docs/formeasure-antibiotics.png" width='1000'> -->
 
 
-### amountBile()
+### amountHistogram()
 this domain [0,10], and sum <10
 ```
-amountBile(oDom, config)
+amountHistogram(oDom, config)
 
 //config example
 {
     "normal":7,
     "data":{
-        "bileAcid": 9.4,
-        "cholesterol": 0.4
+        "aaa": 9.4,
+        "bbb": 0.4
     }
 }
 
@@ -618,189 +540,9 @@ metabolism(oDom, config)
         ],
         "y": 0.003,
         "curve":[]
-    }, {
-        "x": [
-            15000,
-            15500
-        ],
-        "y": 0.0038,
-        "curve":[]
-    }, {
-        "x": [
-            15500,
-            16000
-        ],
-        "y": 0.01,
-        "curve":[]
-    }, {
-        "x": [
-            16000,
-            16500
-        ],
-        "y": 0.018,
-        "curve":[]
-    }, {
-        "x": [
-            16500,
-            17000
-        ],
-        "y": 0.03,
-        "curve":[]
-    }, {
-        "x": [
-            17000,
-            17500
-        ],
-        "y": 0.015,
-        "curve":[]
-    }, {
-        "x": [
-            17500,
-            18000
-        ],
-        "y": 0.026,
-        "curve":[]
-    }, {
-        "x": [
-            18000,
-            18500
-        ],
-        "y": 0.026,
-        "curve":[]
-    }, {
-        "x": [
-            18500,
-            19000
-        ],
-        "y": 0.034,
-        "curve":[]
-    }, {
-        "x": [
-            19000,
-            19500
-        ],
-        "y": 0.05,
-        "curve":[]
-    }, {
-        "x": [
-            19500,
-            20000
-        ],
-        "y": 0.05,
-        "curve":[]
-    }, {
-        "x": [
-            20000,
-            20500
-        ],
-        "y": 0.07,
-        "curve":[]
-    }, {
-        "x": [
-            20500,
-            21000
-        ],
-        "y": 0.078,
-        "curve":[]
-    }, {
-        "x": [
-            21000,
-            21500
-        ],
-        "y": 0.083,
-        "curve":[]
-    }, {
-        "x": [
-            21500,
-            22000
-        ],
-        "y": 0.072,
-        "curve":[]
-    }, {
-        "x": [
-            22000,
-            22500
-        ],
-        "y": 0.08,
-        "curve":[]
-    }, {
-        "x": [
-            22500,
-            23000
-        ],
-        "y": 0.078,
-        "curve":[]
-    }, {
-        "x": [
-            23000,
-            23500
-        ],
-        "y": 0.075,
-        "curve":[]
-    }, {
-        "x": [
-            23500,
-            24000
-        ],
-        "y": 0.075,
-        "curve":[]
-    }, {
-        "x": [
-            24000,
-            24500
-        ],
-        "y": 0.056,
-        "curve":[]
-    }, {
-        "x": [
-            24500,
-            25000
-        ],
-        "y": 0.059,
-        "curve":[]
-    }, {
-        "x": [
-            25000,
-            25500
-        ],
-        "y": 0.043,
-        "curve":[]
-    }, {
-        "x": [
-            25500,
-            26000
-        ],
-        "y": 0.037,
-        "curve":[]
-    }, {
-        "x": [
-            26000,
-            26500
-        ],
-        "y": 0.028,
-        "curve":[]
-    }, {
-        "x": [
-            26500,
-            27000
-        ],
-        "y": 0.018,
-        "curve":[]
-    }, {
-        "x": [
-            27000,
-            27500
-        ],
-        "y": 0.012,
-        "curve":[]
-    }, {
-        "x": [
-            27500,
-            28000
-        ],
-        "y": 0.01,
-        "curve":[]
-    }, {
+    }, 
+    ...
+   {
         "x": [
             28000,
             28500
