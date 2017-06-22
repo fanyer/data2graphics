@@ -16,18 +16,18 @@
  
  
 // import './basic.css'
-import { intakeSugarDistribution } from './lib/intake-sugar-distribution'
-import { intakeFiberStruct } from './lib/intake-fiber-struct'
-import { estimateFiber } from './lib/estimate-fiber'
+import { trendCompare } from './lib/trend-compare'
+import { pieStruct } from './lib/pie-struct'
+import { pieSpiral } from './lib/pie-spiral'
 import { proportion } from './lib/proportion'
 import { deviation } from './lib/deviation'
 import { metabolism } from './lib/metabolism'
 import { curveGraph } from './lib/curve-graph'
 import { linkGraph } from './lib/link-graph'
-import { scoreLevel } from './lib/score-level'
+import { arcLine } from './lib/arc-line'
 import { amountHistogram } from './lib/amount-histogram'
 import { lineRect3, lineRect5, vLineRect5, vLineRect3 } from './lib/line-rect3'
-import { pie } from './lib/pie'
+// import { pie } from './lib/pie'
 import { boomPie } from './lib/boom-pie'
 // import {antibioticsParse} from 'parser4data'
 // import {linkParse} from 'parser4data'
@@ -35,8 +35,6 @@ import subwayRoutes from './lib/subway-routes'
 
 // import canvg from "canvg";
 
-
-// import html2canvas from 'html2canvas'
 
 
 // console.log(rawLinkConfig)
@@ -64,16 +62,16 @@ var oDiv10 = document.querySelector('#div10');
 
 
 
-intakeSugarDistribution(oDiv1);
-intakeFiberStruct(oDiv2);
-estimateFiber(oDiv3);
-intakeFatProportion(oDiv4);
-metabolism(oDiv5);
-curveGraph(oDiv6);
-linkGraph(oDiv7,linkParse(rawLinkConfig));
-scoreLevel(oDiv8);
-amountHistogram(oDiv9);
-boomPie(oDiv10);
+curveGraph(oDiv1);
+linkGraph(oDiv2);
+trendCompare(oDiv3);
+pieSpiral(oDiv4);
+proportion(oDiv5);
+pieStruct(oDiv6);
+// metabolism(oDiv5);
+// scoreLevel(oDiv8);
+// amountHistogram(oDiv9);
+// boomPie(oDiv10);
 
 
 

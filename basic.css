@@ -129,3 +129,70 @@ text {
 #div1{
     transform: scale(0.5);
 }*/
+
+
+
+
+  #div1 canvas,
+  #div1 svg {
+      /*transform: scale(0.5);*/
+      transform-origin: 0 0;
+  }
+  
+  #div2 svg,
+  #div2 canvas {
+      transform: scale(0.6,1.2);
+      transform-origin: 0 0;
+  }
+  
+  .right div {
+      max-height: 300px;
+  }
+  
+  #div3 canvas,
+  #div3 svg {
+      /*transform: scale(0.5);*/
+      transform-origin: 0 0;
+  }
+  
+  #div4 canvas,
+  #div4 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div5 canvas,
+  #div5 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div6 canvas,
+  #div6 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div7 canvas,
+  #div7 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div8 canvas,
+  #div8 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div9 canvas,
+  #div9 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  }
+  
+  #div10 canvas,
+  #div10 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  }

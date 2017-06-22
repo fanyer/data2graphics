@@ -20,49 +20,44 @@
     }
     </style>
     <link rel="stylesheet" href="./basic.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
 
 <body>
-    <p>adae</p>
-    <div id="div1"></div>
-    <div id="div2"></div>
-    <div id="div3"></div>
-    <div id="div4"></div>
-    <div id="div5"></div>
-    <div id="div6"></div>
-    <div id="div7"></div>
-    <div id="div8"></div>
-    <div id="div9"></div>
-    <div id="div10"></div>
-    <script type="text/javascript">
-    // if (typeof Object.assign != 'function') {
-    Object.assign = function(target) {
-        'use strict';
-        if (target == null) {
-            throw new TypeError('Cannot convert undefined or null to object');
-        }
-
-        target = Object(target);
-        for (var index = 1; index < arguments.length; index++) {
-            var source = arguments[index];
-            if (source != null) {
-                for (var key in source) {
-                    if (Object.prototype.hasOwnProperty.call(source, key)) {
-                        target[key] = source[key];
-                    }
-                }
-            }
-        }
-        return target;
-    };
-    // }
-    </script>
-   <!--  <script src='//localhost:3000/libs/canvg_context2d/canvg.js'></script>
-    <script src='//localhost:3000/libs/canvg_context2d/libs/rgbcolor.js'></script>
-    <script src='//localhost:3000/libs/canvg_context2d/libs/StackBlur.js'></script>
-    <script src='//localhost:3000/dist/jspdf.debug.js'></script>
-    <script src='//localhost:3000/lib/html2pdf.js'></script>
-    <script src='//localhost:3000/libs/html2pdf.js'></script> -->
+    <!-- <p>adae</p> -->
+    <div class="mdl-grid">
+        <div id="div1" class="mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+        </div>
+        <div id="div2" class="mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+        </div>
+        <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone right">
+            <div class="mdl-grid">
+                <div id="div3" class="mdl-cell mdl-cell--12-col-desktop mdl-cell--8-col-tablet mdl-cell--6-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+            </div>
+            <div class="mdl-grid">
+                <div id="div4" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div5" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div6" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div7" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div8" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div9" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+                <div id="div10" class="mdl-cell mdl-cell--6-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-card mdl-shadow--2dp">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div11"></div>
+   
+  
     <script type="text/javascript" src='./bundle.js'></script>
 </body>
 
