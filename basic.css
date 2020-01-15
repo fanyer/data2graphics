@@ -125,17 +125,40 @@ text {
     stroke: seagreen;
 }
 
-/*
-#div1{
-    transform: scale(0.5);
-}*/
+
+#div1,
+#div2,
+#div3,
+#div4,
+#div5,
+#div6,
+#div7,
+#div8
+{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#div4 canvas{
+    width: 300px;
+    height: 300px;
+}
+
+#div7 canvas{
+    width: 500px;
+    height: 500px;
+}
 
 
 
-
+/* 
   #div1 canvas,
   #div1 svg {
-      /*transform: scale(0.5);*/
+      transform: scale(0.5);
       transform-origin: 0 0;
   }
   
@@ -151,7 +174,7 @@ text {
   
   #div3 canvas,
   #div3 svg {
-      /*transform: scale(0.5);*/
+      transform: scale(0.5);
       transform-origin: 0 0;
   }
   
@@ -195,4 +218,4 @@ text {
   #div10 svg {
       transform: scale(0.5);
       transform-origin: 0 0;
-  }
+  } */

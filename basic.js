@@ -59,20 +59,24 @@ var oDiv7 = document.querySelector('#div7');
 var oDiv8 = document.querySelector('#div8');
 var oDiv9 = document.querySelector('#div9');
 var oDiv10 = document.querySelector('#div10');
+var oDiv11 = document.querySelector('#div11');
 
 
 
 curveGraph(oDiv1);
 linkGraph(oDiv2);
 trendCompare(oDiv3);
-pieSpiral(oDiv4);
-proportion(oDiv5);
-pieStruct(oDiv6);
+proportion(oDiv4);
+deviation(oDiv6)
+arcLine(oDiv7);
+subwayRoutes.init(oDiv11)
+
+// pieSpiral(oDiv5);
+// pieStruct(oDiv6);
 // metabolism(oDiv5);
 // scoreLevel(oDiv8);
 // amountHistogram(oDiv9);
 // boomPie(oDiv10);
-
 
 
 

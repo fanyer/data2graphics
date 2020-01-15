@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack-dev-server --hot --inline",
+        "dev2": "webpack-dev-server . --open",
         "build:rollup": "rollup -c rollup.config.js",
         "build:webpack": "webpack -c config/prod.env.js"
     },
@@ -20,8 +21,7 @@
         "npmlog": "^4.0.2",
         "rollup": "^0.41.4",
         "rollup-plugin-babel": "^2.7.1",
-        "rollup-plugin-cleanup": "^1.0.0",
-        "webpack-dev-server": "^2.4.1"
+        "rollup-plugin-cleanup": "^1.0.0"
     },
     "dependencies": {
         "babel-core": "^6.22.1",
@@ -45,6 +45,7 @@
         "react": "^15.4.2",
         "react-native-webrtc": "^1.54.7",
         "style-loader": "0.13.1",
-        "webpack": "^1.14.0"
+        "webpack": "^1.14.0",
+        "webpack-dev-server": "1.16.0"
     }
 }
