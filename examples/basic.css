@@ -1,0 +1,221 @@
+  /*seagreen   #00ab84*/
+  /*orange   #e4be6f*/
+  /*salmon   #cb8d88*/
+
+canvas {
+    /*font-family: 'adad';*/
+    /*fill:none;*/
+}
+
+svg {
+    /*background: rgba(46,139,87,0.5);*/
+    background: #fff;
+}
+
+rect {
+    /*fill: none;*/
+    pointer-events: all;
+}
+
+circle {
+    fill: none;
+    stroke: rgba(46, 139, 87, 0.5);
+}
+
+.salmon {
+    stroke: salmon;
+}
+
+
+/*sankey*/
+
+#chart {
+    height: 500px;
+}
+
+.node rect {
+    cursor: move;
+    fill-opacity: .9;
+    shape-rendering: crispEdges;
+}
+
+.node text {
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff;
+}
+
+/*.link {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+}*/
+
+/*.link:hover {
+    stroke-opacity: .5;
+}*/
+
+
+/*histogram*/
+
+
+/*.bar rect {
+    fill: steelblue;
+}*/
+
+
+/*.bar text {
+    fill: #fff;
+    font: 10px sans-serif;
+}
+*/
+
+
+/*level-score*/
+
+/*.line0 {
+    fill: none;
+    stroke: rgba(73,130,180,0.6);
+    stroke-width: 1.5px;
+}*/
+
+/*.line1 {
+    fill: none;
+    stroke: rgba(46,139,87,0.6);
+    stroke-width: 1.5px;
+}
+*/
+.line3 {
+    fill: none;
+    stroke: salmon;
+    stroke-width: 1.5px;
+}
+
+/*.dot {
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}*/
+/*
+path {
+    stroke: steelblue;
+}*/
+
+text {
+    /*font-family: Verdan
+    esa;*/
+    /*font-weight: 100;*/
+    /*font-size: 16px;*/
+}
+
+.text0 {
+    font-family: Verdana;
+    font-weight: 100;
+    fill: steelblue;
+}
+
+.text1 {
+    fill: seagreen;
+    font-family: Verdana;
+    font-weight: 100;
+}
+
+
+
+.basicCurve path {
+    stroke: seagreen;
+}
+
+
+#div1,
+#div2,
+#div3,
+#div4,
+#div5,
+#div6,
+#div7,
+#div8
+{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#div4 canvas{
+    width: 300px;
+    height: 300px;
+}
+
+#div7 canvas{
+    width: 500px;
+    height: 500px;
+}
+
+
+
+/* 
+  #div1 canvas,
+  #div1 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  }
+  
+  #div2 svg,
+  #div2 canvas {
+      transform: scale(0.6,1.2);
+      transform-origin: 0 0;
+  }
+  
+  .right div {
+      max-height: 300px;
+  }
+  
+  #div3 canvas,
+  #div3 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  }
+  
+  #div4 canvas,
+  #div4 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div5 canvas,
+  #div5 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div6 canvas,
+  #div6 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div7 canvas,
+  #div7 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div8 canvas,
+  #div8 svg {
+      transform: scale(0.3);
+      transform-origin: 0 0;
+  }
+  
+  #div9 canvas,
+  #div9 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  }
+  
+  #div10 canvas,
+  #div10 svg {
+      transform: scale(0.5);
+      transform-origin: 0 0;
+  } */
