@@ -1082,9 +1082,13 @@ d3-collection@1, d3-collection@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.3.tgz#00bdea94fbc1628d435abbae2f4dc2164e37dd34"
 
-d3-color@1, d3-color@1.0.3, d3-color@^1.0.1:
+d3-color@1, d3-color@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
+
+d3-color@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-3.1.0.tgz#395b2833dfac71507f12ac2f7af23bf819de24e2"
 
 d3-dispatch@1, d3-dispatch@1.0.3:
   version "1.0.3"
